@@ -5,17 +5,20 @@ import { useLayoutEffect, useRef, useState } from "react"
 import { CopyMark, useCopied } from "@/components/docs/copy-button"
 import { MonoLabel } from "@/components/docs/mono-label"
 import { FrameBox } from "@/components/site/corners"
+import { InlineCode, ProseP, TextLink } from "@/components/site/prose"
 import { useAccent } from "@/hooks/use-accent"
 import { useOrigin } from "@/lib/docs/origin"
 import { accentCss } from "@/lib/accent"
 import type { ComponentDoc } from "@/lib/docs/catalog"
 import { graphUtilitiesCss, registryFiles } from "@/lib/docs/files"
 import { mdxExample } from "@/lib/docs/ascii"
+import { comarkExample, COMARK_URL } from "@/lib/docs/comark"
 import { agentPrompt } from "@/lib/docs/prompt"
 import { GITHUB_TREE, GITHUB_URL } from "@/lib/github"
+import { scopedRegistryInstall } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
-type InstallTab = "cli" | "manual" | "agent" | "mdx"
+type InstallTab = "cli" | "manual" | "agent" | "mdx" | "comark"
 
 const COLLAPSED_HEIGHT = 256
 
@@ -33,6 +36,7 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
   const origin = useOrigin()
   const prompt = agentPrompt({ origin, registry: name, doc, example })
   const mdx = mdxExample(name)
+  const comark = comarkExample(name)
   const tabs: [InstallTab, string][] = [
     ["cli", "CLI"],
     ["manual", "Manual"],
@@ -41,6 +45,10 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
 
   if (mdx) {
     tabs.push(["mdx", "MDX"])
+  }
+
+  if (comark) {
+    tabs.push(["comark", "Comark"])
   }
 
   return (
@@ -76,6 +84,8 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
         <ManualInstall name={name} />
       ) : tab === "mdx" && mdx ? (
         <MdxInstall markdown={mdx.markdown} />
+      ) : tab === "comark" && comark ? (
+        <ComarkInstall markdown={comark.markdown} />
       ) : (
         <CopyBlock label="Prompt" value={prompt} />
       )}
@@ -84,12 +94,7 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
 }
 
 function CliInstall({ name }: { name: string }) {
-  const origin = useOrigin()
-  const url = origin
-    ? `pnpm dlx shadcn@latest add ${origin}/r/${name}.json`
-    : `pnpm dlx shadcn@latest add <origin>/r/${name}.json`
-
-  return <Command label="Command" value={url} />
+  return <Command label="Command" value={scopedRegistryInstall(name)} />
 }
 
 function fileUrl(file: string) {
@@ -153,13 +158,28 @@ function ManualInstall({ name }: { name: string }) {
 function MdxInstall({ markdown }: { markdown: string }) {
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-pretty text-muted-foreground">
+      <ProseP>
         Paste this fenced block into a Markdown file that cannot import the
-        React component — README, GitHub, Linear, PR comments, a bare `.md`.
-        Monospace keeps the frame aligned. Swap labels, keep the frame. Do not
-        invent a different drawing.
-      </p>
+        React component — README, GitHub, Linear, PR comments, a bare{" "}
+        <InlineCode>.md</InlineCode>. Monospace keeps the frame aligned. Swap
+        labels, keep the frame. Do not invent a different drawing.
+      </ProseP>
       <CopyBlock label="Markdown" value={markdown} />
+    </div>
+  )
+}
+
+function ComarkInstall({ markdown }: { markdown: string }) {
+  return (
+    <div className="flex flex-col gap-6">
+      <ProseP>
+        Paste this into a <InlineCode>.md</InlineCode> file that a{" "}
+        <TextLink href={COMARK_URL}>Comark</TextLink> app will render. YAML
+        props match the React API. GitHub and Linear still need the MDX fence —
+        they do not run Comark. Wiring is on{" "}
+        <TextLink href="/docs/comark">/docs/comark</TextLink>.
+      </ProseP>
+      <CopyBlock label="Comark" value={markdown} />
     </div>
   )
 }

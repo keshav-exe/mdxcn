@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
 import { CopyBlock } from "@/components/docs/install"
 import { SkillInstall } from "@/components/docs/skill-install"
@@ -11,36 +10,51 @@ import {
 } from "@/components/graphs"
 import { JsonLd } from "@/components/seo/json-ld"
 import { SiteContainer } from "@/components/site/container"
+import {
+  InlineCode,
+  ProseLead,
+  ProseMuted,
+  ProseP,
+  proseMutedClass,
+  TextLink,
+} from "@/components/site/prose"
 import { Button } from "@/components/ui/button"
 import { components } from "@/lib/docs/catalog"
+import { COMARK_URL } from "@/lib/docs/comark"
 import { skillExamples } from "@/lib/docs/skill"
 import { agentsJsonLd, pageMeta } from "@/lib/seo"
 import { AGENTS_DESCRIPTION } from "@/lib/site"
+import { cn } from "@/lib/utils"
 
 const tries = skillExamples.filter((item) =>
-  ["Refactor", "README"].includes(item.label)
+  ["Refactor", "Comark", "README"].includes(item.label)
 )
 
 const kit = [
   {
     name: "Skill",
     detail:
-      "When to use a figure, which one, and whether to write JSX or paste the official fence. Same two files in Cursor, Claude Code, Codex, or OpenCode.",
+      "When to use a figure, which one, and whether to write JSX, a ::graph-* block, or the official fence — the same two files work in Cursor, Claude Code, Codex, or OpenCode.",
   },
   {
     name: "Recipes",
     detail:
-      "Worked write-ups with real props. Copy the JSX, swap the labels. At most two graphs, prose between them.",
+      "Worked write-ups with real props: copy the JSX, swap the labels, keep at most two graphs with prose between them.",
   },
   {
-    name: "Twins",
+    name: "Comark",
     detail:
-      "Fenced ASCII that survives GitHub, Linear, and a PR comment. Swap labels, keep the frame. Do not invent a fence.",
+      "::graph-* blocks with YAML props for the same graphs without MDX; GitHub still gets the fence.",
+  },
+  {
+    name: "Fenced ASCII",
+    detail:
+      "Official fences that survive GitHub, Linear, and PR comments — swap labels, keep the frame, and do not invent a new drawing.",
   },
   {
     name: "llms.txt",
     detail:
-      "Chooser plus twins in one file, if the skill is not installed.",
+      "Chooser plus ASCII and Comark blocks in one file when the skill is not installed.",
   },
 ]
 
@@ -61,16 +75,17 @@ export default function AgentsPage() {
         >
           <div className="flex flex-col gap-4">
             <p className="font-mono tracking-wide text-graph-muted uppercase">
-              Skill · llms.txt · MDX
+              Skill · llms.txt · Comark
             </p>
             <h1 className="max-w-[16ch] text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
               For agents
             </h1>
-            <p className="max-w-[48ch] text-pretty text-muted-foreground">
-              When a write-up needs a figure, the agent already has one. A skill
-              file picks the graph. JSX goes in MDX. The official fence goes in
-              a README, a PR, or Linear.
-            </p>
+            <ProseLead>
+              When a write-up needs a figure, the skill picks which graph to
+              use. Emit JSX in MDX, a <InlineCode>::graph-*</InlineCode> block in
+              a <TextLink href={COMARK_URL}>Comark</TextLink> app, or the
+              official fence in a README, PR, or Linear note.
+            </ProseLead>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Button nativeButton={false} render={<a href="#install" />}>
@@ -90,29 +105,30 @@ export default function AgentsPage() {
       <section>
         <SiteContainer className="flex flex-col gap-8">
           <div className="flex flex-col gap-4">
-            <h2 className="max-w-[20ch] text-2xl font-semibold tracking-tight text-balance">
-              Write and read
+            <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
+              Writing and reading the same figure
             </h2>
-            <p className="max-w-[48ch] text-pretty text-muted-foreground">
-              Writing — the agent emits at most two graphs next to the claim.
-              React gets JSX. Plain Markdown gets the official twin from{" "}
-              <code className="font-mono">/llms.txt</code>.
-            </p>
-            <p className="max-w-[48ch] text-pretty text-muted-foreground">
-              Reading — the figure is characters in the file. Opening the MDX
-              shows labels and values, not a screenshot. The agent can edit the
-              frame the same way it wrote it.
-            </p>
+            <ProseP>
+              On write, the agent emits at most two graphs next to the claim —
+              JSX for React, YAML for a{" "}
+              <TextLink href={COMARK_URL}>Comark</TextLink> app, or the official
+              fence from <TextLink href="/llms.txt">/llms.txt</TextLink> when the
+              host cannot run a renderer.
+            </ProseP>
+            <ProseMuted>
+              On read, the figure is still characters in the file, so opening
+              the MDX shows labels and values instead of a screenshot, and the
+              agent can edit the frame the same way it wrote it.
+            </ProseMuted>
           </div>
           <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
             <GraphCompare
-              columns={["JSX", "ASCII"]}
+              columns={["JSX", "ASCII", "Comark"]}
               rows={[
-                { label: "MDX / React", values: [true, false] },
-                { label: "README", values: [false, true] },
-                { label: "GitHub / Linear", values: [false, true] },
-                { label: "PR comment", values: [false, true] },
-                { label: "Edit the labels", values: [true, true] },
+                { label: "MDX / React", values: [true, false, true] },
+                { label: "App .md file", values: [false, false, true] },
+                { label: "README / GitHub", values: [false, true, false] },
+                { label: "Edit the labels", values: [true, true, true] },
               ]}
               title="HOST"
             />
@@ -122,7 +138,7 @@ export default function AgentsPage() {
                   nodes: [
                     { label: "write-up" },
                     { label: "chooser" },
-                    { label: "JSX or twin", tone: "accent" },
+                    { label: "JSX / YAML / fence", tone: "accent" },
                   ],
                 },
                 {
@@ -142,19 +158,20 @@ export default function AgentsPage() {
       <section>
         <SiteContainer className="flex flex-col gap-8">
           <div className="flex flex-col gap-4">
-            <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
-              What you drop in
+            <h2 className="max-w-[28ch] text-2xl font-semibold tracking-tight text-balance">
+              What goes in the agent&apos;s folder
             </h2>
-            <p className="max-w-[48ch] text-pretty text-muted-foreground">
-              {components.length} graphs. Most have an official ASCII twin for
-              files that cannot run React. The skill picks at most two.
-            </p>
+            <ProseP>
+              There are {components.length} graphs; most ship an official fenced
+              ASCII for hosts that cannot run React. The skill should pick at
+              most two per write-up.
+            </ProseP>
           </div>
           <dl className="grid gap-6 sm:grid-cols-2 sm:gap-8">
             {kit.map((entry) => (
               <div className="flex flex-col gap-2" key={entry.name}>
                 <dt className="font-medium">{entry.name}</dt>
-                <dd className="max-w-[40ch] text-pretty text-muted-foreground">
+                <dd className={cn(proseMutedClass, "max-w-[40ch]")}>
                   {entry.detail}
                 </dd>
               </div>
@@ -165,7 +182,8 @@ export default function AgentsPage() {
               rows={[
                 { label: "/skill.md", value: "the skill", accent: true },
                 { label: "/skill/recipes.md", value: "jsx recipes" },
-                { label: "/llms.txt", value: "chooser + twins" },
+                { label: "/llms.txt", value: "chooser + ASCII + Comark" },
+                { label: "/comark", value: "plain .md host" },
                 { label: "/developers", value: "api + openapi" },
               ]}
               title="FETCH"
@@ -174,7 +192,7 @@ export default function AgentsPage() {
               items={[
                 { label: "at most two graphs", done: true },
                 { label: "prose between them", done: true },
-                { label: "official twin, not homemade", done: true },
+                { label: "official fence, not homemade", done: true },
                 { label: "no SVG", done: true },
               ]}
               title="RULES"
@@ -189,29 +207,20 @@ export default function AgentsPage() {
             <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
               Install the skill
             </h2>
-            <p className="max-w-[48ch] text-pretty text-muted-foreground">
-              Project copy travels with the repo. Personal copy is this machine
-              only. If the host is React,{" "}
-              <Link
-                className="text-foreground underline-offset-4 hover:underline"
-                href="/docs/installation"
-              >
+            <ProseP>
+              A project copy travels with the repo; a personal copy stays on
+              this machine. If the host is React,{" "}
+              <TextLink href="/docs/installation">
                 install the components
-              </Link>{" "}
-              first. The graphs themselves still need to be in the project.
-            </p>
+              </TextLink>{" "}
+              first — the graphs still need to live in the project.
+            </ProseP>
           </div>
           <SkillInstall />
-          <p className="max-w-[48ch] text-pretty text-muted-foreground">
-            Chooser table and the full file:{" "}
-            <Link
-              className="text-foreground underline-offset-4 hover:underline"
-              href="/docs/skill"
-            >
-              Skill
-            </Link>
-            .
-          </p>
+          <ProseMuted>
+            The chooser table and full skill file are on{" "}
+            <TextLink href="/docs/skill">Skill</TextLink>.
+          </ProseMuted>
         </SiteContainer>
       </section>
 
@@ -219,12 +228,12 @@ export default function AgentsPage() {
         <SiteContainer className="flex flex-col gap-8">
           <div className="flex flex-col gap-4">
             <h2 className="max-w-[20ch] text-2xl font-semibold tracking-tight text-balance">
-              Try it
+              Try a prompt
             </h2>
-            <p className="max-w-[48ch] text-pretty text-muted-foreground">
+            <ProseP>
               Paste one of these after install. Each should pick two graphs and
               put prose between them.
-            </p>
+            </ProseP>
           </div>
           <div className="flex flex-col gap-6">
             {tries.map((item) => (
@@ -235,25 +244,11 @@ export default function AgentsPage() {
               />
             ))}
           </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link
-              className="text-foreground underline-offset-4 hover:underline"
-              href="/docs/skill"
-            >
-              All prompts
-            </Link>
-            <Link
-              className="text-foreground underline-offset-4 hover:underline"
-              href="/docs/examples"
-            >
-              Examples
-            </Link>
-            <Link
-              className="text-foreground underline-offset-4 hover:underline"
-              href="/docs"
-            >
-              Library
-            </Link>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <TextLink href="/docs/skill">All prompts</TextLink>
+            <TextLink href="/docs/examples">Examples</TextLink>
+            <TextLink href="/docs">Library</TextLink>
+            <TextLink href="/comark">Comark</TextLink>
           </div>
         </SiteContainer>
       </section>

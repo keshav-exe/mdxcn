@@ -11,6 +11,7 @@ import { SiteSearch } from "@/components/site/search"
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { GithubStarLink } from "@/components/site/github-star"
 import { SiteCorners, SiteMark, SiteRule } from "@/components/site/corners"
+import { Mark, MARK_THEME } from "@/lib/og/mark"
 import { SITE_NAV } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
@@ -30,9 +31,10 @@ function SiteHeader({ stars }: { stars: number | null }) {
         <div className="flex items-center gap-4 py-4">
           <Link
             aria-label="Homepage"
-            className="shrink-0 text-foreground"
+            className="flex shrink-0 items-center gap-2.5 text-foreground"
             href="/"
           >
+            <Mark className="size-4" palette={MARK_THEME} size={16} />
             markdown graphs
           </Link>
 

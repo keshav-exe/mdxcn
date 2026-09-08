@@ -1,4 +1,5 @@
 import { mdxExample } from "@/lib/docs/ascii"
+import { comarkExample } from "@/lib/docs/comark"
 import type { ComponentDoc, PropRow } from "@/lib/docs/catalog"
 
 export const DESIGN_AND_MOOD = `Design
@@ -31,9 +32,10 @@ Chooser
 
 Host
 - React, or MDX that can import the components → JSX from the examples.
-- Plain Markdown (README, GitHub, Linear, PR comments, .md) → official fenced ASCII twin from /llms.txt ## MDX, or the docs MDX tab. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
+- Plain Markdown (README, GitHub, Linear, PR comments) → official fenced ASCII from /llms.txt ## MDX, or the docs MDX tab. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
+- Comark app (plain .md the app renders) → ::graph-* block from /llms.txt ## Comark, or the docs Comark tab. YAML props match the React API. Do not paste JSX. GitHub still gets fenced ASCII.
 - Reading an existing file: the figure is characters. Edit labels. Do not replace a graph with SVG.
-- No twin: GraphFlow, GraphPlot, GraphActivity, GraphHeatmap, GraphCalendar, GraphTimer, GraphCountdown, GraphFrame. Pick another or skip.
+- No fenced ASCII: GraphFlow, GraphPlot, GraphActivity, GraphHeatmap, GraphCalendar, GraphTimer, GraphCountdown, GraphFrame. They still have a Comark block except GraphFrame. Pick another or skip.
 
 Mood
 Typed, not illustrated. Quiet monospace figures that sit next to prose. Two graphs per section is enough. Restraint over decoration. Do not restyle the frame. Default is one accent; palette is opt-in.`
@@ -165,6 +167,18 @@ export function pageMarkdown({
         "Plain Markdown (README, GitHub, Linear, PR comments). Paste the fence. Do not paste JSX.",
         "",
         mdx.markdown
+      )
+    }
+
+    const comark = comarkExample(name)
+    if (comark) {
+      parts.push(
+        "",
+        "## Comark",
+        "",
+        "Plain .md that a Comark app will render. YAML props match the React API. GitHub still gets the MDX fence.",
+        "",
+        comark.markdown
       )
     }
   }

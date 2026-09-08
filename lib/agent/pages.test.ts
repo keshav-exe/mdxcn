@@ -41,5 +41,6 @@ describe("chooserMarkdown", () => {
     expect(body).toContain("https://example.test/api/v1/components")
     expect(body).toContain("https://example.test/skill.md")
     expect(body).toContain("## CLI")
+    expect(body).toContain("## Comark")
   })
 })

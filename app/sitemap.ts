@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "/",
     "/agents",
+    "/comark",
     "/developers",
     "/developers/deprecation",
     "/agents.md",
@@ -17,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/docs",
     "/docs/installation",
     "/docs/examples",
+    "/docs/comark",
     "/docs/skill",
     "/llms.txt",
     "/skill.md",

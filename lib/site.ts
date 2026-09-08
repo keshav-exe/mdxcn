@@ -1,16 +1,52 @@
 export const SITE_URL = "https://mdx-graphs.kshv.me"
+export const REGISTRY_SCOPE = "@mdx-graphs"
+
+export function scopedRegistryInstall(name: string) {
+  return `pnpm dlx shadcn@latest add ${REGISTRY_SCOPE}/${name}`
+}
 export const SITE_NAME = "Markdown Graphs"
 export const SITE_NAME_SHORT = "markdown graphs"
+/** Browser / OG homepage title — what people search for. */
+export const SITE_TITLE =
+  "markdown-friendly React components with an acquired taste"
+export const SITE_KEYWORDS = [
+  "markdown-friendly React components",
+  "React markdown components",
+  "markdown components",
+  "MDX components",
+  "React MDX",
+  "Markdown Graphs",
+  "mdx-graphs",
+  "markdown graphs",
+  "ASCII charts",
+  "ASCII diagrams",
+  "ASCII graphs",
+  "MDX graphs",
+  "markdown charts",
+  "shadcn charts",
+  "shadcn registry",
+  "Comark",
+  "graph components",
+  "diagram components",
+  "Markdown Graphs API",
+] as const
 export const SITE_DESCRIPTION =
-  "Framed graphs an agent can drop next to prose. JSX in MDX, official ASCII in a README."
+  "ASCII-framed React diagrams you copy into a shadcn project and drop next to prose — JSX in MDX, a ::graph-* block in Comark, or the official fence in a README."
+export const SITE_ALTERNATE_NAMES = [
+  SITE_NAME_SHORT,
+  "mdx-graphs",
+  "markdown-graphs",
+  "markdown-friendly React components",
+  "React markdown components",
+] as const
 export const AGENTS_DESCRIPTION =
-  "A skill file, a chooser, and official ASCII twins. The agent writes the figure — and can read it back."
+  "A skill and chooser that tell an agent which graph to use, and whether to emit JSX, a ::graph-* block, or fenced ASCII it can read back later."
 export const DOCS_DESCRIPTION =
-  "Framed graphs for MDX. A skill so agents pick a component instead of drawing SVG."
+  "ASCII-framed graphs for MDX, with a skill so agents reach for a component instead of inventing SVG."
 export const SITE_NAV = [
   { href: "/agents", label: "agents" },
   { href: "/docs", label: "library" },
-  { href: "/docs/examples", label: "examples" },
+  { href: "/comark", label: "comark" },
 ] as const
 export const SITE_TWITTER = "@kshvbgde"
 export const SITE_EMAIL = "hi@kshv.me"

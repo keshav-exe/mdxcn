@@ -29,7 +29,8 @@ export const getStarted: NavLink[] = [
   { href: "/docs", label: "Introduction" },
   { href: "/docs/installation", label: "Installation" },
   { href: "/docs/examples", label: "Examples" },
-  { href: "/agents", label: "For agents", isNew: true },
+  { href: "/docs/comark", label: "Comark", isNew: true },
+  { href: "/agents", label: "For agents" },
   { href: "/docs/skill", label: "Skill" },
 ]
 

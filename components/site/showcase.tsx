@@ -221,12 +221,12 @@ function ShowcaseSection() {
       <SiteContainer className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <h2 className="max-w-[35ch] text-2xl font-semibold tracking-tight text-balance">
-            JSX or a fence
+            Same figure as JSX or a fence
           </h2>
-          <p className="max-w-[48ch] text-pretty text-muted-foreground">
-            Import the component in MDX. In a README, paste the official ASCII
-            twin. {showcaseCount} graphs have both. Flow, Plot, Activity,
-            Heatmap, Calendar, Timer, and Countdown stay in React.
+          <p className="max-w-[56ch] text-pretty leading-relaxed text-foreground/88">
+            Import the component in MDX, or paste the official fence in a README.
+            {showcaseCount} graphs have both; Flow, Plot, Activity, Heatmap,
+            Calendar, Timer, and Countdown stay in React.
           </p>
         </div>
         <ShowcaseBlock slug={showcaseLayout.full} />

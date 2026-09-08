@@ -17,6 +17,7 @@ import {
 } from "@/lib/docs/skill"
 import { readSkillFile } from "@/lib/docs/skill-files"
 import { AGENTS_DESCRIPTION, DOCS_DESCRIPTION, SITE_URL } from "@/lib/site"
+import { COMARK_DESCRIPTION, COMARK_WIRE } from "@/lib/docs/comark"
 
 function hostOf(origin?: string) {
   return origin || SITE_URL
@@ -63,11 +64,11 @@ pnpm dlx shadcn@latest add $ORIGIN/r/all.json
 
 Add the registry once in components.json, then install components by name.
 
-pnpm dlx shadcn@latest registry add @markdown-graphs=$ORIGIN/r/{name}.json
+pnpm dlx shadcn@latest registry add @mdx-graphs=$ORIGIN/r/{name}.json
 
 Then:
 
-pnpm dlx shadcn@latest add @markdown-graphs/graph-table
+pnpm dlx shadcn@latest add @mdx-graphs/graph-table
 
 ## Import
 
@@ -77,7 +78,7 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
 ## Agents
 
-$ORIGIN/agents is write vs read. $ORIGIN/docs/skill is the SKILL.md. $ORIGIN/llms.txt is the chooser and the twins.`,
+$ORIGIN/agents is write vs read. $ORIGIN/docs/comark is ::graph-* in a plain .md file. $ORIGIN/docs/skill is the SKILL.md. $ORIGIN/llms.txt is the chooser, the ASCII blocks, and the Comark blocks.`,
   })
 }
 
@@ -104,6 +105,42 @@ function examplesMarkdown(origin: string) {
   })
 }
 
+function comarkDocsMarkdown(origin: string) {
+  return pageMarkdown({
+    origin,
+    title: "Comark",
+    description: COMARK_DESCRIPTION,
+    registry: "graph-comark",
+    extra: `## Wire
+
+${COMARK_WIRE}
+
+## Hosts
+
+GitHub, Linear, and a README still get the fenced ASCII. They do not run Comark. Landing: $ORIGIN/comark.`,
+  })
+}
+
+function comarkLandingMarkdown(origin: string) {
+  return pageMarkdown({
+    origin,
+    title: "Comark",
+    description: COMARK_DESCRIPTION,
+    extra: `Write figures as ::graph-* blocks in Markdown. Comark parses the file. These graphs render it.
+
+## Wire
+
+${COMARK_WIRE}
+
+## Links
+
+- Wiring: $ORIGIN/docs/comark
+- Skill: $ORIGIN/docs/skill
+- Demo: https://comark-graphs-demo.vercel.app
+- Comark: https://comark.dev`,
+  })
+}
+
 async function skillMarkdown(origin: string) {
   const source = await readSkillFile("SKILL.md")
   const extra = [
@@ -120,7 +157,7 @@ async function skillMarkdown(origin: string) {
     "",
     "## What it does",
     "",
-    "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. Plain Markdown gets the official fenced twin from /llms.txt.",
+    "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. A Comark app gets a ::graph-* block. Plain Markdown gets the official fenced ASCII from /llms.txt.",
     "",
     "## Files",
     "",
@@ -168,13 +205,13 @@ function agentsMarkdown(origin: string) {
 
 ${AGENTS_DESCRIPTION}
 
-When a write-up needs a figure, pick a component. JSX goes in MDX. The official fence goes in a README, a PR, or Linear.
+When a write-up needs a figure, the skill picks which graph to use. Emit JSX in MDX, a ::graph-* block in a Comark app, or the official fence in a README, PR, or Linear note.
 
-## Write and read
+## Writing and reading
 
-Writing — at most two graphs next to the claim. React gets JSX. Plain Markdown gets the official twin from ${host}/llms.txt.
+On write, emit at most two graphs next to the claim — JSX for React, YAML for Comark, or the official fence from ${host}/llms.txt when the host cannot run a renderer.
 
-Reading — the figure is characters in the file. Opening the MDX shows labels and values. Edit the labels. Do not replace a graph with SVG.
+On read, the figure is still characters in the file, so opening the MDX shows labels and values. Edit the labels; do not replace a graph with SVG.
 
 ## How to call it
 
@@ -197,6 +234,8 @@ ${prompts}
 ## Links
 
 - Skill install: ${host}/docs/skill
+- Comark: ${host}/comark
+- Comark wiring: ${host}/docs/comark
 - Examples: ${host}/docs/examples
 - OpenAPI: ${host}/openapi.json
 - JSON catalog: ${host}/api/v1/components
@@ -243,6 +282,10 @@ export async function markdownForPath(path: string, origin = SITE_URL) {
       return installationMarkdown(host)
     case "/docs/examples":
       return examplesMarkdown(host)
+    case "/docs/comark":
+      return comarkDocsMarkdown(host)
+    case "/comark":
+      return comarkLandingMarkdown(host)
     case "/docs/skill":
       return skillMarkdown(host)
     default:
@@ -270,6 +313,8 @@ export function knownMarkdownPaths() {
     "/docs",
     "/docs/installation",
     "/docs/examples",
+    "/docs/comark",
+    "/comark",
     "/docs/skill",
     ...components.map((item) => `/docs/${item.slug}`),
   ]

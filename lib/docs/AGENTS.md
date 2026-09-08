@@ -13,6 +13,7 @@ Sidenav, `/docs/[slug]`, install copy, and props tables all read from here. Addi
 | `skill.ts`                            | Agent skill copy, chooser table, example prompts, curl install on `/docs/skill` |
 | `skill-files.ts`                      | Reads `skills/markdown-graphs` for `/skill.md` and the docs page                |
 | `ascii.ts`                            | Fenced ASCII examples for the MDX install tab and `/llms.txt` `## MDX`          |
+| `comark.ts` / `comark-props.ts`       | `::graph-*` YAML for the Comark tab, `/llms.txt` `## Comark`, `/comark`         |
 | `components/docs/examples.tsx`        | `examplesBySlug[slug]`                                                          |
 | `components/docs/recipe-card.tsx`     | Live previews for recipes                                                       |
 | `components/docs/nav.tsx`             | Renders `isNewSlug(item.slug)`                                                  |
@@ -42,4 +43,8 @@ Drawing graphs take `palette?: "mono" | "duo" | "multi"`. Don't paste it into ev
 
 ## MDX (ASCII)
 
-Graphs that are a character grid get a fenced ASCII twin. Renderers live in `lib/ascii`. Example props for the docs tab live in `ascii.ts`. Add the slug to `MDX_SLUGS` when the figure survives a `<pre>` without wrapping. Skip flow, plot, activity, heatmap, calendar, timer, countdown, and frame (`MDX_SKIP_SLUGS`). Twins also ship in `/llms.txt` under `## MDX` so agents can paste them into README / GitHub / Linear instead of JSX.
+Graphs that are a character grid get a fenced fenced ASCII. Renderers live in `lib/ascii`. Example props for the docs tab live in `ascii.ts`. Add the slug to `MDX_SLUGS` when the figure survives a `<pre>` without wrapping. Skip flow, plot, activity, heatmap, calendar, timer, countdown, and frame (`MDX_SKIP_SLUGS`). Fenced ASCII also ships in `/llms.txt` under `## MDX` so agents can paste them into README / GitHub / Linear instead of JSX.
+
+## Comark
+
+`::graph-*` blocks for [Comark](https://comark.dev). Example YAML in `lib/docs/comark-props.ts` → docs **Comark** tab and `/llms.txt` `## Comark`. Adapter: `registry/default/graph-comark/` (`coerce.ts`, `adapters.ts`, `from-markdown.tsx`, `layout.tsx`, `graph-comark.tsx` tag map). Landing `/comark`, wiring `/docs/comark`. No catalog row.

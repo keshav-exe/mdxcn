@@ -2,7 +2,9 @@
 
 Load this after [SKILL.md](SKILL.md) when you are about to write a figure in React, or in MDX that can import `@/registry/default`.
 
-If the host is plain Markdown (README, GitHub, Linear, PR comments, a `.md` file), do not paste this JSX. Fetch https://mdx-graphs.kshv.me/llms.txt and copy the matching fenced twin from `## MDX`. Swap labels, keep the frame.
+If the host is Comark, do not paste this JSX. Fetch https://mdx-graphs.kshv.me/llms.txt and copy the matching `::graph-*` block from `## Comark`.
+
+If the host is plain Markdown that cannot run a renderer (README, GitHub, Linear, PR comments, a `.md` file with no Comark), do not paste this JSX. Fetch https://mdx-graphs.kshv.me/llms.txt and copy the matching fenced ASCII from `## MDX`. Swap labels, keep the frame.
 
 Copy a pair. Swap labels for the user's names. Keep the props. Two graphs per section, prose between them. Do not add a third.
 

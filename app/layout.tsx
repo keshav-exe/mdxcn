@@ -13,8 +13,10 @@ import { getGithubStars } from "@/lib/github"
 import {
   SITE_AUTHOR,
   SITE_DESCRIPTION,
+  SITE_KEYWORDS,
   SITE_NAME,
   SITE_NAME_SHORT,
+  SITE_TITLE,
   SITE_TWITTER,
   SITE_URL,
 } from "@/lib/site"
@@ -37,19 +39,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: SITE_NAME,
-    template: `%s · ${SITE_NAME}`,
+    default: SITE_TITLE,
+    template: `%s · ${SITE_NAME_SHORT}`,
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
-  keywords: [
-    "Markdown Graphs",
-    "mdx-graphs",
-    "markdown graphs",
-    "MDX graphs",
-    "ASCII charts",
-    "Markdown Graphs API",
-  ],
+  keywords: [...SITE_KEYWORDS],
   publisher: SITE_NAME,
   alternates: {
     canonical: "/",
@@ -57,11 +52,13 @@ export const metadata: Metadata = {
   authors: [{ name: SITE_AUTHOR.name, url: SITE_AUTHOR.url }],
   creator: SITE_AUTHOR.name,
   openGraph: {
+    title: SITE_TITLE,
     type: "website",
     locale: "en_US",
     siteName: SITE_NAME_SHORT,
   },
   twitter: {
+    title: SITE_TITLE,
     card: "summary_large_image",
     creator: SITE_TWITTER,
   },

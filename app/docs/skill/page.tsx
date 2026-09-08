@@ -39,7 +39,7 @@ export default async function SkillPage() {
     "",
     "## What it does",
     "",
-    "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. Plain Markdown (README, GitHub, Linear) gets the official fenced twin from /llms.txt. Opening the file later, the figure is still characters — the agent can read the labels and edit them. Titles stay short and uppercase. Labels stay lowercase. No SVG, no homemade ASCII, no extra hues, no dumping every graph it knows.",
+    "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. A Comark app gets a ::graph-* block. Plain Markdown (README, GitHub, Linear) gets the official fenced ASCII from /llms.txt.",
     "",
     "## Files",
     "",
@@ -157,6 +157,13 @@ export default async function SkillPage() {
           >
             Examples
           </Link>
+          . Plain <code className="font-mono">.md</code> in a Comark app:{" "}
+          <Link
+            className="text-foreground underline-offset-4 hover:underline"
+            href="/comark"
+          >
+            Comark
+          </Link>
           .
         </p>
       </section>
@@ -172,9 +179,11 @@ export default async function SkillPage() {
           ))}
         </ul>
         <p className="max-w-[56ch] text-pretty text-muted-foreground">
-          Do not draw the chart in SVG. In plain Markdown, paste the official
-          fenced twin from /llms.txt — do not invent ASCII, and do not paste
-          JSX. Do not restyle the frame. Do not dump every graph into one reply.
+          Do not draw the chart in SVG. In GitHub or a README, paste the
+          official fenced ASCII from /llms.txt. In a Comark app, paste a
+          ::graph-* block. Do not invent ASCII, and do not paste JSX into a file
+          that cannot import the components. Do not restyle the frame. Do not
+          dump every graph into one reply.
         </p>
       </section>
 
@@ -202,7 +211,8 @@ export default async function SkillPage() {
           >
             /llms.txt
           </Link>{" "}
-          is the chooser plus the MDX ASCII twins if the skill is not installed.
+          is the chooser plus the MDX ASCII blocks and the Comark blocks if the
+          skill is not installed.
         </p>
         <CopyBlock label="SKILL.md" value={source} />
       </section>

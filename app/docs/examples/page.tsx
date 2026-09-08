@@ -97,7 +97,7 @@ export default function ExamplesPage() {
         >
           Skill
         </Link>
-        . Every graph in one file, including the fenced ASCII twins:{" "}
+        . Every graph in one file, including the fenced ASCII blocks:{" "}
         <Link
           className="text-foreground underline-offset-4 hover:underline"
           href="/llms.txt"

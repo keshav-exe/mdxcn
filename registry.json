@@ -2719,6 +2719,26 @@
           "type": "registry:component"
         },
         {
+          "path": "registry/default/graph-comark/coerce.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-comark/adapters.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-comark/from-markdown.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/default/graph-comark/layout.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/default/graph-comark/graph-comark.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "registry/default/index.ts",
           "type": "registry:lib"
         }
@@ -2777,7 +2797,36 @@
           "background-image": "repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px)"
         }
       },
-      "docs": "Installs the full library into registry/default."
+      "docs": "Installs the full library into registry/default, including the Comark adapter."
+    },
+    {
+      "name": "graph-comark",
+      "type": "registry:component",
+      "title": "Comark",
+      "description": "Maps Comark ::graph-* blocks to markdown-graphs components. Install the graphs first.",
+      "files": [
+        {
+          "path": "registry/default/graph-comark/coerce.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-comark/adapters.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-comark/from-markdown.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/default/graph-comark/layout.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/default/graph-comark/graph-comark.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Pass graphComponents to Comark. Scalars from Markdown arrive as strings; coerceProps fixes that. graph-comark.tsx is the tag map after a full install."
     }
   ]
 }

@@ -1,8 +1,10 @@
 import Link from "next/link"
 
 import { AgentsFlowDemo } from "@/components/site/agents-flow-demo"
-import { Button } from "@/components/ui/button"
 import { SiteContainer } from "@/components/site/container"
+import { InlineCode, ProseMuted, ProseP, TextLink } from "@/components/site/prose"
+import { Button } from "@/components/ui/button"
+import { COMARK_URL } from "@/lib/docs/comark"
 
 function AgentsSection() {
   return (
@@ -14,15 +16,19 @@ function AgentsSection() {
               <h2 className="max-w-[20ch] text-2xl font-semibold tracking-tight text-balance">
                 For agents
               </h2>
-              <p className="max-w-[48ch] text-pretty text-muted-foreground">
-                The figure lives in the file — JSX the agent writes, ASCII it
-                can read back. No SVG, no homemade fence.
-              </p>
-              <p className="max-w-[48ch] text-pretty text-muted-foreground">
-                A skill file picks the graph. Recipes give it real props.{" "}
-                <code className="font-mono">/llms.txt</code> is the chooser plus
-                the twins if the skill is not installed.
-              </p>
+              <ProseP>
+                The figure stays in the file as JSX the agent wrote, a{" "}
+                <InlineCode>::graph-*</InlineCode> block{" "}
+                <TextLink href={COMARK_URL}>Comark</TextLink> can render, or
+                ASCII it can read back later — not SVG, and not a homemade
+                fence.
+              </ProseP>
+              <ProseMuted>
+                A skill picks the graph and recipes supply real props;{" "}
+                <TextLink href="/llms.txt">/llms.txt</TextLink> carries the
+                chooser plus the ASCII and Comark blocks when the skill is not
+                installed.
+              </ProseMuted>
             </div>
             <Button nativeButton={false} render={<Link href="/agents" />}>
               How agents use this

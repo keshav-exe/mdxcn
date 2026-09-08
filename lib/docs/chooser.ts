@@ -1,5 +1,6 @@
 import type { ComponentDoc } from "@/lib/docs/catalog"
 import { MDX_SKIP_SLUGS, isMdxSlug, mdxExample } from "@/lib/docs/ascii"
+import { comarkChooserSection } from "@/lib/docs/comark"
 import { recipesMarkdown } from "@/lib/docs/recipes"
 import { SITE_URL } from "@/lib/site"
 
@@ -156,7 +157,7 @@ export function chooserMarkdown(
     ", "
   )
 
-  const twins = items
+  const asciiBlocks = items
     .filter((item) => isMdxSlug(item.slug))
     .map((item) => {
       const mdx = mdxExample(item.slug)
@@ -176,7 +177,7 @@ ${mdx.markdown}`
   return `# Markdown Graphs
 
 ASCII-framed React diagrams for MDX. Source is copied via shadcn registry, not npm.
-Agents write JSX (React / importable MDX) or paste an official fenced twin (README, GitHub, Linear). Do not invent ASCII. Do not draw SVG.
+Agents write JSX (React / importable MDX), paste an official fenced ASCII (README, GitHub, Linear), or write a \`::graph-*\` block for Comark. Do not invent ASCII. Do not draw SVG.
 ${host}
 
 ## When to use
@@ -188,8 +189,9 @@ Reach for it when the writing is a path or a refactor, an incident or postmortem
 How to call it:
 
 1. React or importable MDX: install with \`pnpm dlx shadcn@latest add ${host}/r/<slug>.json\` and copy JSX from ${host}/docs/examples.
-2. Plain Markdown: paste the official fenced twin from ## MDX below. Do not invent ASCII. Do not paste JSX.
-3. Install the skill from ${host}/skill.md so the chooser runs without fetching this file every time.
+2. Plain Markdown that cannot run a renderer (README, GitHub, Linear): paste the official fenced ASCII from ## MDX below. Do not invent ASCII. Do not paste JSX.
+3. Comark app (plain \`.md\`, streaming, DB-backed content): paste a \`::graph-*\` block from ## Comark. Wiring: ${host}/docs/comark.
+4. Install the skill from ${host}/skill.md so the chooser runs without fetching this file every time.
 
 Do not use it for a one-sentence note, a pie chart, or a drawing that needs SVG. At most two figures, with prose between them.
 
@@ -208,6 +210,8 @@ Do not use it for a one-sentence note, a pie chart, or a drawing that needs SVG.
 - Deprecation policy: ${host}/developers/deprecation
 - Sitemap: ${host}/sitemap.xml
 - For agents: ${host}/agents
+- Wiring: ${host}/docs/comark
+- Landing: ${host}/comark
 
 ## CLI
 
@@ -215,15 +219,16 @@ Install graphs with the official shadcn CLI (not npm):
 
 pnpm dlx shadcn@latest add ${host}/r/<slug>.json
 
-Copy all graphs:
+Copy all graphs (includes the Comark adapter):
 
 pnpm dlx shadcn@latest add ${host}/r/all.json
 
 ## Host
 
 - React, or MDX that can import \`@/registry/default/...\`: copy JSX from ${host}/docs/examples. Install via shadcn.
-- Plain Markdown that cannot run React (README, GitHub, Linear, Slack, PR comments, \`.md\`): paste a fenced twin from ## MDX. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
-- No twin (${skip}): pick a graph that has a twin, or skip the figure.
+- Plain Markdown that cannot run React (README, GitHub, Linear, Slack, PR comments): paste a fenced ASCII from ## MDX. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
+- Comark: paste a \`::graph-*\` block from ## Comark. YAML props match the React API. GitHub does not run Comark — use fenced ASCII there.
+- No fenced ASCII (${skip}): Flow, Plot, Activity, Heatmap, Calendar, Timer, Countdown, Frame have no ## MDX block. They still have a Comark block except Frame.
 
 ## Rules
 
@@ -247,9 +252,11 @@ ${rows.join("\n")}
 
 ## MDX
 
-Official fenced ASCII twins. Paste into plain Markdown. Monospace keeps the frame aligned.
+Official fenced ASCII blocks. Paste into plain Markdown. Monospace keeps the frame aligned.
 
-${twins}
+${asciiBlocks}
+
+${comarkChooserSection(items, host)}
 
 ${recipesMarkdown(host)}
 `

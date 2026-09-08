@@ -5,10 +5,13 @@ import { GITHUB_URL } from "@/lib/github"
 import {
   AGENTS_DESCRIPTION,
   DOCS_DESCRIPTION,
+  SITE_ALTERNATE_NAMES,
   SITE_AUTHOR,
   SITE_DESCRIPTION,
+  SITE_KEYWORDS,
   SITE_NAME,
   SITE_NAME_SHORT,
+  SITE_TITLE,
   SITE_URL,
 } from "@/lib/site"
 
@@ -21,7 +24,7 @@ export function pageMeta({
   description: string
   path: string
 }): Metadata {
-  const ogTitle = title ? `${title} · ${SITE_NAME}` : SITE_NAME
+  const ogTitle = title ? `${title} · ${SITE_NAME_SHORT}` : SITE_TITLE
 
   return {
     ...(title ? { title } : {}),
@@ -70,7 +73,7 @@ function organizationNode() {
   return {
     "@type": "Organization" as const,
     name: SITE_NAME,
-    alternateName: ["mdx-graphs", SITE_NAME_SHORT, "markdown-graphs"],
+    alternateName: [...SITE_ALTERNATE_NAMES],
     url: SITE_URL,
     logo: `${SITE_URL}/opengraph-image`,
     sameAs: [GITHUB_URL, SITE_AUTHOR.x],
@@ -85,9 +88,10 @@ export function websiteJsonLd() {
       {
         "@type": "WebSite",
         name: SITE_NAME,
-        alternateName: [SITE_NAME_SHORT, "mdx-graphs"],
+        alternateName: [...SITE_ALTERNATE_NAMES],
         url: SITE_URL,
         description: SITE_DESCRIPTION,
+        keywords: SITE_KEYWORDS.join(", "),
         inLanguage: "en",
         publisher: organizationNode(),
         potentialAction: {
@@ -99,8 +103,9 @@ export function websiteJsonLd() {
       {
         "@type": "SoftwareApplication",
         name: SITE_NAME,
-        alternateName: [SITE_NAME_SHORT, "mdx-graphs"],
+        alternateName: [...SITE_ALTERNATE_NAMES],
         description: SITE_DESCRIPTION,
+        keywords: SITE_KEYWORDS.join(", "),
         url: SITE_URL,
         applicationCategory: "DeveloperApplication",
         operatingSystem: "Web",
@@ -116,7 +121,9 @@ export function websiteJsonLd() {
       {
         "@type": "SoftwareSourceCode",
         name: SITE_NAME_SHORT,
+        alternateName: [...SITE_ALTERNATE_NAMES],
         description: SITE_DESCRIPTION,
+        keywords: SITE_KEYWORDS.join(", "),
         url: SITE_URL,
         codeRepository: GITHUB_URL,
         license: `${GITHUB_URL}/blob/main/LICENSE`,

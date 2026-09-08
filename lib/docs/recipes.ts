@@ -319,7 +319,7 @@ export function recipesMarkdown(origin = SITE_URL) {
 
   return `## Recipes
 
-Two graphs per write-up is enough. Prose between them. Copy the JSX from the examples when the host can import components. Plain Markdown: copy the matching twin from ## MDX above.
+Two graphs per write-up is enough. Prose between them. Copy the JSX from the examples when the host can import components. Plain Markdown: copy the matching fence from ## MDX above. Comark: copy the matching block from ## Comark.
 
 ${lines.join("\n")}
 

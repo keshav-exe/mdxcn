@@ -1,43 +1,42 @@
 # markdown graphs
 
-React components for ASCII-style tables, charts, and diagrams in MDX. Built so an agent can drop a figure next to prose — JSX in MDX, official ASCII in a README. Each graph sits in a dashed frame with a title on the top edge. One accent color by default; drawing graphs can take `palette="duo"` or `palette="multi"`. You copy the source into your project — this is not an npm package.
+React components for ASCII-style tables, charts, and diagrams in MDX. Built so an agent can drop a figure next to prose — JSX in MDX, `::graph-*` in Comark, official ASCII in a README. Each graph sits in a dashed frame with a title on the top edge. One accent color by default; drawing graphs can take `palette="duo"` or `palette="multi"`. You copy the source into your project — this is not an npm package.
 
-[Docs](https://mdx-graphs.kshv.me/docs) · [For agents](https://mdx-graphs.kshv.me/agents) · [Examples](https://mdx-graphs.kshv.me/docs/examples) · [Install](https://mdx-graphs.kshv.me/docs/installation) · [Skill](https://mdx-graphs.kshv.me/docs/skill) · [GitHub](https://github.com/keshav-exe/markdown-graphs)
+[Docs](https://mdx-graphs.kshv.me/docs) · [Comark](https://mdx-graphs.kshv.me/comark) · [For agents](https://mdx-graphs.kshv.me/agents) · [Examples](https://mdx-graphs.kshv.me/docs/examples) · [Install](https://mdx-graphs.kshv.me/docs/installation) · [Skill](https://mdx-graphs.kshv.me/docs/skill) · [GitHub](https://github.com/keshav-exe/markdown-graphs)
 
 ## Install
 
 You need an existing [shadcn](https://ui.shadcn.com) project and [`motion`](https://motion.dev).
 
-One component:
+Scoped registry (same idea as `@dotmatrix/dotm-square-3`):
+
+```bash
+pnpm dlx shadcn@latest registry add @mdx-graphs=https://mdx-graphs.kshv.me/r/{name}.json
+pnpm dlx shadcn@latest add @mdx-graphs/graph-table
+pnpm dlx shadcn@latest add @mdx-graphs/all
+```
+
+Or paste the full URL once:
 
 ```bash
 pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/graph-table.json
-```
-
-Everything:
-
-```bash
 pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/all.json
 ```
 
-Files land under `@/registry/default`. Import them from there:
-
-```tsx
-import { GraphTable } from "@/registry/default/graph-table/graph-table"
-```
-
-Add the registry once in `components.json` if you want to install by name:
+`components.json` after `registry add`:
 
 ```json
 {
   "registries": {
-    "@markdown-graphs": "https://mdx-graphs.kshv.me/r/{name}.json"
+    "@mdx-graphs": "https://mdx-graphs.kshv.me/r/{name}.json"
   }
 }
 ```
 
-```bash
-pnpm dlx shadcn@latest add @markdown-graphs/graph-table
+Files land under `@/registry/default`. Import from there:
+
+```tsx
+import { GraphTable } from "@/registry/default/graph-table/graph-table"
 ```
 
 ## Components
@@ -78,9 +77,11 @@ pnpm dlx shadcn@latest add @markdown-graphs/graph-table
 | Countdown | `graph-countdown` | Time left until a date                     |
 | Frame     | `graph-frame`     | Shared dashed frame primitives             |
 
-Each docs page has CLI, manual, and agent install tabs. Copy page puts the markdown (install, prompt, examples, props) on the clipboard.
+Each docs page has CLI, manual, agent, MDX, and Comark install tabs. Copy page puts the markdown (install, prompt, examples, props) on the clipboard.
 
-Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on [Examples](https://mdx-graphs.kshv.me/docs/examples). [For agents](https://mdx-graphs.kshv.me/agents) is the write and read story. The [skill](https://mdx-graphs.kshv.me/docs/skill) tells an agent which graph to put next to the prose — JSX in React, fenced ASCII in plain Markdown. Agents can also fetch [`/llms.txt`](https://mdx-graphs.kshv.me/llms.txt) for the chooser and the twins.
+Comark apps render the same figures from `::graph-*` blocks in a plain `.md` file — no MDX. Copy `graph-comark` (already in `all.json`). Full install: `graphComponents` from `graph-components.tsx`. Subset: `createGraphComponents`. Wiring: [Comark](https://mdx-graphs.kshv.me/docs/comark). Pitch: [Comark landing](https://mdx-graphs.kshv.me/comark).
+
+Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on [Examples](https://mdx-graphs.kshv.me/docs/examples). [For agents](https://mdx-graphs.kshv.me/agents) is the write and read story. The [skill](https://mdx-graphs.kshv.me/docs/skill) tells an agent which graph to put next to the prose — JSX in React, `::graph-*` in Comark, fenced ASCII in GitHub. Agents can also fetch [`/llms.txt`](https://mdx-graphs.kshv.me/llms.txt) for the chooser, the ASCII blocks, and the Comark blocks.
 
 ## Design
 

@@ -171,6 +171,13 @@ export const registryFiles: Record<string, string[]> = {
     "registry/default/graph-frame/graph-clock.ts",
     "registry/default/graph-countdown/graph-countdown.tsx",
   ],
+  "graph-comark": [
+    "registry/default/graph-comark/coerce.ts",
+    "registry/default/graph-comark/adapters.ts",
+    "registry/default/graph-comark/from-markdown.tsx",
+    "registry/default/graph-comark/layout.tsx",
+    "registry/default/graph-comark/graph-comark.tsx",
+  ],
   all: ["registry/default"],
 }
 

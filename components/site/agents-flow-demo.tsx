@@ -18,7 +18,7 @@ function AgentsFlowDemo() {
           nodes: [
             { label: "write-up" },
             { label: "chooser" },
-            { label: "JSX or twin", tone: "accent" },
+            { label: "JSX or fence", tone: "accent" },
           ],
         },
         {

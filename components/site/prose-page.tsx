@@ -1,6 +1,8 @@
 import type { ReactNode } from "react"
 
 import { SiteContainer } from "@/components/site/container"
+import { proseBodyClass } from "@/components/site/prose"
+import { cn } from "@/lib/utils"
 
 function ProsePage({
   kicker,
@@ -26,9 +28,7 @@ function ProsePage({
               {title}
             </h1>
           </div>
-          <div className="flex max-w-[56ch] flex-col gap-4 text-pretty text-muted-foreground">
-            {children}
-          </div>
+          <div className={cn("flex flex-col gap-4", proseBodyClass)}>{children}</div>
         </SiteContainer>
       </section>
     </main>

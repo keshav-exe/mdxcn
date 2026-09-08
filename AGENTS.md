@@ -30,8 +30,9 @@ Do the full list. Docs pages are generated from the catalog; there is no per-com
 6. **Replace** `NEW_SLUGS` in `lib/docs/new.ts` with this drop’s slugs. Do not append to last drop’s list.
 7. Row in the README component table
 8. Homepage (`app/page.tsx`) only if it earns a slot
-9. ASCII twin in `lib/ascii` + `MDX_SLUGS` if the figure is a character grid (see `lib/docs/AGENTS.md`)
-10. `pnpm registry:build` so `public/r/` matches source
+9. fenced ASCII in `lib/ascii` + `MDX_SLUGS` if the figure is a character grid (see `lib/docs/AGENTS.md`)
+10. Comark: `COMARK_PROPS` in `lib/docs/comark-props.ts` and `numeric` / `required` in `registry/default/graph-comark/adapters.ts`. Do not add a catalog row for `graph-comark`.
+11. `pnpm registry:build` so `public/r/` matches source
 
 OG images are `opengraph-image.tsx` via `lib/og`. They prerender at `next build` from the catalog. Do not commit PNGs or add a pre-commit generator. A new catalog row is enough.
 

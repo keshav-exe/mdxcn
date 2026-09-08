@@ -28,6 +28,10 @@ Resolve with `resolveGlyphs(glyphs)`. Intensity: `intensityLevel` / `intensityGl
 
 No CSS-box charts. No nested radius demos. No type-specimen / contrast-token graphs.
 
+## Comark adapter
+
+Not a graph. After `all.json`, import `graphComponents` from `graph-comark/graph-comark.tsx` and pass it to Comark — same as [comark-graphs-demo](https://github.com/atinux/comark-graphs-demo). New graph: add `numeric` / `required` in `adapters.ts` and YAML in `comark-props.ts`.
+
 ## Motion
 
 `fadeUp` + `staggerList` + `graphTransition` from `graph-motion.ts`. Stagger rows/weeks, not every cell. `viewport={{ once: true }}`.

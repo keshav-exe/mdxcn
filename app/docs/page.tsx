@@ -19,7 +19,7 @@ export const metadata: Metadata = pageMeta({
   path: "/docs",
 })
 
-const intro = `ASCII-framed graphs you copy into a shadcn project. Built so an agent can place them next to prose — JSX in MDX, official fences in a README. One accent. Drawing graphs also take palette="duo" or "multi".`
+const intro = `ASCII-framed graphs you copy into a shadcn project. Built so an agent can place them next to prose — JSX in MDX, ::graph-* in Comark, official fences in a README. One accent. Drawing graphs also take palette="duo" or "multi".`
 
 export default function DocsPage() {
   const extra = [
@@ -65,7 +65,15 @@ export default function DocsPage() {
           >
             Examples
           </Link>{" "}
-          are short write-ups with two graphs each.
+          are short write-ups with two graphs each.{" "}
+          <Link
+            className="text-foreground underline-offset-4 hover:underline"
+            href="/docs/comark"
+          >
+            Comark
+          </Link>{" "}
+          is <code className="font-mono">::graph-*</code> in a plain{" "}
+          <code className="font-mono">.md</code> file.
         </p>
       </DocsPageHeader>
 

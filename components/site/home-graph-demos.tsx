@@ -62,11 +62,11 @@ function HomeGraphDemos() {
       <SiteContainer className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <h2 className="max-w-[35ch] text-2xl font-semibold tracking-tight text-balance">
-            React-only figures
+            Figures that stay in React
           </h2>
-          <p className="max-w-[48ch] text-pretty text-muted-foreground">
-            Activity, heatmap, calendar, and timers have no ASCII twin. They
-            stay in the component.
+          <p className="max-w-[56ch] text-pretty leading-relaxed text-foreground/88">
+            Activity, heatmap, calendar, and timers have no fenced ASCII, so they
+            live only as components.
           </p>
         </div>
         <AccentPicker />

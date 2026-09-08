@@ -43,12 +43,20 @@ const HITS: Hit[] = [
     haystack: "agents md markdown for agents skill llms machine readable",
   },
   {
+    href: "/comark",
+    title: "Comark",
+    detail: "/comark",
+    group: "Get started",
+    haystack:
+      "comark markdown component syntax yaml graph-table no mdx streaming atinux",
+  },
+  {
     href: "/agents",
     title: "For agents",
     detail: "/agents",
     group: "Get started",
     haystack:
-      "for agents skill llms.txt cursor claude codex opencode mdx write read ascii twin recipes",
+      "for agents skill llms.txt cursor claude codex opencode mdx write read ascii fence recipes comark",
   },
   {
     href: "/about",
@@ -86,7 +94,9 @@ const HITS: Hit[] = [
     haystack:
       item.href === "/docs/skill"
         ? "skill /docs/skill cursor claude codex opencode agent skill.md recipes"
-        : `${item.label} ${item.href}`.toLowerCase(),
+        : item.href === "/docs/comark"
+          ? "comark yaml graph-comark adapter streaming ::graph markdown"
+          : `${item.label} ${item.href}`.toLowerCase(),
   })),
   ...recipes.map((item) => ({
     href: `/docs/examples#${item.slug}`,

@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react"
 
 import { CopyButton } from "@/components/docs/copy-button"
 import { FrameBox } from "@/components/site/corners"
+import { ProseMuted } from "@/components/site/prose"
 import { useAccent } from "@/hooks/use-accent"
 import { accentCss } from "@/lib/accent"
 import { cn } from "@/lib/utils"
@@ -30,11 +31,7 @@ function ComponentPreview({
           <h2 className="text-xl font-semibold tracking-tight text-balance">
             {title}
           </h2>
-          {description ? (
-            <p className="max-w-[56ch] text-pretty text-muted-foreground">
-              {description}
-            </p>
-          ) : null}
+          {description ? <ProseMuted>{description}</ProseMuted> : null}
         </div>
         <div
           className="flex shrink-0 items-center gap-1"

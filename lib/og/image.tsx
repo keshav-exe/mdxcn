@@ -108,23 +108,4 @@ function OgFrame({
   )
 }
 
-function OgMark({ size }: { size: number }) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        height: "100%",
-        backgroundColor: bg,
-        color: accent,
-        fontSize: size * 0.55,
-      }}
-    >
-      +
-    </div>
-  )
-}
-
-export { OgFrame, OgMark }
+export { OgFrame }

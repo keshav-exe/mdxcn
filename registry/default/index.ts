@@ -60,3 +60,11 @@ export { GraphSlope } from "./graph-slope/graph-slope"
 export { GraphBullet } from "./graph-bullet/graph-bullet"
 export { GraphTimer } from "./graph-timer/graph-timer"
 export { GraphCountdown } from "./graph-countdown/graph-countdown"
+export {
+  createGraphComponents,
+  graphComponents,
+  graphTags,
+  type GraphComponentMap,
+} from "./graph-comark/graph-comark"
+export { coerceProps } from "./graph-comark/coerce"
+export { GraphRow } from "./graph-comark/layout"

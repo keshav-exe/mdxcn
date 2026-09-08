@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 
 import { CopyPage } from "@/components/docs/copy-page"
 import { SiteCorners, SiteRule } from "@/components/site/corners"
+import { proseLeadClass, proseMutedClass } from "@/components/site/prose"
 import type { PageCopy } from "@/lib/docs/prompt"
 import { cn } from "@/lib/utils"
 
@@ -41,13 +42,9 @@ function DocsPageHeader({
       </div>
       {kicker ? <p className="font-mono text-graph-accent">{kicker}</p> : null}
       {lead ? (
-        <div className="max-w-[56ch] text-pretty text-muted-foreground">
-          {lead}
-        </div>
+        <div className={cn(proseLeadClass, "flex flex-col gap-4")}>{lead}</div>
       ) : null}
-      {note ? (
-        <p className="max-w-[56ch] text-pretty text-muted-foreground">{note}</p>
-      ) : null}
+      {note ? <p className={proseMutedClass}>{note}</p> : null}
       {children}
     </header>
   )

@@ -6,10 +6,10 @@ import { useOrigin } from "@/lib/docs/origin"
 function NamespaceSetup() {
   const origin = useOrigin()
   const host = origin || "<origin>"
-  const add = `pnpm dlx shadcn@latest registry add @markdown-graphs=${host}/r/{name}.json`
+  const add = `pnpm dlx shadcn@latest registry add @mdx-graphs=${host}/r/{name}.json`
   const config = `{
   "registries": {
-    "@markdown-graphs": "${host}/r/{name}.json"
+    "@mdx-graphs": "${host}/r/{name}.json"
   }
 }`
 
@@ -19,7 +19,7 @@ function NamespaceSetup() {
       <CopyBlock label="components.json" value={config} />
       <Command
         label="Then"
-        value="pnpm dlx shadcn@latest add @markdown-graphs/graph-table"
+        value="pnpm dlx shadcn@latest add @mdx-graphs/graph-table"
       />
     </div>
   )

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <style>
+    :root { --tile: #ededed; --ink: #1c1c1c; --accent: #3b7fb0; }
+    @media (prefers-color-scheme: light) {
+      :root { --tile: #1c1c1c; --ink: #e6e6e6; --accent: #7eadd4; }
+    }
+  </style>
+  <rect width="32" height="32" fill="var(--tile)"/>
+  <rect x="4.5" y="4.5" width="23" height="23" fill="none" stroke="var(--ink)" stroke-width="1" stroke-dasharray="2 2"/>
+  <g fill="var(--tile)">
+    <rect x="2" y="2" width="5" height="5"/>
+    <rect x="25" y="2" width="5" height="5"/>
+    <rect x="2" y="25" width="5" height="5"/>
+    <rect x="25" y="25" width="5" height="5"/>
+  </g>
+  <path d="M4.5 2v5M2 4.5h5M27.5 2v5M25 4.5h5M4.5 25v5M2 27.5h5M27.5 25v5M25 27.5h5" fill="none" stroke="var(--ink)" stroke-width="1"/>
+  <rect x="8" y="18" width="4" height="6" fill="var(--ink)"/>
+  <rect x="14" y="13" width="4" height="11" fill="var(--ink)"/>
+  <rect x="20" y="8" width="4" height="16" fill="var(--accent)"/>
+</svg>

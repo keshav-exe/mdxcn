@@ -35,7 +35,7 @@ describe("homepage copy", () => {
     expect(text.length).toBeGreaterThanOrEqual(500)
   })
 
-  it("includes when-to-use jobs in the markdown twin", () => {
+  it("includes when-to-use jobs in the markdown export", () => {
     const md = homeMarkdown()
     expect(md).toContain("# Markdown Graphs")
     expect(md).toContain("## Write")

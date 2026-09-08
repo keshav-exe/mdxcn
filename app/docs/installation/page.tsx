@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
 import { Command, InstallCommand } from "@/components/docs/install"
 import { DocsPageHeader } from "@/components/docs/page-header"
 import { NamespaceSetup } from "@/components/docs/namespace"
 import { JsonLd } from "@/components/seo/json-ld"
+import { InlineCode, ProseP, TextLink } from "@/components/site/prose"
+import { COMARK_URL } from "@/lib/docs/comark"
 import { getComponent } from "@/lib/docs/catalog"
 import { installationJsonLd, pageMeta } from "@/lib/seo"
 
@@ -34,11 +35,11 @@ pnpm dlx shadcn@latest add $ORIGIN/r/all.json
 
 Add the registry once in components.json, then install components by name.
 
-pnpm dlx shadcn@latest registry add @markdown-graphs=$ORIGIN/r/{name}.json
+pnpm dlx shadcn@latest registry add @mdx-graphs=$ORIGIN/r/{name}.json
 
 Then:
 
-pnpm dlx shadcn@latest add @markdown-graphs/graph-table
+pnpm dlx shadcn@latest add @mdx-graphs/graph-table
 
 ## Import
 
@@ -48,7 +49,7 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
 ## Agents
 
-$ORIGIN/agents is write vs read — JSX in MDX, official ASCII in a README. $ORIGIN/docs/skill is the SKILL.md. Same files in Cursor, Claude Code, Codex, OpenCode, or any agent that loads Agent Skills. $ORIGIN/llms.txt is the chooser, recipes, and fenced ASCII twins in one file.`
+$ORIGIN/agents is write vs read — JSX in MDX, ::graph-* in Comark, official ASCII in a README. $ORIGIN/docs/skill is the SKILL.md. Same files in Cursor, Claude Code, Codex, OpenCode, or any agent that loads Agent Skills. $ORIGIN/llms.txt is the chooser, recipes, fenced ASCII blocks, and Comark blocks in one file.`
 
 export default function InstallationPage() {
   const table = getComponent("graph-table")
@@ -65,9 +66,9 @@ export default function InstallationPage() {
         }}
         lead={
           <>
-            These are source files, not an npm package. You need an existing
-            shadcn project and the <code className="font-mono">motion</code>{" "}
-            dependency.
+            These are source files, not an npm package. You need an existing{" "}
+            <TextLink href="https://ui.shadcn.com">shadcn</TextLink> project and
+            the <InlineCode>motion</InlineCode> dependency.
           </>
         }
         title="Installation"
@@ -78,38 +79,37 @@ export default function InstallationPage() {
           <h2 className="text-xl font-semibold tracking-tight">
             One component
           </h2>
-          <p className="text-pretty text-muted-foreground">
+          <ProseP>
             Run the shadcn CLI against this site&apos;s registry, or copy the
             files from GitHub.
-          </p>
+          </ProseP>
           <InstallCommand doc={table} name="graph-table" />
         </section>
 
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold tracking-tight">Everything</h2>
-          <p className="text-pretty text-muted-foreground">
+          <ProseP>
             Installs every graph and the shared frame code into{" "}
-            <code className="font-mono">registry/default</code>.
-          </p>
+            <InlineCode>registry/default</InlineCode>.
+          </ProseP>
           <InstallCommand name="all" />
         </section>
 
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold tracking-tight">Namespace</h2>
-          <p className="text-pretty text-muted-foreground">
-            Add the registry once in{" "}
-            <code className="font-mono">components.json</code>, then install
-            components by name.
-          </p>
+          <ProseP>
+            Add the registry once in <InlineCode>components.json</InlineCode>,
+            then install components by name.
+          </ProseP>
           <NamespaceSetup />
         </section>
 
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold tracking-tight">Import</h2>
-          <p className="text-pretty text-muted-foreground">
-            Files land under <code className="font-mono">@/registry</code>. Add
-            your own barrel export if you want a shorter import path.
-          </p>
+          <ProseP>
+            Files land under <InlineCode>@/registry</InlineCode>. Add your own
+            barrel export if you want a shorter import path.
+          </ProseP>
           <Command
             label="Import"
             value={`import { GraphTable } from "@/registry/default/graph-table/graph-table"`}
@@ -118,31 +118,15 @@ export default function InstallationPage() {
 
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold tracking-tight">Agents</h2>
-          <p className="text-pretty text-muted-foreground">
+          <ProseP>
             A skill file so the agent picks a component instead of drawing SVG.
-            JSX in MDX. Official ASCII in a README.{" "}
-            <Link
-              className="text-foreground underline-offset-4 hover:underline"
-              href="/agents"
-            >
-              For agents
-            </Link>{" "}
-            is the write and read story.{" "}
-            <Link
-              className="text-foreground underline-offset-4 hover:underline"
-              href="/docs/skill"
-            >
-              Skill
-            </Link>{" "}
-            is the install.{" "}
-            <Link
-              className="text-foreground underline-offset-4 hover:underline"
-              href="/llms.txt"
-            >
-              /llms.txt
-            </Link>{" "}
-            is the chooser plus the twins, in one file.
-          </p>
+            JSX in MDX. A <InlineCode>::graph-*</InlineCode> block in{" "}
+            <TextLink href={COMARK_URL}>Comark</TextLink>. Official ASCII in a
+            README. <TextLink href="/agents">For agents</TextLink> is the write
+            and read story. <TextLink href="/docs/skill">Skill</TextLink> is the
+            install. <TextLink href="/llms.txt">/llms.txt</TextLink> is the
+            chooser plus the ASCII blocks and the Comark blocks, in one file.
+          </ProseP>
         </section>
       </div>
     </div>
