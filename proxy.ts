@@ -8,7 +8,7 @@ import {
 } from "@/lib/http/accept"
 
 const SKIP =
-  /^\/(api\/|_next\/|_vercel\/|r\/|llms\.txt$|skill\.md$|agents\.md$|skill\/|openapi\.json$|sitemap\.xml$|robots\.txt$|\.well-known\/)/
+  /^\/(api\/|_next\/|_vercel\/|r\/|llms\.txt$|skill\.md$|agents\.md$|skill\/|openapi\.json$|sitemap\.xml$|robots\.txt$|\.well-known\/|favicon\.ico$|icon(?:\.svg)?$|apple-icon)|opengraph-image/
 
 function markdownDestination(pathname: string) {
   const clean = pathname.replace(/\.md$/i, "") || "/"
@@ -25,7 +25,7 @@ export function proxy(request: NextRequest) {
   const accept = request.headers.get("accept")
 
   if (SKIP.test(pathname)) {
-    return withVary(NextResponse.next())
+    return NextResponse.next()
   }
 
   if (pathname.endsWith(".md")) {
@@ -59,5 +59,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api/|_next/|_vercel/).*)"],
+  matcher: [
+    "/((?!api/|_next/|_vercel/|r/|favicon\\.ico|icon|apple-icon|.*\\.(?:json|txt|xml|svg|ico|png)$).*)",
+  ],
 }

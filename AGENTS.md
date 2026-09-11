@@ -34,7 +34,7 @@ Do the full list. Docs pages are generated from the catalog; there is no per-com
 10. Comark: `COMARK_PROPS` in `lib/docs/comark-props.ts` and `numeric` / `required` in `registry/default/graph-comark/adapters.ts`. Do not add a catalog row for `graph-comark`.
 11. `pnpm registry:build` so `public/r/` matches source
 
-OG images are `opengraph-image.tsx` via `lib/og`. They prerender at `next build` from the catalog. Do not commit PNGs or add a pre-commit generator. A new catalog row is enough.
+OG is one static `app/opengraph-image.png` (+ `.alt.txt`) shared by every route. No per-page `opengraph-image.tsx`, no `ImageResponse` at request time. Redraw the PNG only if the mark or palette changes; `lib/og/mark.tsx` is the source of the mark.
 
 ## Design
 

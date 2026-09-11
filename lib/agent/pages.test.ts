@@ -36,7 +36,6 @@ describe("chooserMarkdown", () => {
     const body = chooserMarkdown(components, "https://example.test")
     expect(body).toContain("## When to use")
     expect(body).toContain("## Machine-readable")
-    expect(body).toContain("Markdown Graphs Developer API")
     expect(body).toContain("https://example.test/openapi.json")
     expect(body).toContain("https://example.test/api/v1/components")
     expect(body).toContain("https://example.test/skill.md")

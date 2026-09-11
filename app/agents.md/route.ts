@@ -1,5 +1,8 @@
 import { markdownForPath } from "@/lib/agent/pages"
 import { MARKDOWN_TYPE } from "@/lib/http/accept"
+import { CACHE_DAY } from "@/lib/http/cache"
+
+export const dynamic = "force-static"
 
 export async function GET() {
   const body = await markdownForPath("/agents")
@@ -7,7 +10,7 @@ export async function GET() {
   return new Response(body, {
     headers: {
       "Content-Type": MARKDOWN_TYPE,
-      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=86400",
+      ...CACHE_DAY,
     },
   })
 }

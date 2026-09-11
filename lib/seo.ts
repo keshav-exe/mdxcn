@@ -75,7 +75,7 @@ function organizationNode() {
     name: SITE_NAME,
     alternateName: [...SITE_ALTERNATE_NAMES],
     url: SITE_URL,
-    logo: `${SITE_URL}/opengraph-image`,
+    logo: `${SITE_URL}/opengraph-image.png`,
     sameAs: [GITHUB_URL, SITE_AUTHOR.x],
   }
 }

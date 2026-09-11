@@ -17,8 +17,6 @@ Sidenav, `/docs/[slug]`, install copy, and props tables all read from here. Addi
 | `components/docs/examples.tsx`        | `examplesBySlug[slug]`                                                          |
 | `components/docs/recipe-card.tsx`     | Live previews for recipes                                                       |
 | `components/docs/nav.tsx`             | Renders `isNewSlug(item.slug)`                                                  |
-| `app/docs/[slug]/opengraph-image.tsx` | Per-page OG. Uses catalog title + description                                   |
-
 ## New marks
 
 `NEW_SLUGS` is the **current drop**, not a changelog.

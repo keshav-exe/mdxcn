@@ -19,7 +19,7 @@ export const MARK_LIGHT: MarkPalette = {
   accent: "#3b7fb0",
 }
 
-/** Dark tile — matches the OG frame. Used for the Apple touch icon. */
+/** Dark tile — matches `app/opengraph-image.png`. Used for the Apple touch icon. */
 export const MARK_DARK: MarkPalette = {
   tile: "#1c1c1c",
   ink: "#e6e6e6",

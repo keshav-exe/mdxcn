@@ -9,9 +9,9 @@ describe("notFoundProblem", () => {
     expect(body.code).toBe("not_found")
     expect(body.title).toBe("Not found")
     expect(body.instance).toBe("/api/v1/components/nope")
-    expect(body.hrefs?.llms).toMatch(/\/llms\.txt$/)
-    expect(body.hrefs?.openapi).toMatch(/\/openapi\.json$/)
-    expect(body.hrefs?.sitemap).toMatch(/\/sitemap\.xml$/)
+    expect(body.hrefs?.docs).toMatch(/\/docs$/)
+    expect(body.hrefs?.llms).toBeUndefined()
+    expect(body.hrefs?.openapi).toBeUndefined()
   })
 })
 

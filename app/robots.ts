@@ -7,7 +7,15 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/r/",
+      disallow: [
+        "/r/",
+        "/api/",
+        "/llms.txt",
+        "/openapi.json",
+        "/skill.md",
+        "/skill/recipes.md",
+        "/agents.md",
+      ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: "mdx-graphs.kshv.me",

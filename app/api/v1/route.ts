@@ -1,13 +1,13 @@
 import { apiIndex } from "@/lib/agent/openapi"
-import { jsonOk } from "@/lib/http/api"
-import { methodNotAllowed } from "@/lib/http/api"
-import { requestOrigin } from "@/lib/http/origin"
+import { jsonOk, methodNotAllowed } from "@/lib/http/api"
+import { CACHE_CATALOG } from "@/lib/http/cache"
+import { SITE_URL } from "@/lib/site"
 
-export async function GET(request: Request) {
-  return jsonOk(apiIndex(requestOrigin(request)), {
-    headers: {
-      "Cache-Control": "public, s-maxage=300, stale-while-revalidate=86400",
-    },
+export const dynamic = "force-static"
+
+export async function GET() {
+  return jsonOk(apiIndex(SITE_URL), {
+    headers: CACHE_CATALOG,
   })
 }
 

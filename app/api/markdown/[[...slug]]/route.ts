@@ -1,8 +1,8 @@
-import { markdownForPath } from "@/lib/agent/pages"
 import { notFoundMarkdown } from "@/lib/agent/not-found"
-import { MARKDOWN_TYPE } from "@/lib/http/accept"
+import { markdownForPath } from "@/lib/agent/pages"
+import { MARKDOWN_TYPE, preferredType } from "@/lib/http/accept"
 import { apiNotFound } from "@/lib/http/api"
-import { preferredType } from "@/lib/http/accept"
+import { CACHE_SHORT } from "@/lib/http/cache"
 import { requestOrigin, requestPath } from "@/lib/http/origin"
 
 export async function GET(
@@ -30,7 +30,7 @@ export async function GET(
       headers: {
         "Content-Type": MARKDOWN_TYPE,
         Vary: "Accept",
-        "Cache-Control": "no-store",
+        ...CACHE_SHORT,
       },
     })
   }
@@ -39,7 +39,7 @@ export async function GET(
     headers: {
       "Content-Type": MARKDOWN_TYPE,
       Vary: "Accept",
-      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=86400",
+      ...CACHE_SHORT,
     },
   })
 }

@@ -59,9 +59,6 @@ export function notFoundProblem(instance?: string) {
     code: "not_found",
     hrefs: {
       docs: `${SITE_URL}/docs`,
-      llms: `${SITE_URL}/llms.txt`,
-      openapi: `${SITE_URL}/openapi.json`,
-      sitemap: `${SITE_URL}/sitemap.xml`,
     },
   })
 }

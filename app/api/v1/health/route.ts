@@ -1,6 +1,8 @@
-import { jsonOk } from "@/lib/http/api"
-import { methodNotAllowed } from "@/lib/http/api"
+import { jsonOk, methodNotAllowed } from "@/lib/http/api"
+import { CACHE_SHORT } from "@/lib/http/cache"
 import { SITE_URL } from "@/lib/site"
+
+export const dynamic = "force-static"
 
 export async function GET() {
   return jsonOk(
@@ -11,9 +13,7 @@ export async function GET() {
       url: SITE_URL,
     },
     {
-      headers: {
-        "Cache-Control": "no-store",
-      },
+      headers: CACHE_SHORT,
     }
   )
 }

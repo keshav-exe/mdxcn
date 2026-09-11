@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/comark",
     "/developers",
     "/developers/deprecation",
-    "/agents.md",
     "/about",
     "/contact",
     "/privacy",
@@ -20,10 +19,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/docs/examples",
     "/docs/comark",
     "/docs/skill",
-    "/llms.txt",
-    "/skill.md",
-    "/skill/recipes.md",
-    "/openapi.json",
     ...components.map((item) => `/docs/${item.slug}`),
   ]
 

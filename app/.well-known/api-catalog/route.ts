@@ -1,12 +1,15 @@
 import { apiCatalog } from "@/lib/agent/openapi"
 import { jsonOk } from "@/lib/http/api"
-import { requestOrigin } from "@/lib/http/origin"
+import { CACHE_CATALOG } from "@/lib/http/cache"
+import { SITE_URL } from "@/lib/site"
 
-export async function GET(request: Request) {
-  return jsonOk(apiCatalog(requestOrigin(request)), {
+export const dynamic = "force-static"
+
+export async function GET() {
+  return jsonOk(apiCatalog(SITE_URL), {
     headers: {
       "Content-Type": "application/linkset+json; charset=utf-8",
-      "Cache-Control": "public, s-maxage=300, stale-while-revalidate=86400",
+      ...CACHE_CATALOG,
     },
   })
 }

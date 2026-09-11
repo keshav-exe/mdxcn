@@ -1,6 +1,9 @@
-import { components } from "@/lib/docs/catalog"
 import { toComponentJson } from "@/lib/agent/openapi"
+import { components } from "@/lib/docs/catalog"
 import { jsonOk, methodNotAllowed } from "@/lib/http/api"
+import { CACHE_CATALOG } from "@/lib/http/cache"
+
+export const dynamic = "force-static"
 
 export async function GET() {
   return jsonOk(
@@ -8,9 +11,7 @@ export async function GET() {
       components: components.map(toComponentJson),
     },
     {
-      headers: {
-        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=86400",
-      },
+      headers: CACHE_CATALOG,
     }
   )
 }

@@ -29,6 +29,7 @@ function SiteFooter() {
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
                   href="/developers"
+                  prefetch={false}
                 >
                   Developer API
                 </Link>
@@ -36,6 +37,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/agents"
                 >
                   For agents
@@ -44,6 +46,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/comark"
                 >
                   Comark
@@ -52,6 +55,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/docs"
                 >
                   Docs
@@ -60,6 +64,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/docs/examples"
                 >
                   Examples
@@ -68,6 +73,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/docs/installation"
                 >
                   Installation
@@ -76,6 +82,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/docs/skill"
                 >
                   Skill
@@ -84,6 +91,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/sponsor"
                 >
                   Sponsor
@@ -92,6 +100,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/about"
                 >
                   About
@@ -100,6 +109,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/contact"
                 >
                   Contact
@@ -108,6 +118,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/privacy"
                 >
                   Privacy
@@ -116,6 +127,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/llms.txt"
                 >
                   llms.txt
@@ -124,6 +136,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/openapi.json"
                 >
                   OpenAPI

@@ -88,6 +88,7 @@ function NavItem({
         )}
         href={href}
         onClick={onNavigate}
+        prefetch={false}
       >
         <span className="min-w-0 truncate">{children}</span>
         {isNew ? (
@@ -132,7 +133,7 @@ function DocsSidebar() {
   return (
     <aside className="sticky top-14 isolate max-h-[calc(100dvh-3.5rem)] w-64 shrink-0 max-lg:hidden sm:top-16 sm:max-h-[calc(100dvh-4rem)]">
       <SiteRule className="right-0" orientation="y" />
-      <div className="max-h-[calc(100dvh-3.5rem)] scrollbar-none overflow-y-auto py-10 sm:max-h-[calc(100dvh-4rem)]">
+      <div className="scrollbar-none max-h-[calc(100dvh-3.5rem)] overflow-y-auto py-10 sm:max-h-[calc(100dvh-4rem)]">
         <DocsNav />
       </div>
       <ScrollFade edge="top" />
