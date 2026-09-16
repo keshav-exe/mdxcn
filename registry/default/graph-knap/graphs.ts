@@ -1,4 +1,10 @@
-import { col, colWidth, fillTrack, frameAscii, rule } from "@/lib/ascii/frame"
+import {
+  col,
+  colWidth,
+  fillTrack,
+  frameAscii,
+  rule,
+} from "@/registry/default/graph-knap/frame"
 
 function clamp01(value: number) {
   return Math.min(1, Math.max(0, value))

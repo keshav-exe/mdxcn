@@ -1,5 +1,5 @@
-export { fence, frameAscii } from "@/lib/ascii/frame"
-export * from "@/lib/ascii/graphs"
+export { fence, frameAscii } from "@/registry/default/graph-knap/frame"
+export * from "@/registry/default/graph-knap/graphs"
 export {
   isMdxSlug,
   MDX_SLUGS,

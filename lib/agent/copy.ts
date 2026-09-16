@@ -5,7 +5,7 @@ export const HOME_WHAT =
   "Markdown Graphs is a set of ASCII-framed React diagrams you copy into a shadcn project — not an npm package of components. Each figure sits in a dashed frame with a title on the top edge."
 
 export const HOME_WRITE =
-  "When an agent is writing a refactor, an incident, a tradeoff, or a PR, it can put at most two graphs next to the prose. React files get JSX; a Comark app gets a ::graph-* block with YAML props; a README, GitHub comment, Linear note, or any plain Markdown that cannot run a renderer gets the official fenced ASCII from /llms.txt. It should not invent SVG, Mermaid, or homemade ASCII."
+  "When an agent is writing a refactor, an incident, a tradeoff, or a PR, it can put at most two graphs next to the prose. React files get JSX; a Comark app gets a ::graph-* block with YAML props; a Knap template gets a graph_* filter that emits the official fence; a README, GitHub comment, Linear note, or any plain Markdown that cannot run a renderer gets the official fenced ASCII from /llms.txt. It should not invent SVG, Mermaid, or homemade ASCII."
 
 export const HOME_READ =
   "Because the figure is characters in the file, opening the MDX later shows the labels and values — and the agent can edit the frame the same way it wrote it."
@@ -13,7 +13,7 @@ export const HOME_READ =
 export const HOME_INSTALL = `pnpm dlx shadcn@latest add ${SITE_URL}/r/all.json`
 
 export const HOME_NEXT =
-  "Then copy the skill from /skill.md, or fetch /llms.txt if the skill is not installed. The catalog is /docs, Comark wiring is /docs/comark, and OpenAPI is /openapi.json."
+  "Then copy the skill from /skill.md, or fetch /llms.txt if the skill is not installed. The catalog is /docs, Comark wiring is /docs/comark, Knap wiring is /docs/knap, and OpenAPI is /openapi.json."
 
 export const HOME_API =
   "The JSON catalog is at /api/v1/components, OpenAPI at /openapi.json, and the developer portal at /developers. Every API response includes RateLimit-* headers (1000 GET requests per hour)."
@@ -60,6 +60,7 @@ ${HOME_BRAND}
 - JSON catalog: ${host}/api/v1/components
 - For agents: ${host}/agents
 - Comark: ${host}/comark
+- Knap: ${host}/knap
 - agents.md: ${host}/agents.md
 - Docs: ${host}/docs
 - Examples: ${host}/docs/examples
@@ -71,8 +72,8 @@ ${HOME_BRAND}
 
 export const ABOUT_PARAS = [
   `Markdown Graphs is an open-source library of ASCII-framed React diagrams for MDX. ${SITE_AUTHOR.name} publishes the source on GitHub under the MIT license. You copy the files into an existing shadcn project with the shadcn CLI. This is not an npm package of components.`,
-  "Each graph sits in a dashed frame with a title on the top edge. Drawing graphs use one accent by default. Most graphs have an official fenced ASCII for README files, GitHub, Linear, and PR comments. Comark apps can render the same figures from ::graph-* blocks in a plain .md file.",
-  `The site at ${SITE_URL.replace("https://", "")} is the catalog, the shadcn registry, and the agent skill. The skill file tells an agent which graph to put next to prose — JSX in MDX, a ::graph-* block in Comark, or the official fence in a README.`,
+  "Each graph sits in a dashed frame with a title on the top edge. Drawing graphs use one accent by default. Most graphs have an official fenced ASCII for README files, GitHub, Linear, and PR comments. Comark apps can render the same figures from ::graph-* blocks in a plain .md file. Knap templates can emit that fence, or a ::graph-* block, from data.",
+  `The site at ${SITE_URL.replace("https://", "")} is the catalog, the shadcn registry, and the agent skill. The skill file tells an agent which graph to put next to prose — JSX in MDX, a ::graph-* block in Comark, a graph_* filter in Knap, or the official fence in a README.`,
   `Source: ${GITHUB_URL}. Mail: ${SITE_EMAIL}.`,
 ] as const
 
@@ -87,7 +88,7 @@ export const DEVELOPERS_PARAS = [
   "Markdown Graphs exposes a read-only JSON API for agents and integrators. Version 1 is prefixed at /api/v1/. No API keys. Responses include RateLimit-* headers (1000 GET requests per hour). Errors are RFC 9457 application/problem+json with code, detail, and recovery links.",
   "Start at /api/v1 for the endpoint index, /api/v1/health for a health check, and /api/v1/components for the full graph catalog. OpenAPI 3.1 is at /openapi.json. RFC 9727 API catalog is at /.well-known/api-catalog.",
   "Install graph source files with the shadcn CLI: pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/all.json. That is the official CLI path — there is no separate npm package of React components.",
-  "Agent resources: /agents and /agents.md for the write/read story, /skill.md for the skill file, /llms.txt for the chooser, fenced ASCII blocks, and Comark blocks. Comark wiring: /docs/comark. Deprecation policy: /developers/deprecation.",
+  "Agent resources: /agents and /agents.md for the write/read story, /skill.md for the skill file, /llms.txt for the chooser, fenced ASCII blocks, Comark blocks, and Knap filters. Comark wiring: /docs/comark. Knap wiring: /docs/knap. Deprecation policy: /developers/deprecation.",
 ] as const
 
 export const DEPRECATION_PARAS = [

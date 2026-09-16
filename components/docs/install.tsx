@@ -13,12 +13,13 @@ import type { ComponentDoc } from "@/lib/docs/catalog"
 import { graphUtilitiesCss, registryFiles } from "@/lib/docs/files"
 import { mdxExample } from "@/lib/docs/ascii"
 import { comarkExample, COMARK_URL } from "@/lib/docs/comark"
+import { knapExample, KNAP_URL } from "@/lib/docs/knap"
 import { agentPrompt } from "@/lib/docs/prompt"
 import { GITHUB_TREE, GITHUB_URL } from "@/lib/github"
 import { scopedRegistryInstall } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
-type InstallTab = "cli" | "manual" | "agent" | "mdx" | "comark"
+type InstallTab = "cli" | "manual" | "agent" | "mdx" | "comark" | "knap"
 
 const COLLAPSED_HEIGHT = 256
 
@@ -37,6 +38,7 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
   const prompt = agentPrompt({ origin, registry: name, doc, example })
   const mdx = mdxExample(name)
   const comark = comarkExample(name)
+  const knap = knapExample(name)
   const tabs: [InstallTab, string][] = [
     ["cli", "CLI"],
     ["manual", "Manual"],
@@ -49,6 +51,10 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
 
   if (comark) {
     tabs.push(["comark", "Comark"])
+  }
+
+  if (knap) {
+    tabs.push(["knap", "Knap"])
   }
 
   return (
@@ -86,6 +92,12 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
         <MdxInstall markdown={mdx.markdown} />
       ) : tab === "comark" && comark ? (
         <ComarkInstall markdown={comark.markdown} />
+      ) : tab === "knap" && knap ? (
+        <KnapInstall
+          data={JSON.stringify(knap.variables, null, 2)}
+          markdown={knap.markdown}
+          template={knap.template}
+        />
       ) : (
         <CopyBlock label="Prompt" value={prompt} />
       )}
@@ -184,6 +196,32 @@ function ComarkInstall({ markdown }: { markdown: string }) {
   )
 }
 
+function KnapInstall({
+  data,
+  markdown,
+  template,
+}: {
+  data: string
+  markdown: string
+  template: string
+}) {
+  return (
+    <div className="flex flex-col gap-6">
+      <ProseP>
+        Pipe the graph props through a <TextLink href={KNAP_URL}>Knap</TextLink>{" "}
+        filter. The output is the official fence (or a{" "}
+        <InlineCode>::graph-*</InlineCode> block when the figure has no ASCII).
+        Wire <InlineCode>graphFilters</InlineCode> in{" "}
+        <TextLink href="/docs/knap">/docs/knap</TextLink>. The Knap CLI does
+        not load them.
+      </ProseP>
+      <CopyBlock label="Template" value={template} />
+      <CopyBlock label="Data" value={data} />
+      <CopyBlock label="Markdown" value={markdown} />
+    </div>
+  )
+}
+
 function CopyToggle({
   label,
   onClick,
@@ -194,7 +232,7 @@ function CopyToggle({
   return (
     <div className="flex justify-center graph-frame py-2">
       <button
-        className="relative px-2 py-1 font-mono w-full tracking-wide text-muted-foreground uppercase hover:text-foreground"
+        className="relative w-full px-2 py-1 font-mono tracking-wide text-muted-foreground uppercase hover:text-foreground"
         onClick={onClick}
         type="button"
       >

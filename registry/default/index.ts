@@ -68,3 +68,10 @@ export {
 } from "./graph-comark/graph-comark"
 export { coerceProps } from "./graph-comark/coerce"
 export { GraphRow } from "./graph-comark/layout"
+export {
+  createGraphFilters,
+  graphFilterMetadata,
+  graphFilterNames,
+  graphFilters,
+  type GraphFilterName,
+} from "./graph-knap/graph-knap"

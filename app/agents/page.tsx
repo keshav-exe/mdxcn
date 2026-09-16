@@ -21,20 +21,21 @@ import {
 import { Button } from "@/components/ui/button"
 import { components } from "@/lib/docs/catalog"
 import { COMARK_URL } from "@/lib/docs/comark"
+import { KNAP_URL } from "@/lib/docs/knap"
 import { skillExamples } from "@/lib/docs/skill"
 import { agentsJsonLd, pageMeta } from "@/lib/seo"
 import { AGENTS_DESCRIPTION } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 const tries = skillExamples.filter((item) =>
-  ["Refactor", "Comark", "README"].includes(item.label)
+  ["Refactor", "Comark", "Knap", "README"].includes(item.label)
 )
 
 const kit = [
   {
     name: "Skill",
     detail:
-      "When to use a figure, which one, and whether to write JSX, a ::graph-* block, or the official fence — the same two files work in Cursor, Claude Code, Codex, or OpenCode.",
+      "When to use a figure, which one, and whether to write JSX, a ::graph-* block, a graph_* filter, or the official fence. The same two files work in Cursor, Claude Code, Codex, or OpenCode.",
   },
   {
     name: "Recipes",
@@ -47,6 +48,11 @@ const kit = [
       "::graph-* blocks with YAML props for the same graphs without MDX; GitHub still gets the fence.",
   },
   {
+    name: "Knap",
+    detail:
+      "graph_* filters that turn a props object into the official fence, or a ::graph-* block when you pass comark.",
+  },
+  {
     name: "Fenced ASCII",
     detail:
       "Official fences that survive GitHub, Linear, and PR comments — swap labels, keep the frame, and do not invent a new drawing.",
@@ -54,7 +60,7 @@ const kit = [
   {
     name: "llms.txt",
     detail:
-      "Chooser plus ASCII and Comark blocks in one file when the skill is not installed.",
+      "Chooser plus ASCII, Comark, and Knap blocks in one file when the skill is not installed.",
   },
 ]
 
@@ -75,16 +81,18 @@ export default function AgentsPage() {
         >
           <div className="flex flex-col gap-4">
             <p className="font-mono tracking-wide text-graph-muted uppercase">
-              Skill · llms.txt · Comark
+              Skill · llms.txt · Comark · Knap
             </p>
             <h1 className="max-w-[16ch] text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
               For agents
             </h1>
             <ProseLead>
               When a write-up needs a figure, the skill picks which graph to
-              use. Emit JSX in MDX, a <InlineCode>::graph-*</InlineCode> block in
-              a <TextLink href={COMARK_URL}>Comark</TextLink> app, or the
-              official fence in a README, PR, or Linear note.
+              use. Emit JSX in MDX, a <InlineCode>::graph-*</InlineCode> block
+              in a <TextLink href={COMARK_URL}>Comark</TextLink> app, a{" "}
+              <InlineCode>graph_*</InlineCode> filter in{" "}
+              <TextLink href={KNAP_URL}>Knap</TextLink>, or the official fence
+              in a README, PR, or Linear note.
             </ProseLead>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -111,9 +119,11 @@ export default function AgentsPage() {
             <ProseP>
               On write, the agent emits at most two graphs next to the claim —
               JSX for React, YAML for a{" "}
-              <TextLink href={COMARK_URL}>Comark</TextLink> app, or the official
-              fence from <TextLink href="/llms.txt">/llms.txt</TextLink> when the
-              host cannot run a renderer.
+              <TextLink href={COMARK_URL}>Comark</TextLink> app, a{" "}
+              <InlineCode>graph_*</InlineCode> filter in{" "}
+              <TextLink href={KNAP_URL}>Knap</TextLink>, or the official fence
+              from <TextLink href="/llms.txt">/llms.txt</TextLink> when the host
+              cannot run a renderer.
             </ProseP>
             <ProseMuted>
               On read, the figure is still characters in the file, so opening
@@ -123,12 +133,15 @@ export default function AgentsPage() {
           </div>
           <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
             <GraphCompare
-              columns={["JSX", "ASCII", "Comark"]}
+              columns={["JSX", "ASCII", "Comark", "Knap"]}
               rows={[
-                { label: "MDX / React", values: [true, false, true] },
-                { label: "App .md file", values: [false, false, true] },
-                { label: "README / GitHub", values: [false, true, false] },
-                { label: "Edit the labels", values: [true, true, true] },
+                { label: "MDX / React", values: [true, false, true, false] },
+                { label: "App .md file", values: [false, false, true, true] },
+                {
+                  label: "README / GitHub",
+                  values: [false, true, false, true],
+                },
+                { label: "Edit the labels", values: [true, true, true, true] },
               ]}
               title="HOST"
             />
@@ -138,7 +151,7 @@ export default function AgentsPage() {
                   nodes: [
                     { label: "write-up" },
                     { label: "chooser" },
-                    { label: "JSX / YAML / fence", tone: "accent" },
+                    { label: "JSX / YAML / filter", tone: "accent" },
                   ],
                 },
                 {
@@ -182,8 +195,12 @@ export default function AgentsPage() {
               rows={[
                 { label: "/skill.md", value: "the skill", accent: true },
                 { label: "/skill/recipes.md", value: "jsx recipes" },
-                { label: "/llms.txt", value: "chooser + ASCII + Comark" },
+                {
+                  label: "/llms.txt",
+                  value: "chooser + ASCII + Comark + Knap",
+                },
                 { label: "/comark", value: "plain .md host" },
+                { label: "/knap", value: "data → markdown" },
                 { label: "/developers", value: "api + openapi" },
               ]}
               title="FETCH"
@@ -249,6 +266,7 @@ export default function AgentsPage() {
             <TextLink href="/docs/examples">Examples</TextLink>
             <TextLink href="/docs">Library</TextLink>
             <TextLink href="/comark">Comark</TextLink>
+            <TextLink href="/knap">Knap</TextLink>
           </div>
         </SiteContainer>
       </section>

@@ -1,6 +1,7 @@
 import type { ComponentDoc } from "@/lib/docs/catalog"
 import { MDX_SKIP_SLUGS, isMdxSlug, mdxExample } from "@/lib/docs/ascii"
 import { comarkChooserSection } from "@/lib/docs/comark"
+import { knapChooserSection } from "@/lib/docs/knap"
 import { recipesMarkdown } from "@/lib/docs/recipes"
 import { SITE_URL } from "@/lib/site"
 
@@ -177,7 +178,7 @@ ${mdx.markdown}`
   return `# Markdown Graphs
 
 ASCII-framed React diagrams for MDX. Source is copied via shadcn registry, not npm.
-Agents write JSX (React / importable MDX), paste an official fenced ASCII (README, GitHub, Linear), or write a \`::graph-*\` block for Comark. Do not invent ASCII. Do not draw SVG.
+Agents write JSX (React / importable MDX), paste an official fenced ASCII (README, GitHub, Linear), write a \`::graph-*\` block for Comark, or pipe data through a Knap filter. Do not invent ASCII. Do not draw SVG.
 ${host}
 
 ## When to use
@@ -191,7 +192,8 @@ How to call it:
 1. React or importable MDX: install with \`pnpm dlx shadcn@latest add ${host}/r/<slug>.json\` and copy JSX from ${host}/docs/examples.
 2. Plain Markdown that cannot run a renderer (README, GitHub, Linear): paste the official fenced ASCII from ## MDX below. Do not invent ASCII. Do not paste JSX.
 3. Comark app (plain \`.md\`, streaming, DB-backed content): paste a \`::graph-*\` block from ## Comark. Wiring: ${host}/docs/comark.
-4. Install the skill from ${host}/skill.md so the chooser runs without fetching this file every time.
+4. Knap template (data → Markdown): pipe props through a \`graph_*\` filter from ## Knap. Wiring: ${host}/docs/knap.
+5. Install the skill from ${host}/skill.md so the chooser runs without fetching this file every time.
 
 Do not use it for a one-sentence note, a pie chart, or a drawing that needs SVG. At most two figures, with prose between them.
 
@@ -209,7 +211,7 @@ Install graphs with the official shadcn CLI (not npm):
 
 pnpm dlx shadcn@latest add ${host}/r/<slug>.json
 
-Copy all graphs (includes the Comark adapter):
+Copy all graphs (includes the Comark adapter and Knap filters):
 
 pnpm dlx shadcn@latest add ${host}/r/all.json
 
@@ -218,7 +220,8 @@ pnpm dlx shadcn@latest add ${host}/r/all.json
 - React, or MDX that can import \`@/registry/default/...\`: copy JSX from ${host}/docs/examples. Install via shadcn.
 - Plain Markdown that cannot run React (README, GitHub, Linear, Slack, PR comments): paste a fenced ASCII from ## MDX. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
 - Comark: paste a \`::graph-*\` block from ## Comark. YAML props match the React API. GitHub does not run Comark — use fenced ASCII there.
-- No fenced ASCII (${skip}): Flow, Plot, Activity, Heatmap, Calendar, Timer, Countdown, Frame have no ## MDX block. They still have a Comark block except Frame.
+- Knap: pipe the same props through a \`graph_*\` filter from ## Knap. Output is the official fence, or \`::graph-*\` when the figure has no ASCII / the param is \`comark\`. The Knap CLI does not load these filters. Wire them in your app.
+- No fenced ASCII (${skip}): Flow, Plot, Activity, Heatmap, Calendar, Timer, Countdown, Frame have no ## MDX block. They still have a Comark block and a Knap filter (YAML) except Frame.
 
 ## Rules
 
@@ -247,6 +250,8 @@ Official fenced ASCII blocks. Paste into plain Markdown. Monospace keeps the fra
 ${asciiBlocks}
 
 ${comarkChooserSection(items, host)}
+
+${knapChooserSection(items, host)}
 
 ${recipesMarkdown(host)}
 `

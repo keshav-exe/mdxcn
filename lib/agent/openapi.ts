@@ -230,7 +230,7 @@ export function apiIndex(origin = SITE_URL) {
       {
         method: "GET" as const,
         path: "/llms.txt",
-        summary: "Chooser and fenced ASCII blocks",
+        summary: "Chooser, ASCII, Comark, and Knap",
         operationId: "getLlmsTxt",
       },
       {
@@ -396,9 +396,9 @@ export function openApiSpec(origin = SITE_URL) {
         get: {
           operationId: "getLlmsTxt",
           tags: ["machine"],
-          summary: "Chooser and fenced ASCII blocks",
+          summary: "Chooser, ASCII, Comark, and Knap",
           description:
-            "When-to-use, host rules, chooser table, official fenced ASCIIs, and recipes. Fetch this if the skill is not installed.",
+            "When-to-use, host rules, chooser table, official fenced ASCIIs, Comark blocks, Knap filters, and recipes. Fetch this if the skill is not installed.",
           responses: {
             "200": {
               description: "Markdown.",

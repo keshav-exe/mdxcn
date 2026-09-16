@@ -2739,6 +2739,30 @@
           "type": "registry:component"
         },
         {
+          "path": "registry/default/graph-knap/frame.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/graphs.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/yaml.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/props.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/filters.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/graph-knap.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "registry/default/index.ts",
           "type": "registry:lib"
         }
@@ -2797,7 +2821,7 @@
           "background-image": "repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px)"
         }
       },
-      "docs": "Installs the full library into registry/default, including the Comark adapter."
+      "docs": "Installs the full library into registry/default, including the Comark adapter and Knap filters."
     },
     {
       "name": "graph-comark",
@@ -2827,6 +2851,39 @@
         }
       ],
       "docs": "Pass graphComponents to Comark. Scalars from Markdown arrive as strings; coerceProps fixes that. graph-comark.tsx is the tag map after a full install."
+    },
+    {
+      "name": "graph-knap",
+      "type": "registry:component",
+      "title": "Knap",
+      "description": "Knap filters that emit fenced ASCII graphs (or ::graph-* blocks). Install knap separately.",
+      "files": [
+        {
+          "path": "registry/default/graph-knap/frame.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/graphs.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/yaml.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/props.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/filters.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/default/graph-knap/graph-knap.ts",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Spread graphFilters into createEngine with standardFilters. Piped value is the React props object. A string param is the title. Pass comark for a ::graph-* block."
     }
   ]
 }

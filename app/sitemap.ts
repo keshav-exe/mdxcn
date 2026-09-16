@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/",
     "/agents",
     "/comark",
+    "/knap",
     "/developers",
     "/developers/deprecation",
     "/about",
@@ -18,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/docs/installation",
     "/docs/examples",
     "/docs/comark",
+    "/docs/knap",
     "/docs/skill",
     ...components.map((item) => `/docs/${item.slug}`),
   ]

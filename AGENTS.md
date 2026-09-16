@@ -30,9 +30,10 @@ Do the full list. Docs pages are generated from the catalog; there is no per-com
 6. **Replace** `NEW_SLUGS` in `lib/docs/new.ts` with this drop’s slugs. Do not append to last drop’s list.
 7. Row in the README component table
 8. Homepage (`app/page.tsx`) only if it earns a slot
-9. fenced ASCII in `lib/ascii` + `MDX_SLUGS` if the figure is a character grid (see `lib/docs/AGENTS.md`)
+9. fenced ASCII in `registry/default/graph-knap/graphs.ts` + `MDX_SLUGS` if the figure is a character grid (see `lib/docs/AGENTS.md`)
 10. Comark: `COMARK_PROPS` in `lib/docs/comark-props.ts` and `numeric` / `required` in `registry/default/graph-comark/adapters.ts`. Do not add a catalog row for `graph-comark`.
-11. `pnpm registry:build` so `public/r/` matches source
+11. Knap: `GRAPH_VALUE_KEY` / `ASCII` / `GRAPH_FILTER_SLUGS` in `graph-knap` (`props.ts`, `filters.ts`). Do not add a catalog row for `graph-knap`.
+12. `pnpm registry:build` so `public/r/` matches source
 
 OG is one static `app/opengraph-image.png` (+ `.alt.txt`) shared by every route. No per-page `opengraph-image.tsx`, no `ImageResponse` at request time. Redraw the PNG only if the mark or palette changes; `lib/og/mark.tsx` is the source of the mark.
 

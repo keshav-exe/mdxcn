@@ -51,12 +51,20 @@ const HITS: Hit[] = [
       "comark markdown component syntax yaml graph-table no mdx streaming atinux",
   },
   {
+    href: "/knap",
+    title: "Knap",
+    detail: "/knap",
+    group: "Get started",
+    haystack:
+      "knap template filter graph_timeline graph_meter data markdown obsidian kepano graph-knap",
+  },
+  {
     href: "/agents",
     title: "For agents",
     detail: "/agents",
     group: "Get started",
     haystack:
-      "for agents skill llms.txt cursor claude codex opencode mdx write read ascii fence recipes comark",
+      "for agents skill llms.txt cursor claude codex opencode mdx write read ascii fence recipes comark knap",
   },
   {
     href: "/about",
@@ -96,7 +104,9 @@ const HITS: Hit[] = [
         ? "skill /docs/skill cursor claude codex opencode agent skill.md recipes"
         : item.href === "/docs/comark"
           ? "comark yaml graph-comark adapter streaming ::graph markdown"
-          : `${item.label} ${item.href}`.toLowerCase(),
+          : item.href === "/docs/knap"
+            ? "knap graph-knap filter graph_timeline createEngine template markdown"
+            : `${item.label} ${item.href}`.toLowerCase(),
   })),
   ...recipes.map((item) => ({
     href: `/docs/examples#${item.slug}`,

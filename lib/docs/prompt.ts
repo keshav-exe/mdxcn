@@ -1,5 +1,6 @@
 import { mdxExample } from "@/lib/docs/ascii"
 import { comarkExample } from "@/lib/docs/comark"
+import { knapExample } from "@/lib/docs/knap"
 import type { ComponentDoc, PropRow } from "@/lib/docs/catalog"
 
 export const DESIGN_AND_MOOD = `Design
@@ -34,8 +35,9 @@ Host
 - React, or MDX that can import the components → JSX from the examples.
 - Plain Markdown (README, GitHub, Linear, PR comments) → official fenced ASCII from /llms.txt ## MDX, or the docs MDX tab. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
 - Comark app (plain .md the app renders) → ::graph-* block from /llms.txt ## Comark, or the docs Comark tab. YAML props match the React API. Do not paste JSX. GitHub still gets fenced ASCII.
+- Knap template (data → Markdown) → graph_* filter from /llms.txt ## Knap, or the docs Knap tab. Pipe the React props object. A string param is the title. Pass comark for a ::graph-* block. Wire graphFilters in createEngine; the Knap CLI does not load them.
 - Reading an existing file: the figure is characters. Edit labels. Do not replace a graph with SVG.
-- No fenced ASCII: GraphFlow, GraphPlot, GraphActivity, GraphHeatmap, GraphCalendar, GraphTimer, GraphCountdown, GraphFrame. They still have a Comark block except GraphFrame. Pick another or skip.
+- No fenced ASCII: GraphFlow, GraphPlot, GraphActivity, GraphHeatmap, GraphCalendar, GraphTimer, GraphCountdown, GraphFrame. They still have a Comark block and a Knap filter (YAML) except GraphFrame. Pick another or skip.
 
 Mood
 Typed, not illustrated. Quiet monospace figures that sit next to prose. Two graphs per section is enough. Restraint over decoration. Do not restyle the frame. Default is one accent; palette is opt-in.`
@@ -179,6 +181,24 @@ export function pageMarkdown({
         "Plain .md that a Comark app will render. YAML props match the React API. GitHub still gets the MDX fence.",
         "",
         comark.markdown
+      )
+    }
+
+    const knap = knapExample(name)
+    if (knap) {
+      parts.push(
+        "",
+        "## Knap",
+        "",
+        "Pipe the graph props through a Knap filter. Output is the official fence, or ::graph-* when the figure has no ASCII. Wire graphFilters. The Knap CLI does not load them.",
+        "",
+        knap.template,
+        "",
+        "```json",
+        JSON.stringify(knap.variables, null, 2),
+        "```",
+        "",
+        knap.markdown
       )
     }
   }

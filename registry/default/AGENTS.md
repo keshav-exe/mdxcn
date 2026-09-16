@@ -32,6 +32,10 @@ No CSS-box charts. No nested radius demos. No type-specimen / contrast-token gra
 
 Not a graph. After `all.json`, import `graphComponents` from `graph-comark/graph-comark.tsx` and pass it to Comark — same as [comark-graphs-demo](https://github.com/atinux/comark-graphs-demo). New graph: add `numeric` / `required` in `adapters.ts` and YAML in `comark-props.ts`.
 
+## Knap filters
+
+Not a graph. After `all.json`, spread `graphFilters` from `graph-knap/graph-knap.ts` into Knap's `createEngine`. New graph: add an ASCII renderer in `graphs.ts` if it is a character grid, then `GRAPH_VALUE_KEY` / `ASCII` / `GRAPH_FILTER_SLUGS`. Graphs with no ASCII emit `::graph-*` YAML.
+
 ## Motion
 
 `fadeUp` + `staggerList` + `graphTransition` from `graph-motion.ts`. Stagger rows/weeks, not every cell. `viewport={{ once: true }}`.

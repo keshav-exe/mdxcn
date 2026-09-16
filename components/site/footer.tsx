@@ -56,6 +56,15 @@ function SiteFooter() {
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
                   prefetch={false}
+                  href="/knap"
+                >
+                  Knap
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="font-normal text-muted-foreground hover:text-foreground"
+                  prefetch={false}
                   href="/docs"
                 >
                   Docs

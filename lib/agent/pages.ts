@@ -18,6 +18,12 @@ import {
 import { readSkillFile } from "@/lib/docs/skill-files"
 import { AGENTS_DESCRIPTION, DOCS_DESCRIPTION, SITE_URL } from "@/lib/site"
 import { COMARK_DESCRIPTION, COMARK_WIRE } from "@/lib/docs/comark"
+import {
+  KNAP_API_URL,
+  KNAP_DESCRIPTION,
+  KNAP_URL,
+  KNAP_WIRE,
+} from "@/lib/docs/knap"
 
 function hostOf(origin?: string) {
   return origin || SITE_URL
@@ -78,7 +84,7 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
 ## Agents
 
-$ORIGIN/agents is write vs read. $ORIGIN/docs/comark is ::graph-* in a plain .md file. $ORIGIN/docs/skill is the SKILL.md. $ORIGIN/llms.txt is the chooser, the ASCII blocks, and the Comark blocks.`,
+$ORIGIN/agents is write vs read. $ORIGIN/docs/comark is ::graph-* in a plain .md file. $ORIGIN/docs/knap is graph_* filters that emit the fence. $ORIGIN/docs/skill is the SKILL.md. $ORIGIN/llms.txt is the chooser, the ASCII blocks, the Comark blocks, and the Knap filters.`,
   })
 }
 
@@ -141,6 +147,42 @@ ${COMARK_WIRE}
   })
 }
 
+function knapDocsMarkdown(origin: string) {
+  return pageMarkdown({
+    origin,
+    title: "Knap",
+    description: KNAP_DESCRIPTION,
+    registry: "graph-knap",
+    extra: `## Wire
+
+${KNAP_WIRE}
+
+## Hosts
+
+Output is Markdown. GitHub and a README can open the fence. A Comark app can open ::graph-* if you passed comark. The Knap CLI does not load these filters. Landing: $ORIGIN/knap.`,
+  })
+}
+
+function knapLandingMarkdown(origin: string) {
+  return pageMarkdown({
+    origin,
+    title: "Knap",
+    description: KNAP_DESCRIPTION,
+    extra: `Pipe graph props through a graph_* filter. Knap renders Markdown. These filters draw the official fence.
+
+## Wire
+
+${KNAP_WIRE}
+
+## Links
+
+- Wiring: $ORIGIN/docs/knap
+- Skill: $ORIGIN/docs/skill
+- Knap: ${KNAP_URL}
+- API: ${KNAP_API_URL}`,
+  })
+}
+
 async function skillMarkdown(origin: string) {
   const source = await readSkillFile("SKILL.md")
   const extra = [
@@ -157,7 +199,7 @@ async function skillMarkdown(origin: string) {
     "",
     "## What it does",
     "",
-    "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. A Comark app gets a ::graph-* block. Plain Markdown gets the official fenced ASCII from /llms.txt.",
+    "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. A Comark app gets a ::graph-* block. A Knap template gets a graph_* filter. Plain Markdown gets the official fenced ASCII from /llms.txt.",
     "",
     "## Files",
     "",
@@ -205,11 +247,11 @@ function agentsMarkdown(origin: string) {
 
 ${AGENTS_DESCRIPTION}
 
-When a write-up needs a figure, the skill picks which graph to use. Emit JSX in MDX, a ::graph-* block in a Comark app, or the official fence in a README, PR, or Linear note.
+When a write-up needs a figure, the skill picks which graph to use. Emit JSX in MDX, a ::graph-* block in a Comark app, a graph_* filter in a Knap template, or the official fence in a README, PR, or Linear note.
 
 ## Writing and reading
 
-On write, emit at most two graphs next to the claim — JSX for React, YAML for Comark, or the official fence from ${host}/llms.txt when the host cannot run a renderer.
+On write, emit at most two graphs next to the claim — JSX for React, YAML for Comark, a Knap filter when data becomes Markdown, or the official fence from ${host}/llms.txt when the host cannot run a renderer.
 
 On read, the figure is still characters in the file, so opening the MDX shows labels and values. Edit the labels; do not replace a graph with SVG.
 
@@ -236,6 +278,8 @@ ${prompts}
 - Skill install: ${host}/docs/skill
 - Comark: ${host}/comark
 - Comark wiring: ${host}/docs/comark
+- Knap: ${host}/knap
+- Knap wiring: ${host}/docs/knap
 - Examples: ${host}/docs/examples
 - OpenAPI: ${host}/openapi.json
 - JSON catalog: ${host}/api/v1/components
@@ -286,6 +330,10 @@ export async function markdownForPath(path: string, origin = SITE_URL) {
       return comarkDocsMarkdown(host)
     case "/comark":
       return comarkLandingMarkdown(host)
+    case "/docs/knap":
+      return knapDocsMarkdown(host)
+    case "/knap":
+      return knapLandingMarkdown(host)
     case "/docs/skill":
       return skillMarkdown(host)
     default:
@@ -315,6 +363,8 @@ export function knownMarkdownPaths() {
     "/docs/examples",
     "/docs/comark",
     "/comark",
+    "/docs/knap",
+    "/knap",
     "/docs/skill",
     ...components.map((item) => `/docs/${item.slug}`),
   ]

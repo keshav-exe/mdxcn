@@ -4,6 +4,7 @@ import { SiteContainer } from "@/components/site/container"
 import { InlineCode, ProseLead, TextLink } from "@/components/site/prose"
 import { Button } from "@/components/ui/button"
 import { COMARK_URL } from "@/lib/docs/comark"
+import { KNAP_URL } from "@/lib/docs/knap"
 
 function Hero() {
   return (
@@ -21,7 +22,8 @@ function Hero() {
               ASCII-framed React diagrams you copy into a shadcn project and
               drop next to prose — JSX in MDX, a{" "}
               <InlineCode>::graph-*</InlineCode> block in{" "}
-              <TextLink href={COMARK_URL}>Comark</TextLink>, or the official
+              <TextLink href={COMARK_URL}>Comark</TextLink>, a{" "}
+              <TextLink href={KNAP_URL}>Knap</TextLink> filter, or the official
               fence in a README. A <TextLink href="/docs/skill">skill</TextLink>{" "}
               steers the agent toward a component instead of inventing SVG.
             </ProseLead>

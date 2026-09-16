@@ -113,7 +113,7 @@ export const skillChooser: SkillChooserRow[] = [
 
 export const skillRules = [
   "At most two graphs in a section. Prose between them.",
-  "React / importable MDX: JSX. Comark: ::graph-* with YAML. GitHub / README / Linear: official fenced ASCII from /llms.txt. Do not invent ASCII.",
+  "React / importable MDX: JSX. Comark: ::graph-* with YAML. Knap: graph_* filter. GitHub / README / Linear: official fenced ASCII from /llms.txt. Do not invent ASCII.",
   "Titles: short uppercase, drawn as [ TITLE ].",
   "Labels: lowercase, plain (auth middleware, not AuthMiddleware Layer).",
   "Copy props from docs or recipes. Do not invent APIs, extra hues, or chart libraries.",
@@ -170,6 +170,13 @@ Use markdown graphs — a punch list (GraphCheck fence) and a grouped table if i
 
 Use ::graph-* blocks with YAML props. At most two figures. Don't paste JSX. Don't draw SVG.`,
   },
+  {
+    label: "Knap",
+    hint: "{{ events | graph_timeline }}, then {{ uptime | graph_uptime }}",
+    prompt: `Write a Knap template for this postmortem. p95 crossed 800ms at 14:02, rollback at 14:11.
+
+Pipe the graph props through graph_* filters so the output is the official fenced ASCII. At most two figures. Don't paste JSX. Don't draw SVG.`,
+  },
 ]
 
 export function skillCurl(origin: string, dir: string) {
@@ -185,7 +192,7 @@ export function skillCopyFromRepo(dir: string) {
 
 export function skillPrompt(origin: string, dir = ".agents/skills") {
   const host = origin || SITE_URL
-  return `Copy the markdown graphs skill into this project. It is a SKILL.md (Agent Skills). It tells you when to put a framed graph next to the prose, which component to pick, and whether to write JSX, a ::graph-* block for Comark, or paste the official fenced ASCII. Do not draw SVG. Do not invent ASCII art.
+  return `Copy the markdown graphs skill into this project. It is a SKILL.md (Agent Skills). It tells you when to put a framed graph next to the prose, which component to pick, and whether to write JSX, a ::graph-* block for Comark, a graph_* filter for Knap, or paste the official fenced ASCII. Do not draw SVG. Do not invent ASCII art.
 
 Put it in the skills folder this agent already reads (${dir}/markdown-graphs). If this repo uses a different skills directory (.cursor/skills, .claude/skills, .agents/skills, .opencode/skills), use that instead.
 
@@ -195,5 +202,5 @@ If the graph files are missing and the host is React, install them first:
 
 pnpm dlx shadcn@latest add ${host}/r/all.json
 
-Fetch ${host}/agents for the write and read story. Fetch ${host}/llms.txt for the chooser, the MDX ASCII blocks, and the Comark blocks. Copy JSX from ${host}/docs/examples when the file can import components. Copy ::graph-* from ${host}/docs/comark when the host is Comark.`
+Fetch ${host}/agents for the write and read story. Fetch ${host}/llms.txt for the chooser, the MDX ASCII blocks, the Comark blocks, and the Knap filters. Copy JSX from ${host}/docs/examples when the file can import components. Copy ::graph-* from ${host}/docs/comark when the host is Comark. Copy graph_* filters from ${host}/docs/knap when the host is Knap.`
 }

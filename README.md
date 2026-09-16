@@ -1,8 +1,8 @@
 # markdown graphs
 
-React components for ASCII-style tables, charts, and diagrams in MDX. Built so an agent can drop a figure next to prose — JSX in MDX, `::graph-*` in Comark, official ASCII in a README. Each graph sits in a dashed frame with a title on the top edge. One accent color by default; drawing graphs can take `palette="duo"` or `palette="multi"`. You copy the source into your project — this is not an npm package.
+React components for ASCII-style tables, charts, and diagrams in MDX. Built so an agent can drop a figure next to prose — JSX in MDX, `::graph-*` in Comark, `graph_*` in Knap, official ASCII in a README. Each graph sits in a dashed frame with a title on the top edge. One accent color by default; drawing graphs can take `palette="duo"` or `palette="multi"`. You copy the source into your project — this is not an npm package.
 
-[Docs](https://mdx-graphs.kshv.me/docs) · [Comark](https://mdx-graphs.kshv.me/comark) · [For agents](https://mdx-graphs.kshv.me/agents) · [Examples](https://mdx-graphs.kshv.me/docs/examples) · [Install](https://mdx-graphs.kshv.me/docs/installation) · [Skill](https://mdx-graphs.kshv.me/docs/skill) · [GitHub](https://github.com/keshav-exe/markdown-graphs)
+[Docs](https://mdx-graphs.kshv.me/docs) · [Comark](https://mdx-graphs.kshv.me/comark) · [Knap](https://mdx-graphs.kshv.me/knap) · [For agents](https://mdx-graphs.kshv.me/agents) · [Examples](https://mdx-graphs.kshv.me/docs/examples) · [Install](https://mdx-graphs.kshv.me/docs/installation) · [Skill](https://mdx-graphs.kshv.me/docs/skill) · [GitHub](https://github.com/keshav-exe/markdown-graphs)
 
 ## Install
 
@@ -77,11 +77,13 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 | Countdown | `graph-countdown` | Time left until a date                     |
 | Frame     | `graph-frame`     | Shared dashed frame primitives             |
 
-Each docs page has CLI, manual, agent, MDX, and Comark install tabs. Copy page puts the markdown (install, prompt, examples, props) on the clipboard.
+Each docs page has CLI, manual, agent, MDX, Comark, and Knap install tabs. Copy page puts the markdown (install, prompt, examples, props) on the clipboard.
 
-Comark apps render the same figures from `::graph-*` blocks in a plain `.md` file — no MDX. Copy `graph-comark` (already in `all.json`). Full install: `graphComponents` from `graph-components.tsx`. Subset: `createGraphComponents`. Wiring: [Comark](https://mdx-graphs.kshv.me/docs/comark). Pitch: [Comark landing](https://mdx-graphs.kshv.me/comark).
+Comark apps render the same figures from `::graph-*` blocks in a plain `.md` file — no MDX. Copy `graph-comark` (already in `all.json`). Full install: `graphComponents` from `graph-comark.tsx`. Subset: `createGraphComponents`. Wiring: [Comark](https://mdx-graphs.kshv.me/docs/comark). Pitch: [Comark landing](https://mdx-graphs.kshv.me/comark).
 
-Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on [Examples](https://mdx-graphs.kshv.me/docs/examples). [For agents](https://mdx-graphs.kshv.me/agents) is the write and read story. The [skill](https://mdx-graphs.kshv.me/docs/skill) tells an agent which graph to put next to the prose — JSX in React, `::graph-*` in Comark, fenced ASCII in GitHub. Agents can also fetch [`/llms.txt`](https://mdx-graphs.kshv.me/llms.txt) for the chooser, the ASCII blocks, and the Comark blocks.
+Knap templates pipe the same props through `graph_*` filters and emit the official fence (or a `::graph-*` block). Copy `graph-knap` (already in `all.json`). Spread `graphFilters` into `createEngine`. The Knap CLI does not load them. Wiring: [Knap](https://mdx-graphs.kshv.me/docs/knap). Pitch: [Knap landing](https://mdx-graphs.kshv.me/knap).
+
+Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on [Examples](https://mdx-graphs.kshv.me/docs/examples). [For agents](https://mdx-graphs.kshv.me/agents) is the write and read story. The [skill](https://mdx-graphs.kshv.me/docs/skill) tells an agent which graph to put next to the prose — JSX in React, `::graph-*` in Comark, `graph_*` in Knap, fenced ASCII in GitHub. Agents can also fetch [`/llms.txt`](https://mdx-graphs.kshv.me/llms.txt) for the chooser, the ASCII blocks, the Comark blocks, and the Knap filters.
 
 ## Design
 

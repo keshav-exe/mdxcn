@@ -19,7 +19,7 @@ export const metadata: Metadata = pageMeta({
   path: "/docs",
 })
 
-const intro = `ASCII-framed graphs you copy into a shadcn project. Built so an agent can place them next to prose — JSX in MDX, ::graph-* in Comark, official fences in a README. One accent. Drawing graphs also take palette="duo" or "multi".`
+const intro = `ASCII-framed graphs you copy into a shadcn project. Built so an agent can place them next to prose — JSX in MDX, ::graph-* in Comark, graph_* in Knap, official fences in a README. One accent. Drawing graphs also take palette="duo" or "multi".`
 
 export default function DocsPage() {
   const extra = [
@@ -73,7 +73,15 @@ export default function DocsPage() {
             Comark
           </Link>{" "}
           is <code className="font-mono">::graph-*</code> in a plain{" "}
-          <code className="font-mono">.md</code> file.
+          <code className="font-mono">.md</code> file.{" "}
+          <Link
+            className="text-foreground underline-offset-4 hover:underline"
+            href="/docs/knap"
+          >
+            Knap
+          </Link>{" "}
+          is <code className="font-mono">graph_*</code> filters that emit the
+          fence.
         </p>
       </DocsPageHeader>
 

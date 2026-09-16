@@ -178,6 +178,14 @@ export const registryFiles: Record<string, string[]> = {
     "registry/default/graph-comark/layout.tsx",
     "registry/default/graph-comark/graph-comark.tsx",
   ],
+  "graph-knap": [
+    "registry/default/graph-knap/frame.ts",
+    "registry/default/graph-knap/graphs.ts",
+    "registry/default/graph-knap/yaml.ts",
+    "registry/default/graph-knap/props.ts",
+    "registry/default/graph-knap/filters.ts",
+    "registry/default/graph-knap/graph-knap.ts",
+  ],
   all: ["registry/default"],
 }
 

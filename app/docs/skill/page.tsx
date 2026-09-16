@@ -39,7 +39,7 @@ export default async function SkillPage() {
     "",
     "## What it does",
     "",
-    "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. A Comark app gets a ::graph-* block. Plain Markdown (README, GitHub, Linear) gets the official fenced ASCII from /llms.txt.",
+    "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. A Comark app gets a ::graph-* block. A Knap template gets a graph_* filter. Plain Markdown (README, GitHub, Linear) gets the official fenced ASCII from /llms.txt.",
     "",
     "## Files",
     "",
@@ -164,6 +164,13 @@ export default async function SkillPage() {
           >
             Comark
           </Link>
+          . Data into Markdown with{" "}
+          <Link
+            className="text-foreground underline-offset-4 hover:underline"
+            href="/knap"
+          >
+            Knap
+          </Link>
           .
         </p>
       </section>
@@ -181,9 +188,10 @@ export default async function SkillPage() {
         <p className="max-w-[56ch] text-pretty text-muted-foreground">
           Do not draw the chart in SVG. In GitHub or a README, paste the
           official fenced ASCII from /llms.txt. In a Comark app, paste a
-          ::graph-* block. Do not invent ASCII, and do not paste JSX into a file
-          that cannot import the components. Do not restyle the frame. Do not
-          dump every graph into one reply.
+          ::graph-* block. In a Knap template, pipe props through a graph_*
+          filter. Do not invent ASCII, and do not paste JSX into a file that
+          cannot import the components. Do not restyle the frame. Do not dump
+          every graph into one reply.
         </p>
       </section>
 
@@ -211,8 +219,8 @@ export default async function SkillPage() {
           >
             /llms.txt
           </Link>{" "}
-          is the chooser plus the MDX ASCII blocks and the Comark blocks if the
-          skill is not installed.
+          is the chooser plus the MDX ASCII blocks, the Comark blocks, and the
+          Knap filters if the skill is not installed.
         </p>
         <CopyBlock label="SKILL.md" value={source} />
       </section>

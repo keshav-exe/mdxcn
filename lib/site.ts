@@ -26,12 +26,13 @@ export const SITE_KEYWORDS = [
   "shadcn charts",
   "shadcn registry",
   "Comark",
+  "Knap",
   "graph components",
   "diagram components",
   "Markdown Graphs API",
 ] as const
 export const SITE_DESCRIPTION =
-  "ASCII-framed React diagrams you copy into a shadcn project and drop next to prose — JSX in MDX, a ::graph-* block in Comark, or the official fence in a README."
+  "ASCII-framed React diagrams you copy into a shadcn project and drop next to prose — JSX in MDX, a ::graph-* block in Comark, a Knap filter, or the official fence in a README."
 export const SITE_ALTERNATE_NAMES = [
   SITE_NAME_SHORT,
   "mdx-graphs",
@@ -40,13 +41,14 @@ export const SITE_ALTERNATE_NAMES = [
   "React markdown components",
 ] as const
 export const AGENTS_DESCRIPTION =
-  "A skill and chooser that tell an agent which graph to use, and whether to emit JSX, a ::graph-* block, or fenced ASCII it can read back later."
+  "A skill and chooser that tell an agent which graph to use, and whether to emit JSX, a ::graph-* block, a Knap filter, or fenced ASCII it can read back later."
 export const DOCS_DESCRIPTION =
   "ASCII-framed graphs for MDX, with a skill so agents reach for a component instead of inventing SVG."
 export const SITE_NAV = [
   { href: "/agents", label: "agents" },
   { href: "/docs", label: "library" },
   { href: "/comark", label: "comark" },
+  { href: "/knap", label: "knap" },
 ] as const
 export const SITE_TWITTER = "@kshvbgde"
 export const SITE_EMAIL = "hi@kshv.me"

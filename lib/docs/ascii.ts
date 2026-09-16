@@ -1,4 +1,4 @@
-import { fence } from "@/lib/ascii/frame"
+import { fence } from "@/registry/default/graph-knap/frame"
 import {
   asciiBars,
   asciiBullet,
@@ -25,7 +25,7 @@ import {
   asciiUptime,
   asciiWaffle,
   asciiWaterfall,
-} from "@/lib/ascii/graphs"
+} from "@/registry/default/graph-knap/graphs"
 
 export const MDX_SLUGS = [
   "graph-table",

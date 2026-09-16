@@ -3,13 +3,14 @@ name: markdown-graphs
 description: >-
   Picks markdown graphs next to prose. In React or MDX that can import
   components, copies JSX. In a Comark app, writes a ::graph-* block with YAML
-  props. In plain Markdown (README, GitHub, Linear, PR comments), pastes the
-  official fenced ASCII from llms.txt. Never invents SVG, Mermaid,
-  Recharts, canvas, or homemade ASCII. Use when explaining a refactor,
-  incident, postmortem, tradeoff, pull request, sprint, or migration; when
-  writing a README or markdown doc; when the user mentions markdown graphs,
-  ASCII diagrams, framed charts, GraphFlow, GraphTimeline, or Comark; or when
-  a write-up would scan faster with a figure.
+  props. In a Knap template, pipes props through a graph_* filter. In plain
+  Markdown (README, GitHub, Linear, PR comments), pastes the official fenced
+  ASCII from llms.txt. Never invents SVG, Mermaid, Recharts, canvas, or
+  homemade ASCII. Use when explaining a refactor, incident, postmortem,
+  tradeoff, pull request, sprint, or migration; when writing a README or
+  markdown doc; when the user mentions markdown graphs, ASCII diagrams,
+  framed charts, GraphFlow, GraphTimeline, Comark, or Knap; or when a
+  write-up would scan faster with a figure.
 ---
 
 # markdown graphs
@@ -22,27 +23,28 @@ Pick the host before you write — the paste format depends on it.
 | --------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------- |
 | React, or MDX that can `import` from `@/registry/default` | JSX                 | [recipes.md](recipes.md), then docs examples                                     |
 | Comark app (plain `.md` the app renders)                  | `::graph-*` + YAML  | https://mdx-graphs.kshv.me/llms.txt `## Comark`, or the docs page **Comark** tab |
+| Knap template (data → Markdown)                           | `graph_*` filter    | https://mdx-graphs.kshv.me/llms.txt `## Knap`, or the docs page **Knap** tab     |
 | README, GitHub, Linear, Slack, PR comments                | Fenced ASCII        | https://mdx-graphs.kshv.me/llms.txt `## MDX`, or the docs page **MDX** tab       |
 
-Do not paste JSX into a file that cannot run React. Do not paste `::graph-*` into GitHub or Linear — they do not run Comark. Do not invent ASCII art — copy the official fence, swap labels, keep the frame.
+Do not paste JSX into a file that cannot run React. Do not paste `::graph-*` into GitHub or Linear — they do not run Comark. Do not invent ASCII art — copy the official fence, swap labels, keep the frame. Knap filters emit that fence (or `::graph-*` when the param is `comark`).
 
-No fenced ASCII: Flow, Plot, Activity, Heatmap, Calendar, Timer, Countdown, Frame. On GitHub, pick a graph that has fenced ASCII, or skip. On Comark, those graphs still work except Frame.
+No fenced ASCII: Flow, Plot, Activity, Heatmap, Calendar, Timer, Countdown, Frame. On GitHub, pick a graph that has fenced ASCII, or skip. On Comark, those graphs still work except Frame. On Knap they emit `::graph-*` YAML except Frame.
 
 Source is copied via shadcn, not npm. Imports land under `@/registry/default`. Unsure of props? Fetch https://mdx-graphs.kshv.me/llms.txt.
 
-If `registry/default/graph-frame` is missing and the host is React or Comark:
+If `registry/default/graph-frame` is missing and the host is React, Comark, or Knap:
 
 ```bash
 pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/all.json
 ```
 
-Need `motion`. One component: replace `all` with the slug (`graph-flow`, …). For Comark, the adapter is `graph-comark` (already in `all.json`).
+Need `motion`. One component: replace `all` with the slug (`graph-flow`, …). For Comark, the adapter is `graph-comark` (already in `all.json`). For Knap, the filters are `graph-knap` (already in `all.json`). Also `pnpm add knap`.
 
 ## Procedure
 
 1. Decide if a figure earns it. One sentence → no graph. A path, a night, a matrix, a diff → yes.
 2. Pick **at most two** graphs from the chooser. Prefer a pair in recipes.md. If the host is GitHub / README, drop any pick that has no fenced ASCII.
-3. Copy. JSX from recipes.md / docs. `::graph-*` from llms.txt `## Comark`. ASCII from llms.txt `## MDX`. Swap labels, keep the API / frame.
+3. Copy. JSX from recipes.md / docs. `::graph-*` from llms.txt `## Comark`. `{{ … | graph_* }}` from llms.txt `## Knap`. ASCII from llms.txt `## MDX`. Swap labels, keep the API / frame.
 4. Write the reply in this shape. Do not lead with the figure.
 
 React / importable MDX:
@@ -69,6 +71,16 @@ events:
   - { date: "14:02", label: "p95 crossed 800ms" }
 ---
 ::
+
+1–3 sentences (what the second figure adds)
+```
+
+Knap:
+
+```
+1–3 sentences (the claim)
+
+{{ events | graph_timeline:"NIGHT" }}
 
 1–3 sentences (what the second figure adds)
 ```
@@ -142,7 +154,7 @@ Skip `GraphFrame` unless you are assembling a custom figure. If the chart alread
 import { GraphFlow } from "@/registry/default/graph-flow/graph-flow"
 ```
 
-Named export matches the folder: `graph-<name>/graph-<name>`. Do not invent a barrel. Skip this when the host is Comark or plain Markdown.
+Named export matches the folder: `graph-<name>/graph-<name>`. Do not invent a barrel. Skip this when the host is Comark, Knap, or plain Markdown.
 
 Comark wiring (once per app, after `all.json`):
 
@@ -151,6 +163,19 @@ import { graphComponents } from "@/registry/default/graph-comark/graph-comark"
 ```
 
 Pass `graphComponents` to Comark's `components` prop.
+
+Knap wiring (once per app, after `all.json`):
+
+```tsx
+import { createEngine, standardFilters } from "knap"
+import { graphFilters } from "@/registry/default/graph-knap/graph-knap"
+
+const engine = createEngine({
+  filters: { ...standardFilters, ...graphFilters },
+})
+```
+
+The Knap CLI does not load these filters.
 
 Subset (only some graphs copied):
 
@@ -163,12 +188,18 @@ const graphComponents = createGraphComponents({
 })
 ```
 
+```ts
+import { createGraphFilters } from "@/registry/default/graph-knap/graph-knap"
+
+const graphFilters = createGraphFilters(["graph_table", "graph_timeline"])
+```
+
 ## Rules
 
 - At most two graphs in a section. Prose between them. Never a gallery.
 - Titles: 1–2 words, uppercase, no punctuation. Drawn as `[ TITLE ]`.
 - Labels: lowercase, plain (`auth middleware`, not `AuthMiddleware Layer`).
-- Copy props / fences / `::graph-*` blocks from recipes.md, docs, or llms.txt. Do not invent APIs, extra hues, or chart libraries.
+- Copy props / fences / `::graph-*` blocks / `graph_*` filters from recipes.md, docs, or llms.txt. Do not invent APIs, extra hues, or chart libraries.
 - Default palette is one accent (`--graph-accent`). `palette="duo"` / `"multi"` only when a second or third series needs it.
 - Unused rows recede (~0.4 opacity). Numbers: `tabular-nums`, right-aligned.
 - Motion is already in the components (transform + opacity, ~220ms). Do not add loops, pulses, or CSS animation.
@@ -186,7 +217,7 @@ const graphComponents = createGraphComponents({
 
 ## Example prompts
 
-These are user messages. Match the pair. React → copy JSX from the recipe. Comark → copy the `::graph-*` block from llms.txt `## Comark`. GitHub / README → copy the fence from llms.txt.
+These are user messages. Match the pair. React → copy JSX from the recipe. Comark → copy the `::graph-*` block from llms.txt `## Comark`. Knap → copy the `graph_*` filter from llms.txt `## Knap`. GitHub / README → copy the fence from llms.txt.
 
 **Refactor** → `GraphFlow`, then `GraphTimeline` (GitHub: Timeline only — Flow has no fenced ASCII)
 
@@ -210,6 +241,14 @@ Use markdown graphs — a timeline of the night, then which days users felt it. 
 Write this postmortem as a Comark Markdown file. p95 crossed 800ms at 14:02, rollback at 14:11.
 
 Use ::graph-* blocks with YAML props. At most two figures. Don't paste JSX. Don't draw SVG.
+```
+
+**Knap postmortem** → `{{ events | graph_timeline }}`, then `{{ uptime | graph_uptime }}`
+
+```
+Write a Knap template for this postmortem. p95 crossed 800ms at 14:02, rollback at 14:11.
+
+Pipe the graph props through graph_* filters so the output is the official fenced ASCII. At most two figures. Don't paste JSX. Don't draw SVG.
 ```
 
 **Pull request** → `GraphDiff`, then `GraphSlope`

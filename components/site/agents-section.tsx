@@ -2,9 +2,15 @@ import Link from "next/link"
 
 import { AgentsFlowDemo } from "@/components/site/agents-flow-demo"
 import { SiteContainer } from "@/components/site/container"
-import { InlineCode, ProseMuted, ProseP, TextLink } from "@/components/site/prose"
+import {
+  InlineCode,
+  ProseMuted,
+  ProseP,
+  TextLink,
+} from "@/components/site/prose"
 import { Button } from "@/components/ui/button"
 import { COMARK_URL } from "@/lib/docs/comark"
+import { KNAP_URL } from "@/lib/docs/knap"
 
 function AgentsSection() {
   return (
@@ -19,15 +25,16 @@ function AgentsSection() {
               <ProseP>
                 The figure stays in the file as JSX the agent wrote, a{" "}
                 <InlineCode>::graph-*</InlineCode> block{" "}
-                <TextLink href={COMARK_URL}>Comark</TextLink> can render, or
+                <TextLink href={COMARK_URL}>Comark</TextLink> can render, a{" "}
+                <TextLink href={KNAP_URL}>Knap</TextLink> filter can emit, or
                 ASCII it can read back later — not SVG, and not a homemade
                 fence.
               </ProseP>
               <ProseMuted>
                 A skill picks the graph and recipes supply real props;{" "}
                 <TextLink href="/llms.txt">/llms.txt</TextLink> carries the
-                chooser plus the ASCII and Comark blocks when the skill is not
-                installed.
+                chooser plus the ASCII, Comark, and Knap blocks when the skill
+                is not installed.
               </ProseMuted>
             </div>
             <Button nativeButton={false} render={<Link href="/agents" />}>
