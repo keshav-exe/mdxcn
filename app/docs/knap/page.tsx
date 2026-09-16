@@ -2,13 +2,7 @@ import type { Metadata } from "next"
 
 import { Command, CopyBlock, InstallCommand } from "@/components/docs/install"
 import { DocsPageHeader } from "@/components/docs/page-header"
-import {
-  InlineCode,
-  ProseLead,
-  ProseMuted,
-  ProseP,
-  TextLink,
-} from "@/components/site/prose"
+import { InlineCode, ProseLead, ProseP, TextLink } from "@/components/site/prose"
 import { JsonLd } from "@/components/seo/json-ld"
 import {
   KNAP_API_URL,
@@ -77,21 +71,17 @@ export default function KnapDocsPage() {
           </ProseLead>
         }
         title="Knap"
-      >
-        <ProseMuted>
-          Landing: <TextLink href="/knap">/knap</TextLink>. Language:{" "}
-          <TextLink href={KNAP_URL}>knap.md</TextLink>. API:{" "}
-          <TextLink href={KNAP_API_URL}>knap.md/api</TextLink>.
-        </ProseMuted>
-      </DocsPageHeader>
+      />
 
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-semibold tracking-tight">Install</h2>
         <ProseP>
-          Copy the graphs first. <InlineCode>all.json</InlineCode> already
-          includes the filters. If the ASCII helpers are all you need, adding{" "}
-          <InlineCode>graph-knap</InlineCode> alone is enough.{" "}
-          <TextLink href={KNAP_URL}>Knap</TextLink> is a separate package.
+          Three names: <TextLink href={KNAP_URL}>Knap</TextLink> is the
+          templating language (<InlineCode>pnpm add knap</InlineCode>).{" "}
+          <InlineCode>graph-knap</InlineCode> is the filter pack you copy from
+          this registry. <InlineCode>graph_*</InlineCode> is what you write in
+          templates. Copy the graphs first; <InlineCode>all.json</InlineCode>{" "}
+          already includes the filters.
         </ProseP>
         <InstallCommand name="graph-knap" />
         <Command label="Knap" value="pnpm add knap" />
