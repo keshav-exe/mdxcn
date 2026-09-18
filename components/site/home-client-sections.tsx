@@ -21,8 +21,8 @@ const HomeGraphDemos = dynamic(
 function HomeClientSections() {
   return (
     <>
-      <ShowcaseSection />
       <HomeGraphDemos />
+      <ShowcaseSection />
     </>
   )
 }

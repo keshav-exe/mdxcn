@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/seo/json-ld"
 import { AgentsSection } from "@/components/site/agents-section"
 import { Hero } from "@/components/site/hero"
 import { HomeClientSections } from "@/components/site/home-client-sections"
-import { HomeIntro } from "@/components/site/home-intro"
+import { HomeFaq } from "@/components/site/home-faq"
 import { pageMeta, websiteJsonLd } from "@/lib/seo"
 import { SITE_DESCRIPTION } from "@/lib/site"
 
@@ -18,9 +18,9 @@ export default function Page() {
     <main id="main">
       <JsonLd data={websiteJsonLd()} />
       <Hero />
-      <HomeIntro />
-      <AgentsSection />
       <HomeClientSections />
+      <AgentsSection />
+      <HomeFaq />
     </main>
   )
 }

@@ -1,17 +1,13 @@
 import Link from "next/link"
-
 import { SiteContainer } from "@/components/site/container"
-import { ProseMuted } from "@/components/site/prose"
-import { Button } from "@/components/ui/button"
 import { Mark, MARK_THEME } from "@/lib/og/mark"
 import { GITHUB_URL } from "@/lib/github"
-import { usd, CELL_USD } from "@/lib/sponsors"
 
 function SiteFooter() {
   return (
     <footer>
       <SiteContainer
-        className="flex flex-col gap-8"
+        className="flex flex-col gap-24"
         corners={["tl", "tr", "bl", "br"]}
       >
         <div className="flex flex-col gap-8">
@@ -31,7 +27,7 @@ function SiteFooter() {
                   href="/developers"
                   prefetch={false}
                 >
-                  Developer API
+                  developer api
                 </Link>
               </li>
               <li>
@@ -40,7 +36,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/agents"
                 >
-                  For agents
+                  for agents
                 </Link>
               </li>
               <li>
@@ -49,7 +45,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/comark"
                 >
-                  Comark
+                  comark
                 </Link>
               </li>
               <li>
@@ -58,7 +54,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/knap"
                 >
-                  Knap
+                  knap
                 </Link>
               </li>
               <li>
@@ -67,7 +63,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/docs"
                 >
-                  Docs
+                  docs
                 </Link>
               </li>
               <li>
@@ -76,7 +72,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/docs/examples"
                 >
-                  Examples
+                  examples
                 </Link>
               </li>
               <li>
@@ -85,7 +81,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/docs/installation"
                 >
-                  Installation
+                  installation
                 </Link>
               </li>
               <li>
@@ -94,16 +90,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/docs/skill"
                 >
-                  Skill
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="font-normal text-muted-foreground hover:text-foreground"
-                  prefetch={false}
-                  href="/sponsor"
-                >
-                  Sponsor
+                  skill
                 </Link>
               </li>
               <li>
@@ -112,7 +99,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/about"
                 >
-                  About
+                  about
                 </Link>
               </li>
               <li>
@@ -121,7 +108,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/contact"
                 >
-                  Contact
+                  contact
                 </Link>
               </li>
               <li>
@@ -130,7 +117,7 @@ function SiteFooter() {
                   prefetch={false}
                   href="/privacy"
                 >
-                  Privacy
+                  privacy
                 </Link>
               </li>
               <li>
@@ -148,54 +135,34 @@ function SiteFooter() {
                   prefetch={false}
                   href="/openapi.json"
                 >
-                  OpenAPI
+                  openapi
                 </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
                   href={GITHUB_URL}
                   rel="noreferrer"
                 >
-                  Source
-                </a>
+                  source
+                </Link>
               </li>
               <li>
-                <a
-                  className="font-normal text-muted-foreground hover:text-foreground"
-                  href="https://x.com/kshvbgde"
-                  rel="noreferrer"
-                >
-                  X
-                </a>
-              </li>
-              <li>
-                <a
+                <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
                   href="https://github.com/keshav-exe/markdown-graphs/blob/main/LICENSE"
                   rel="noreferrer"
                 >
                   MIT
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
         </div>
-        <div className="flex flex-col gap-4 border-t border-dashed border-graph-frame pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <ProseMuted className="max-w-none">
-            Four homepage cells. {usd(CELL_USD)} a cell per month.
-          </ProseMuted>
-          <Button
-            nativeButton={false}
-            render={<Link href="/sponsor" />}
-            variant="outline"
-          >
-            Sponsor
-          </Button>
-        </div>
+
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-pretty text-muted-foreground">
-            {new Date().getFullYear()} Markdown Graphs. MIT license.
+            {new Date().getFullYear()} markdown graphs. mit license.
           </p>
           <p className="text-pretty text-muted-foreground">
             {" "}

@@ -62,11 +62,11 @@ function HomeGraphDemos() {
       <SiteContainer className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <h2 className="max-w-[35ch] text-2xl font-semibold tracking-tight text-balance">
-            Figures that stay in React
+            pick a palette, copy the component
           </h2>
-          <p className="max-w-[56ch] text-pretty leading-relaxed text-foreground/88">
-            Activity, heatmap, calendar, and timers have no fenced ASCII, so they
-            live only as components.
+          <p className="max-w-[56ch] leading-relaxed text-pretty text-foreground/88">
+            every graph uses text glyphs, your theme tokens, and one shared
+            frame. try an accent below, then copy the component you need.
           </p>
         </div>
         <AccentPicker />
@@ -155,19 +155,19 @@ function HomeGraphDemos() {
             className="text-foreground underline-offset-4 hover:underline"
             href="/agents"
           >
-            For agents
+            for agents
           </Link>
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/docs"
           >
-            Library
+            library
           </Link>
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/docs/examples"
           >
-            Examples
+            examples
           </Link>
           <Link
             className="text-foreground underline-offset-4 hover:underline"
@@ -179,7 +179,7 @@ function HomeGraphDemos() {
             className="text-foreground underline-offset-4 hover:underline"
             href="/sponsor"
           >
-            Sponsor
+            sponsor
           </Link>
         </div>
       </SiteContainer>

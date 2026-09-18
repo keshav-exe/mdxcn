@@ -1,4 +1,6 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react"
+import { PlusIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 
 import { cn } from "@/lib/utils"
 
@@ -14,14 +16,25 @@ type Corner = keyof typeof cornerClass
 const ALL_CORNERS: Corner[] = ["tl", "tr", "bl", "br"]
 
 const markClass =
-  "pointer-events-none absolute z-20 flex size-4 items-center justify-center bg-background font-mono text-sm leading-none select-none"
+  "pointer-events-none absolute z-20 flex size-4 items-center justify-center bg-background select-none"
+
+function CornerPlusMark() {
+  return (
+    <HugeiconsIcon
+      className="size-4"
+      icon={PlusIcon}
+      size={16}
+      strokeWidth={2}
+    />
+  )
+}
 
 function SiteMark({
-  mark = "+",
+  mark = <CornerPlusMark />,
   tone = "rail",
   className,
 }: {
-  mark?: string
+  mark?: ReactNode
   tone?: "rail" | "frame"
   className?: string
 }) {
@@ -40,12 +53,12 @@ function SiteMark({
 }
 
 function SiteCorners({
-  mark = "+",
+  mark = <CornerPlusMark />,
   corners = ALL_CORNERS,
   tone = "rail",
   className,
 }: {
-  mark?: string
+  mark?: ReactNode
   corners?: readonly Corner[]
   tone?: "rail" | "frame"
   className?: string

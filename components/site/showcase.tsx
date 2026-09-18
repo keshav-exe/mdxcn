@@ -176,8 +176,8 @@ function ShowcaseFigure({
       >
         {(
           [
-            ["tsx", "TSX"],
-            ["markdown", "Markdown"],
+            ["tsx", "tsx"],
+            ["markdown", "markdown"],
           ] as const
         ).map(([id, label]) => (
           <button
@@ -204,7 +204,7 @@ function ShowcaseFigure({
       ) : (
         <FrameBox className="min-w-0">
           <div className="absolute top-2 right-2 z-20">
-            <CopyButton label="Copy Markdown" text={item.markdown} />
+            <CopyButton label="copy markdown" text={item.markdown} />
           </div>
           <pre className="scrollbar-graph max-h-72 overflow-auto p-4 pr-12 font-mono text-sm text-pretty whitespace-pre-wrap text-muted-foreground sm:p-6">
             <code>{item.markdown}</code>
@@ -221,12 +221,12 @@ function ShowcaseSection() {
       <SiteContainer className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
           <h2 className="max-w-[35ch] text-2xl font-semibold tracking-tight text-balance">
-            Same figure as JSX or a fence
+            one figure, two formats
           </h2>
-          <p className="max-w-[56ch] text-pretty leading-relaxed text-foreground/88">
-            Import the component in MDX, or paste the official fence in a README.
-            {showcaseCount} graphs have both; Flow, Plot, Activity, Heatmap,
-            Calendar, Timer, and Countdown stay in React.
+          <p className="max-w-[56ch] leading-relaxed text-pretty text-foreground/88">
+            switch between the live react component and the ascii you can paste
+            into a readme, issue, or pull request. {showcaseCount} graphs
+            support both formats.
           </p>
         </div>
         <ShowcaseBlock slug={showcaseLayout.full} />

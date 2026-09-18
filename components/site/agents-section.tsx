@@ -8,7 +8,6 @@ import {
   ProseP,
   TextLink,
 } from "@/components/site/prose"
-import { Button } from "@/components/ui/button"
 import { COMARK_URL } from "@/lib/docs/comark"
 import { KNAP_URL } from "@/lib/docs/knap"
 
@@ -20,26 +19,26 @@ function AgentsSection() {
           <div className="flex flex-col items-start gap-6">
             <div className="flex flex-col gap-4">
               <h2 className="max-w-[20ch] text-2xl font-semibold tracking-tight text-balance">
-                For agents
+                give your agent the same library
               </h2>
               <ProseP>
-                The figure stays in the file as JSX the agent wrote, a{" "}
-                <InlineCode>::graph-*</InlineCode> block{" "}
-                <TextLink href={COMARK_URL}>Comark</TextLink> can render, a{" "}
-                <TextLink href={KNAP_URL}>Knap</TextLink> filter can emit, or
-                ASCII it can read back later — not SVG, and not a homemade
-                fence.
+                install the skill and your agent can choose a graph, fill in
+                real props, and place it beside the prose. it writes jsx for
+                mdx, <InlineCode>::graph-*</InlineCode> for{" "}
+                <TextLink href={COMARK_URL}>comark</TextLink>, or a{" "}
+                <TextLink href={KNAP_URL}>knap</TextLink> filter.
               </ProseP>
               <ProseMuted>
-                A skill picks the graph and recipes supply real props;{" "}
-                <TextLink href="/llms.txt">/llms.txt</TextLink> carries the
-                chooser plus the ASCII, Comark, and Knap blocks when the skill
-                is not installed.
+                in plain markdown, it pastes the official ascii instead of
+                inventing a diagram you cannot reuse.
               </ProseMuted>
             </div>
-            <Button nativeButton={false} render={<Link href="/agents" />}>
-              How agents use this
-            </Button>
+            <Link
+              className="text-foreground underline-offset-4 hover:text-foreground/80 hover:underline"
+              href="/agents"
+            >
+              install the agent skill
+            </Link>
           </div>
           <AgentsFlowDemo />
         </div>

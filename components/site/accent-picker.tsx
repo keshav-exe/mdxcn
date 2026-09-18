@@ -49,9 +49,9 @@ function AccentPicker() {
 
   return (
     <div className="flex flex-col gap-2">
-      <MonoLabel>Accent</MonoLabel>
+      <MonoLabel className="normal-case">accent</MonoLabel>
       <div
-        aria-label="Accent color"
+        aria-label="accent color"
         className="flex flex-wrap items-center gap-1"
         role="radiogroup"
       >

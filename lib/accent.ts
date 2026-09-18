@@ -45,7 +45,7 @@ function gradientSwatch(
 export const accents: Accent[] = [
   {
     id: "theme",
-    label: "Theme",
+    label: "theme",
     kind: "solid",
     light: "oklch(0.32 0 0)",
     dark: "oklch(0.92 0 0)",
@@ -55,7 +55,7 @@ export const accents: Accent[] = [
   },
   {
     id: "mint",
-    label: "Mint",
+    label: "mint",
     kind: "solid",
     light: "oklch(0.52 0.14 163)",
     dark: "oklch(0.77 0.15 163)",
@@ -65,7 +65,7 @@ export const accents: Accent[] = [
   },
   {
     id: "orange",
-    label: "Orange",
+    label: "orange",
     kind: "solid",
     light: "oklch(0.58 0.16 55)",
     dark: "oklch(0.76 0.14 55)",
@@ -75,7 +75,7 @@ export const accents: Accent[] = [
   },
   {
     id: "green",
-    label: "Green",
+    label: "green",
     kind: "solid",
     light: "oklch(0.5 0.14 145)",
     dark: "oklch(0.74 0.14 145)",
@@ -85,7 +85,7 @@ export const accents: Accent[] = [
   },
   {
     id: "cyan",
-    label: "Cyan",
+    label: "cyan",
     kind: "solid",
     light: "oklch(0.5 0.1 210)",
     dark: "oklch(0.76 0.1 210)",
@@ -95,7 +95,7 @@ export const accents: Accent[] = [
   },
   {
     id: "blue",
-    label: "Blue",
+    label: "blue",
     kind: "solid",
     light: "oklch(0.5 0.18 255)",
     dark: "oklch(0.7 0.12 255)",
@@ -105,7 +105,7 @@ export const accents: Accent[] = [
   },
   {
     id: "purple",
-    label: "Purple",
+    label: "purple",
     kind: "solid",
     light: "oklch(0.5 0.16 300)",
     dark: "oklch(0.72 0.12 300)",
@@ -115,7 +115,7 @@ export const accents: Accent[] = [
   },
   {
     id: "pink",
-    label: "Pink",
+    label: "pink",
     kind: "solid",
     light: "oklch(0.55 0.18 8)",
     dark: "oklch(0.74 0.14 8)",
@@ -125,7 +125,7 @@ export const accents: Accent[] = [
   },
   {
     id: "sunset",
-    label: "Sunset",
+    label: "sunset",
     kind: "gradient",
     light: "oklch(0.55 0.18 19)",
     dark: "oklch(0.7 0.19 19)",
@@ -141,7 +141,7 @@ export const accents: Accent[] = [
   },
   {
     id: "ocean",
-    label: "Ocean",
+    label: "ocean",
     kind: "gradient",
     light: "oklch(0.5 0.14 228)",
     dark: "oklch(0.77 0.15 228)",
@@ -157,7 +157,7 @@ export const accents: Accent[] = [
   },
   {
     id: "neon",
-    label: "Neon",
+    label: "neon",
     kind: "gradient",
     light: "oklch(0.48 0.16 129)",
     dark: "oklch(0.92 0.23 129)",
@@ -173,7 +173,7 @@ export const accents: Accent[] = [
   },
   {
     id: "aurora",
-    label: "Aurora",
+    label: "aurora",
     kind: "gradient",
     light: "oklch(0.55 0.2 351)",
     dark: "oklch(0.68 0.25 351)",
@@ -189,7 +189,7 @@ export const accents: Accent[] = [
   },
   {
     id: "fire",
-    label: "Fire",
+    label: "fire",
     kind: "gradient",
     light: "oklch(0.55 0.18 33)",
     dark: "oklch(0.67 0.22 33)",
@@ -205,7 +205,7 @@ export const accents: Accent[] = [
   },
   {
     id: "prism",
-    label: "Prism",
+    label: "prism",
     kind: "gradient",
     light: "oklch(0.5 0.12 220)",
     dark: "oklch(0.75 0.14 220)",

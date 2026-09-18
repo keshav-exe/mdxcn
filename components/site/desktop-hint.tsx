@@ -7,8 +7,8 @@ function DesktopHint() {
         <SiteRule className="left-0" orientation="y" />
         <SiteRule className="right-0" orientation="y" />
         <SiteRule className="bottom-0" />
-        <p className="py-3 font-mono text-pretty text-graph-muted">
-          View on a desktop screen for a better experience.
+        <p className="py-3 font-mono text-pretty text-graph-muted text-center text-sm">
+          view on a desktop screen for a better experience.
         </p>
       </div>
     </div>

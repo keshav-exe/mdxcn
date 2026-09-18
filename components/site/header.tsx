@@ -28,103 +28,105 @@ function SiteHeader({ stars }: { stars: number | null }) {
         {docs ? (
           <SiteMark className="bottom-0 left-64 -translate-x-1/2 translate-y-1/2 max-lg:hidden" />
         ) : null}
-        <div className="flex items-center gap-4 py-4">
-          <Link
-            aria-label="Homepage"
-            className="flex shrink-0 items-center gap-2.5 text-foreground"
-            href="/"
-          >
-            <Mark className="size-4" palette={MARK_THEME} size={16} />
-            markdown graphs
-          </Link>
+        <div className="flex items-center gap-4 justify-between py-4">
+          <div className="flex items-center gap-4">
+            <Link
+              aria-label="Homepage"
+              className="flex shrink-0 items-center gap-2.5 text-foreground"
+              href="/"
+            >
+              <Mark className="size-4" palette={MARK_THEME} size={16} />
+              markdown graphs
+            </Link>
 
-          <nav aria-label="Primary" className="max-lg:hidden">
-            <ul className="flex items-center gap-6" role="list">
-              {SITE_NAV.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    className="text-muted-foreground hover:text-foreground"
-                    href={item.href}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+            <nav aria-label="Primary" className="max-lg:hidden">
+              <ul className="flex items-center gap-4" role="list">
+                {SITE_NAV.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      className="text-muted-foreground hover:text-foreground"
+                      href={item.href}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
 
-          <div className="ml-auto flex items-center gap-1 sm:gap-6">
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
             <SiteSearch />
             <GithubStarLink className="max-lg:hidden" stars={stars} />
-            <ThemeToggle />
-            <Dialog.Root>
-              <Dialog.Trigger
-                nativeButton={false}
-                render={
-                  <HeaderButton className="lg:hidden" label="Open menu" />
-                }
-              >
-                <HugeiconsIcon
-                  className="size-5 shrink-0"
-                  icon={MenuIcon}
-                  size={20}
-                  strokeWidth={1.5}
-                />
-              </Dialog.Trigger>
-              <Dialog.Portal>
-                <Dialog.Popup
-                  className={cn(
-                    "graph-motion fixed inset-0 z-50 flex flex-col gap-10 bg-background p-4",
-                    "origin-top-right transition-[opacity,transform] duration-200 ease-out-cubic",
-                    "data-starting-style:scale-95 data-starting-style:opacity-0",
-                    "data-ending-style:scale-95 data-ending-style:opacity-0 data-ending-style:duration-150"
-                  )}
-                >
-                  <div className="flex items-center justify-between">
-                    <Dialog.Title className="text-foreground">
-                      menu
-                    </Dialog.Title>
-                    <Dialog.Close
-                      nativeButton={false}
-                      render={<HeaderButton label="Close menu" />}
-                    >
-                      <HugeiconsIcon
-                        className="size-5 shrink-0"
-                        icon={Cancel01Icon}
-                        size={20}
-                        strokeWidth={1.5}
-                      />
-                    </Dialog.Close>
-                  </div>
-                  <ul className="flex flex-col gap-6" role="list">
-                    {SITE_NAV.map((item) => (
-                      <li key={item.href}>
-                        <Dialog.Close
-                          nativeButton={false}
-                          render={
-                            <Link
-                              className="text-2xl text-foreground"
-                              href={item.href}
-                            />
-                          }
-                        >
-                          {item.label}
-                        </Dialog.Close>
-                      </li>
-                    ))}
-
-                    <li>
-                      <div className="text-2xl">
-                        <GithubStarLink stars={stars} />
-                      </div>
-                    </li>
-                  </ul>
-                </Dialog.Popup>
-              </Dialog.Portal>
-            </Dialog.Root>
           </div>
         </div>
       </div>
+      <Dialog.Root>
+        <Dialog.Trigger
+          nativeButton={false}
+          render={
+            <HeaderButton className="lg:hidden" label="Open menu" />
+          }
+        >
+          <HugeiconsIcon
+            className="size-5 shrink-0"
+            icon={MenuIcon}
+            size={20}
+            strokeWidth={1.5}
+          />
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <Dialog.Popup
+            className={cn(
+              "graph-motion fixed inset-0 z-50 flex flex-col gap-10 bg-background p-4",
+              "origin-top-right transition-[opacity,transform] duration-200 ease-out-cubic",
+              "data-starting-style:scale-95 data-starting-style:opacity-0",
+              "data-ending-style:scale-95 data-ending-style:opacity-0 data-ending-style:duration-150"
+            )}
+          >
+            <div className="flex items-center justify-between">
+              <Dialog.Title className="text-foreground">
+                menu
+              </Dialog.Title>
+              <Dialog.Close
+                nativeButton={false}
+                render={<HeaderButton label="Close menu" />}
+              >
+                <HugeiconsIcon
+                  className="size-5 shrink-0"
+                  icon={Cancel01Icon}
+                  size={20}
+                  strokeWidth={1.5}
+                />
+              </Dialog.Close>
+            </div>
+            <ul className="flex flex-col gap-6" role="list">
+              {SITE_NAV.map((item) => (
+                <li key={item.href}>
+                  <Dialog.Close
+                    nativeButton={false}
+                    render={
+                      <Link
+                        className="text-2xl text-foreground"
+                        href={item.href}
+                      />
+                    }
+                  >
+                    {item.label}
+                  </Dialog.Close>
+                </li>
+              ))}
+
+              <li>
+                <div className="text-2xl">
+                  <GithubStarLink stars={stars} />
+                </div>
+              </li>
+            </ul>
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
     </header>
   )
 }

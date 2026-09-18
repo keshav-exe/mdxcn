@@ -260,10 +260,6 @@ function SiteSearch() {
           size={20}
           strokeWidth={1.5}
         />
-        <span className="max-lg:hidden">search</span>
-        <kbd className="font-mono text-graph-muted max-lg:hidden">
-          {mod === "⌘" ? "⌘K" : "Ctrl K"}
-        </kbd>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Backdrop
