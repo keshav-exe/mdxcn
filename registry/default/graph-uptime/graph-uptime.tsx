@@ -7,6 +7,7 @@ import {
   GraphBody,
   GraphTick,
   GraphTrack,
+  words,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -22,7 +23,8 @@ type UptimeStatus = "ok" | "degraded" | "down" | "empty"
 
 type GraphUptimeProps = {
   title: string
-  days: UptimeStatus[]
+  /** `["ok", "down"]` or `"ok ok down"`. ok, degraded, down, or empty. */
+  days: UptimeStatus[] | string
   from?: string
   to?: string
   columns?: number
@@ -45,7 +47,7 @@ function statusTone(
 
 function GraphUptime({
   title,
-  days,
+  days: daysProp,
   from,
   to,
   columns = 30,
@@ -54,6 +56,7 @@ function GraphUptime({
   corner,
   className,
 }: GraphUptimeProps) {
+  const days = words<UptimeStatus>(daysProp)
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)

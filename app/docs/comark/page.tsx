@@ -19,30 +19,30 @@ import {
 } from "@/lib/docs/comark"
 import { pageMeta, webPageJsonLd } from "@/lib/seo"
 
-const extra = `## Install
+const extra = `## install
 
-pnpm dlx shadcn@latest add @mdx-graphs/all
+pnpm dlx shadcn@latest add @mdxcn/all
 
 The adapter is graph-comark. all.json already includes it.
 
-## Wire
+## wire
 
 ${COMARK_WIRE}
 
-## Coerce
+## coerce
 
 Markdown attributes are strings. {value=0.86} arrives as "0.86". arrays and objects survive YAML. coerceProps turns listed numeric props into numbers, maps class to className, and strips a leading colon from Vue-style keys.
 
-## Stream
+## stream
 
 Auto-close completes a dangling ::graph-table. YAML is all-or-nothing — a timeline grows an event at a time. A prefix that cuts mid-key can throw YAMLException; hold the last good tree. Required props missing → empty frame, not rows.map on undefined.
 
-## Hosts
+## hosts
 
 GitHub, Linear, and a README still get the fenced ASCII. They do not run Comark.`
 
 export const metadata: Metadata = pageMeta({
-  title: "Comark",
+  title: "comark",
   description: COMARK_DESCRIPTION,
   path: "/docs/comark",
 })
@@ -62,37 +62,37 @@ export default function ComarkDocsPage() {
           description: COMARK_DESCRIPTION,
           extra,
           registry: "graph-comark",
-          title: "Comark",
+          title: "comark",
         }}
         kicker="graph-comark"
         lead={
           <ProseLead>
-            Author figures as <InlineCode>::graph-*</InlineCode> blocks in plain
-            Markdown; <TextLink href={COMARK_URL}>Comark</TextLink> parses the
-            file and these graphs draw the frames — no MDX compile step.
+            author figures as <InlineCode>::graph-*</InlineCode> blocks in plain
+            markdown; <TextLink href={COMARK_URL}>comark</TextLink> parses the
+            file and these graphs draw the frames — no mdx compile step.
           </ProseLead>
         }
-        title="Comark"
+        title="comark"
       >
         <ProseMuted>
           Landing and live pair: <TextLink href="/comark">/comark</TextLink>.
           Full catalog demo:{" "}
-          <TextLink href={COMARK_DEMO_URL}>comark-graphs-demo</TextLink>.
+          <TextLink href={COMARK_DEMO_URL}>comark-demo</TextLink>.
         </ProseMuted>
       </DocsPageHeader>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Install</h2>
+        <h2 className="text-xl font-semibold tracking-tight">install</h2>
         <ProseP>
-          Copy the graphs first — <InlineCode>all.json</InlineCode> already
-          includes the adapter. If the graphs are already in the repo, adding{" "}
+          copy the graphs first — <InlineCode>all.json</InlineCode> already
+          includes the adapter. if the graphs are already in the repo, adding{" "}
           <InlineCode>graph-comark</InlineCode> alone is enough.
         </ProseP>
         <InstallCommand name="graph-comark" />
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Wire</h2>
+        <h2 className="text-xl font-semibold tracking-tight">wire</h2>
         <ProseP>
           Parse on the server and pass the document, not the raw string, so the{" "}
           <TextLink href={COMARK_URL}>Comark</TextLink> parser stays out of the
@@ -100,9 +100,9 @@ export default function ComarkDocsPage() {
           <InlineCode>&quot;use client&quot;</InlineCode> because they animate,
           and they arrive as client references.
         </ProseP>
-        <CopyBlock label="Server" value={COMARK_WIRE} />
+        <CopyBlock label="server" value={COMARK_WIRE} />
         <Command
-          label="Subset"
+          label="subset"
           value={`import { createGraphComponents } from "@/registry/default/graph-comark/graph-comark"
 import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
@@ -113,7 +113,7 @@ const graphComponents = createGraphComponents({
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Author</h2>
+        <h2 className="text-xl font-semibold tracking-tight">author</h2>
         <ProseP>
           Put YAML props on a <InlineCode>::graph-*</InlineCode> block — they
           match the React API. Nest figures in{" "}
@@ -121,7 +121,7 @@ const graphComponents = createGraphComponents({
           Comark tab with a copy-paste block.
         </ProseP>
         <CopyBlock
-          label="Markdown"
+          label="markdown"
           value={`::graph-meter
 ---
 title: COVERAGE
@@ -134,7 +134,7 @@ caption: 86% of statements
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Coerce</h2>
+        <h2 className="text-xl font-semibold tracking-tight">coerce</h2>
         <ProseP>
           <InlineCode>{"{value=0.86}"}</InlineCode> arrives as{" "}
           <InlineCode>&quot;0.86&quot;</InlineCode>. Arrays and objects in the
@@ -148,20 +148,20 @@ caption: 86% of statements
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Stream</h2>
+        <h2 className="text-xl font-semibold tracking-tight">stream</h2>
         <ProseP>
           Auto-close completes a dangling <InlineCode>::graph-table</InlineCode>
           , so a half-written tag does not swallow the rest of the page. YAML is
           all-or-nothing: a timeline grows an event at a time. A prefix that
-          cuts mid-key can throw. Hold the last good tree. Missing required props
-          render an empty frame instead of crashing. Graphs remount when data
-          changes so <InlineCode>once: true</InlineCode> motion does not leave
-          new rows at opacity 0.
+          cuts mid-key can throw. Hold the last good tree. Missing required
+          props render an empty frame instead of crashing. Graphs remount when
+          data changes so <InlineCode>once: true</InlineCode> motion does not
+          leave new rows at opacity 0.
         </ProseP>
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Hosts</h2>
+        <h2 className="text-xl font-semibold tracking-tight">hosts</h2>
         <ProseP>
           GitHub, Linear, and a README still get the fenced ASCII from the MDX
           tab — they do not run Comark.{" "}

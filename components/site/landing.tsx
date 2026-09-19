@@ -1,0 +1,136 @@
+import Link from "next/link"
+import type { ReactNode } from "react"
+
+import { HeroInstall } from "@/components/site/hero-install"
+import { SiteContainer } from "@/components/site/container"
+import { ProseLead, ProseMuted } from "@/components/site/prose"
+import { cn } from "@/lib/utils"
+
+type LandingAction = {
+  href: string
+  label: string
+}
+
+function LandingHero({
+  title,
+  lead,
+  item,
+  command,
+  actions,
+  figure,
+}: {
+  title: string
+  lead: ReactNode
+  item?: string
+  command?: string
+  actions?: readonly LandingAction[]
+  figure: ReactNode
+}) {
+  return (
+    <section>
+      <SiteContainer
+        borderTop={false}
+        className="py-8 sm:py-16 md:py-24 lg:py-32"
+      >
+        <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="flex min-w-0 flex-col items-start gap-4">
+            <h1 className="max-w-[16ch] text-4xl font-medium tracking-tighter text-balance sm:text-5xl md:text-6xl lg:text-7xl">
+              {title}
+            </h1>
+            <ProseLead>{lead}</ProseLead>
+            {command != null || item != null ? (
+              <HeroInstall
+                className="max-w-none"
+                command={command}
+                item={item}
+              />
+            ) : null}
+            {actions && actions.length > 0 ? (
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {actions.map((action) => (
+                  <LandingLink href={action.href} key={action.href}>
+                    {action.label}
+                  </LandingLink>
+                ))}
+              </div>
+            ) : null}
+          </div>
+          <div className="min-w-0">{figure}</div>
+        </div>
+      </SiteContainer>
+    </section>
+  )
+}
+
+function LandingSection({
+  title,
+  lead,
+  muted,
+  id,
+  children,
+}: {
+  title: string
+  lead?: ReactNode
+  muted?: ReactNode
+  id?: string
+  children: ReactNode
+}) {
+  return (
+    <section id={id}>
+      <SiteContainer className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
+          <h2 className="max-w-[35ch] text-2xl font-semibold tracking-tight text-balance">
+            {title}
+          </h2>
+          {lead}
+          {muted ? <ProseMuted>{muted}</ProseMuted> : null}
+        </div>
+        {children}
+      </SiteContainer>
+    </section>
+  )
+}
+
+function LandingLink({
+  href,
+  children,
+  className,
+}: {
+  href: string
+  children: ReactNode
+  className?: string
+}) {
+  const cls = cn(
+    "text-foreground underline-offset-4 hover:underline",
+    className
+  )
+
+  if (href.startsWith("http") || href.startsWith("mailto:")) {
+    return (
+      <a className={cls} href={href} rel="noreferrer" target="_blank">
+        {children}
+      </a>
+    )
+  }
+
+  return (
+    <Link className={cls} href={href}>
+      {children}
+    </Link>
+  )
+}
+
+function LandingLinks({ items }: { items: readonly LandingAction[] }) {
+  return (
+    <div className="flex flex-wrap gap-x-6 gap-y-2">
+      {items.map((item) => (
+        <LandingLink href={item.href} key={item.href}>
+          {item.label}
+        </LandingLink>
+      ))}
+    </div>
+  )
+}
+
+export { LandingHero, LandingLink, LandingLinks, LandingSection }
+export type { LandingAction }

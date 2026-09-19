@@ -53,7 +53,7 @@ export default function GlobalError({
           body="The shell failed to render. Try again."
           code="ERROR"
           hint={error.digest}
-          title="Something broke"
+          title="something broke"
         />
       </body>
     </html>

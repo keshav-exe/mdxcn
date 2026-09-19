@@ -34,7 +34,7 @@ function SkillInstall() {
         <SiteMark className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-sm:hidden" />
         <SiteMark className="top-1/2 right-0 translate-x-1/2 -translate-y-1/2 max-sm:hidden" />
         <SiteMark className="bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 max-sm:hidden" />
-        <div aria-label="Agent" className="grid sm:grid-cols-2" role="tablist">
+        <div aria-label="agent" className="grid sm:grid-cols-2" role="tablist">
           {skillAgents.map((item, index) => {
             const selected = item.id === agent.id
             return (
@@ -60,10 +60,10 @@ function SkillInstall() {
         </div>
       </div>
 
-      <CopyBlock label="Project" value={skillCurl(origin, agent.project)} />
-      <CopyBlock label="Personal" value={skillCurl(origin, agent.personal)} />
-      <Command label="From the repo" value={skillCopyFromRepo(agent.project)} />
-      <CopyBlock label="Prompt" value={skillPrompt(origin, agent.project)} />
+      <CopyBlock label="project" value={skillCurl(origin, agent.project)} />
+      <CopyBlock label="personal" value={skillCurl(origin, agent.personal)} />
+      <Command label="from the repo" value={skillCopyFromRepo(agent.project)} />
+      <CopyBlock label="prompt" value={skillPrompt(origin, agent.project)} />
     </div>
   )
 }

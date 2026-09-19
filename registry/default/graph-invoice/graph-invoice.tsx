@@ -1,11 +1,22 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  childItems,
+  defineItem,
   Graph,
   GraphBody,
   GraphRule,
+  hasHost,
+  itemText,
+  linesOf,
+  listItems,
+  paragraphsOf,
+  splitLabel,
+  tableOf,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -38,14 +49,105 @@ type InvoiceTotal = {
 
 type GraphInvoiceProps = {
   title: string
-  from?: InvoiceParty
-  to?: InvoiceParty
+  from?: InvoiceParty | string
+  to?: InvoiceParty | string
   meta?: InvoiceMeta[]
-  items: InvoiceItem[]
+  /** Data form. Or a markdown table of line items. */
+  items?: InvoiceItem[]
   totals?: InvoiceTotal[]
   note?: string
+  children?: ReactNode
   corner?: string
   className?: string
+}
+
+const From = defineItem<InvoiceParty>("From")
+const To = defineItem<InvoiceParty>("To")
+const Meta = defineItem<{ label: string; value?: string }>("Meta")
+const Item = defineItem<
+  Omit<InvoiceItem, "description"> & { description?: string }
+>("Item")
+const Total = defineItem<{
+  label?: string
+  value?: string
+  accent?: boolean
+}>("Total")
+
+function partyOf(
+  value: InvoiceParty | string | undefined,
+  entry?: InvoiceParty & { children?: ReactNode }
+): InvoiceParty | undefined {
+  if (typeof value === "string") {
+    const [name, ...lines] = value
+      .split(/\n/)
+      .map((line) => line.trim())
+      .filter(Boolean)
+    if (!name) {
+      return undefined
+    }
+    return {
+      name,
+      lines: lines.length > 0 ? lines : undefined,
+    }
+  }
+
+  if (value) {
+    return value
+  }
+
+  if (!entry) {
+    return undefined
+  }
+
+  const lines = entry.lines ?? linesOf(entry.children)
+  return {
+    name: entry.name,
+    lines: lines.length > 0 ? lines : undefined,
+  }
+}
+
+function moneyLine(text: string): { label: string; value: string } | null {
+  const match = text.match(/^(.*?)\s+([+\-−]?[\d,]+(?:\.\d+)?)\s*$/)
+  if (!match) {
+    return null
+  }
+  return { label: match[1]?.trim() ?? "", value: match[2] ?? "" }
+}
+
+function itemsFromTable(children: ReactNode): InvoiceItem[] {
+  const table = tableOf(children)
+  if (!table || table.rows.length === 0) {
+    return []
+  }
+
+  const headers = table.headers.map((header) => header.toLowerCase())
+  const qtyAt = headers.findIndex((header) => /qty|qty\.|quantity/.test(header))
+  const rateAt = headers.findIndex((header) => /rate|price/.test(header))
+  const amountAt = headers.findIndex((header) =>
+    /amount|total|sum/.test(header)
+  )
+
+  return table.rows.map((row) => {
+    const last = row.length - 1
+    const amountIndex = amountAt >= 0 ? amountAt : last
+    const description = row[0] ?? ""
+    const qty =
+      qtyAt >= 0
+        ? row[qtyAt]
+        : row.length >= 4
+          ? row[1]
+          : row.length === 3 && rateAt < 0
+            ? row[1]
+            : undefined
+    const rate =
+      rateAt >= 0 ? row[rateAt] : row.length >= 4 ? row[2] : undefined
+    return {
+      description,
+      qty: qty || undefined,
+      rate: rate || undefined,
+      amount: row[amountIndex] ?? "",
+    }
+  })
 }
 
 function Party({ label, party }: { label: string; party: InvoiceParty }) {
@@ -66,15 +168,62 @@ function Party({ label, party }: { label: string; party: InvoiceParty }) {
 
 function GraphInvoice({
   title,
-  from,
-  to,
-  meta,
-  items,
-  totals,
-  note,
+  from: fromProp,
+  to: toProp,
+  meta: metaProp,
+  items: itemsProp,
+  totals: totalsProp,
+  note: noteProp,
+  children,
   corner,
   className,
 }: GraphInvoiceProps) {
+  const from = partyOf(fromProp, childItems(children, From)[0])
+  const to = partyOf(toProp, childItems(children, To)[0])
+  const taggedMeta = childItems(children, Meta).map((entry) => ({
+    label: entry.label,
+    value: entry.value ?? textOf(entry.children),
+  }))
+  const listedMeta = listItems(children)
+    .map((entry) => splitLabel(itemText(entry)))
+    .filter((entry) => entry.rest)
+    .map((entry) => ({ label: entry.label, value: entry.rest }))
+  const meta = metaProp ?? (taggedMeta.length > 0 ? taggedMeta : listedMeta)
+  const taggedItems = childItems(children, Item).map((entry) => ({
+    ...entry,
+    description: entry.description ?? textOf(entry.children),
+  }))
+  const items = (
+    itemsProp ??
+    (taggedItems.length > 0 ? taggedItems : itemsFromTable(children))
+  ).map((entry) => ({ ...entry, description: entry.description ?? "" }))
+  const taggedTotals = childItems(children, Total).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+    value: entry.value ?? textOf(entry.children),
+  }))
+  const paragraphTotals = paragraphsOf(children).flatMap((paragraph) => {
+    const content = (paragraph.props as { children?: ReactNode }).children
+    const parsed = moneyLine(textOf(content).trim())
+    if (!parsed) {
+      return []
+    }
+    return [
+      {
+        ...parsed,
+        accent: hasHost(content, ["strong", "b"]),
+      },
+    ]
+  })
+  const totals =
+    totalsProp ?? (taggedTotals.length > 0 ? taggedTotals : paragraphTotals)
+  const note =
+    noteProp ??
+    paragraphsOf(children)
+      .map((paragraph) =>
+        textOf((paragraph.props as { children?: ReactNode }).children).trim()
+      )
+      .find((text) => text && !moneyLine(text))
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
@@ -205,7 +354,7 @@ function GraphInvoice({
   )
 }
 
-export { GraphInvoice }
+export { From, GraphInvoice, Item, Meta, To, Total }
 export type {
   GraphInvoiceProps,
   InvoiceItem,

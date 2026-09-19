@@ -54,16 +54,16 @@ export function developersJsonLd() {
     "@graph": [
       {
         "@type": "WebAPI",
-        name: "Markdown Graphs API",
+        name: "mdxcn API",
         description:
-          "Read-only JSON catalog and machine-readable docs for Markdown Graphs.",
+          "Read-only JSON catalog and machine-readable docs for mdxcn.",
         url: `${SITE_URL}/developers`,
         documentation: `${SITE_URL}/openapi.json`,
         provider: organizationNode(),
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "Markdown Graphs API", path: "/developers" },
+        { name: "home", path: "/" },
+        { name: "mdxcn api", path: "/developers" },
       ]),
     ],
   }
@@ -160,7 +160,7 @@ export function webPageJsonLd({
         },
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
+        { name: "home", path: "/" },
         { name, path },
       ]),
     ],
@@ -171,7 +171,7 @@ export function docsJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "markdown graphs components",
+    name: "mdxcn components",
     description: DOCS_DESCRIPTION,
     url: `${SITE_URL}/docs`,
     mainEntity: {
@@ -207,29 +207,9 @@ export function componentJsonLd(item: ComponentDoc) {
         },
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "Docs", path: "/docs" },
+        { name: "home", path: "/" },
+        { name: "docs", path: "/docs" },
         { name: item.title, path: `/docs/${item.slug}` },
-      ]),
-    ],
-  }
-}
-
-export function sponsorJsonLd() {
-  return {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        name: "Sponsor",
-        description:
-          "Four cells on the homepage, next to the title. $100 each per month. 100k+ impressions on X.",
-        url: `${SITE_URL}/sponsor`,
-        author,
-      },
-      breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "Sponsor", path: "/sponsor" },
       ]),
     ],
   }
@@ -248,8 +228,8 @@ export function skillJsonLd() {
         author,
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "Docs", path: "/docs" },
+        { name: "home", path: "/" },
+        { name: "docs", path: "/docs" },
         { name: "Skill", path: "/docs/skill" },
       ]),
     ],
@@ -262,16 +242,16 @@ export function installationJsonLd() {
     "@graph": [
       {
         "@type": "TechArticle",
-        headline: "Installation",
+        headline: "installation",
         description:
           "Copy the source into a shadcn project. Then give the agent the skill.",
         url: `${SITE_URL}/docs/installation`,
         author,
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "Docs", path: "/docs" },
-        { name: "Installation", path: "/docs/installation" },
+        { name: "home", path: "/" },
+        { name: "docs", path: "/docs" },
+        { name: "installation", path: "/docs/installation" },
       ]),
     ],
   }
@@ -283,14 +263,14 @@ export function agentsJsonLd() {
     "@graph": [
       {
         "@type": "WebPage",
-        name: "For agents",
+        name: "for agents",
         description: AGENTS_DESCRIPTION,
         url: `${SITE_URL}/agents`,
         author,
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "For agents", path: "/agents" },
+        { name: "home", path: "/" },
+        { name: "for agents", path: "/agents" },
       ]),
     ],
   }

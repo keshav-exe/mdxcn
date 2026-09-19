@@ -17,7 +17,7 @@ function SiteFooter() {
             href="/"
           >
             <Mark className="size-4" palette={MARK_THEME} size={16} />
-            markdown graphs
+            mdxcn
           </Link>
           <nav aria-label="Footer">
             <ul className="flex flex-wrap gap-6" role="list">
@@ -162,7 +162,7 @@ function SiteFooter() {
 
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-pretty text-muted-foreground">
-            {new Date().getFullYear()} markdown graphs. mit license.
+            {new Date().getFullYear()} mdxcn. mit license.
           </p>
           <p className="text-pretty text-muted-foreground">
             {" "}

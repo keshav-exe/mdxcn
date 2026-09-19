@@ -10,7 +10,7 @@ const description =
   "No accounts. Vercel Analytics on the site. Public GitHub star count. Mail is ordinary email."
 
 export const metadata: Metadata = pageMeta({
-  title: "Privacy",
+  title: "privacy",
   description,
   path: "/privacy",
 })
@@ -20,12 +20,12 @@ export default function PrivacyPage() {
     <>
       <JsonLd
         data={webPageJsonLd({
-          name: "Privacy · Markdown Graphs",
+          name: "Privacy · mdxcn",
           description,
           path: "/privacy",
         })}
       />
-      <ProsePage kicker="Markdown Graphs" title="Privacy">
+      <ProsePage title="privacy">
         {PRIVACY_PARAS.map((para) => (
           <p key={para}>{para}</p>
         ))}

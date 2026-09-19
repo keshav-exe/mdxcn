@@ -1,8 +1,19 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  defineItem,
+  Graph,
+  GraphBody,
+  hasHost,
+  itemText,
+  listItems,
+  splitLabel,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
   staggerList,
@@ -11,21 +22,49 @@ import { cn } from "@/lib/utils"
 
 type SpecRow = {
   label: string
-  value: string
+  /** Falls back to the child text: `<Field label="Family">Geist Mono</Field>`. */
+  value?: string
   accent?: boolean
 }
 
 type GraphSpecProps = {
   title: string
-  rows: SpecRow[]
+  /** Data form. Or write `<Field />` children. */
+  rows?: SpecRow[]
+  children?: ReactNode
   corner?: string
   className?: string
 }
 
-function GraphSpec({ title, rows, corner, className }: GraphSpecProps) {
+/** `<Field label="ETA" accent>Thu</Field>` inside `<GraphSpec>`. */
+const Field = defineItem<SpecRow>("Field")
+
+function GraphSpec({
+  title,
+  rows: rowsProp,
+  children,
+  corner,
+  className,
+}: GraphSpecProps) {
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
+  const listed = listItems(children).map((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    const content = (item.props as { children?: ReactNode }).children
+    return {
+      label,
+      value: rest,
+      accent: hasHost(content, ["strong", "b"]),
+    }
+  })
+  const tagged = childItems(children, Field).map((entry) => ({
+    ...entry,
+    value: entry.value ?? textOf(entry.children),
+  }))
+  const rows = (rowsProp ?? (listed.length > 0 ? listed : tagged)).map(
+    (entry) => ({ ...entry, value: entry.value ?? "" })
+  )
 
   return (
     <Graph title={title} className={className} corner={corner}>
@@ -60,5 +99,5 @@ function GraphSpec({ title, rows, corner, className }: GraphSpecProps) {
   )
 }
 
-export { GraphSpec }
+export { Field, GraphSpec }
 export type { GraphSpecProps, SpecRow }

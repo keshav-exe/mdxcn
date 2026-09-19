@@ -2,7 +2,11 @@
 
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  fraction,
+  Graph,
+  GraphBody,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fillDelay,
   graphTransition,
@@ -15,7 +19,8 @@ import { cn } from "@/lib/utils"
 
 type GraphWaffleProps = {
   title: string
-  value: number
+  /** `0.73`, `"0.73"`, or `"73%"`. */
+  value: number | string
   cells?: number
   columns?: number
   caption?: string
@@ -27,7 +32,7 @@ type GraphWaffleProps = {
 
 function GraphWaffle({
   title,
-  value,
+  value: valueProp,
   cells = 100,
   columns = 10,
   caption,
@@ -36,6 +41,7 @@ function GraphWaffle({
   corner,
   className,
 }: GraphWaffleProps) {
+  const value = fraction(valueProp)
   const reduce = useReducedMotion()
   const clamped = Math.min(1, Math.max(0, value))
   const filled = Math.round(clamped * cells)

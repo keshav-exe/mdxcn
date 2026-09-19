@@ -1,8 +1,8 @@
+import { GITHUB_URL, GITHUB_REPO } from "@/lib/github"
 import { SITE_AUTHOR, SITE_EMAIL, SITE_URL } from "@/lib/site"
-import { GITHUB_URL } from "@/lib/github"
 
 export const HOME_WHAT =
-  "Markdown Graphs is a set of ASCII-framed React diagrams you copy into a shadcn project — not an npm package of components. Each figure sits in a dashed frame with a title on the top edge."
+  "mdxcn is a set of ASCII-framed React diagrams you copy into a shadcn project — not an npm package of components. Each figure sits in a dashed frame with a title on the top edge."
 
 export const HOME_WRITE =
   "When an agent is writing a refactor, an incident, a tradeoff, or a PR, it can put at most two graphs next to the prose. React files get JSX; a Comark app gets a ::graph-* block with YAML props; a Knap template gets a graph_* filter that emits the official fence; a README, GitHub comment, Linear note, or any plain Markdown that cannot run a renderer gets the official fenced ASCII from /llms.txt. It should not invent SVG, Mermaid, or homemade ASCII."
@@ -22,22 +22,22 @@ export const HOME_CLI =
   "Install graphs with the official shadcn CLI — there is no separate npm package of React components. One command copies the source into your registry."
 
 export const HOME_BRAND =
-  "mdx-graphs.kshv.me is the canonical site; the GitHub repo is keshav-exe/markdown-graphs. Search for “Markdown Graphs” or “mdx-graphs” for docs, the API, and the agent skill."
+  `${SITE_URL.replace("https://", "")} is the canonical site; the GitHub repo is ${GITHUB_REPO}. Search for mdxcn for docs, the API, and the agent skill.`
 
 export function homeMarkdown(origin = SITE_URL) {
   const host = origin || SITE_URL
 
-  return `# Markdown Graphs
+  return `# mdxcn
 
 ${HOME_WHAT}
 
 ${HOME_WRITE}
 
-## Write
+## write
 
 Install the skill into the folder the agent already reads. Ask for a write-up. The chooser picks the graph. Copy the props from the docs or a recipe, then swap the labels.
 
-## Read
+## read
 
 ${HOME_READ}
 
@@ -55,10 +55,10 @@ ${HOME_BRAND}
 
 ## Links
 
-- Developer API: ${host}/developers
+- developer api: ${host}/developers
 - OpenAPI: ${host}/openapi.json
 - JSON catalog: ${host}/api/v1/components
-- For agents: ${host}/agents
+- for agents: ${host}/agents
 - Comark: ${host}/comark
 - Knap: ${host}/knap
 - agents.md: ${host}/agents.md
@@ -71,37 +71,37 @@ ${HOME_BRAND}
 }
 
 export const ABOUT_PARAS = [
-  `Markdown Graphs is an open-source library of ASCII-framed React diagrams for MDX. ${SITE_AUTHOR.name} publishes the source on GitHub under the MIT license. You copy the files into an existing shadcn project with the shadcn CLI. This is not an npm package of components.`,
+  `mdxcn is an open-source library of ASCII-framed React diagrams for MDX. ${SITE_AUTHOR.name} publishes the source on GitHub under the MIT license. You copy the files into an existing shadcn project with the shadcn CLI. This is not an npm package of components.`,
   "Each graph sits in a dashed frame with a title on the top edge. Drawing graphs use one accent by default. Most graphs have an official fenced ASCII for README files, GitHub, Linear, and PR comments. Comark apps can render the same figures from ::graph-* blocks in a plain .md file. Knap templates can emit that fence, or a ::graph-* block, from data.",
   `The site at ${SITE_URL.replace("https://", "")} is the catalog, the shadcn registry, and the agent skill. The skill file tells an agent which graph to put next to prose — JSX in MDX, a ::graph-* block in Comark, a graph_* filter in Knap, or the official fence in a README.`,
   `Source: ${GITHUB_URL}. Mail: ${SITE_EMAIL}.`,
 ] as const
 
 export const CONTACT_PARAS = [
-  `Mail ${SITE_AUTHOR.name} at ${SITE_EMAIL}. That address is for the library, the site, and homepage sponsor cells.`,
+  `Mail ${SITE_AUTHOR.name} at ${SITE_EMAIL}. That address is for the library, the site, and questions about mdxcn or the registry.`,
   `Bugs and patches go to ${GITHUB_URL}/issues. The repository is public. The license is MIT.`,
   `On X: ${SITE_AUTHOR.x}. The handle is @kshvbgde.`,
-  "There is no support desk and no SLA. If a graph is wrong, open an issue with the slug and the props you passed. If you want a homepage cell, use the sponsor page and the same email. For the skill or the registry, start on /docs/skill or /openapi.json.",
+  "There is no support desk and no SLA. If a graph is wrong, open an issue with the slug and the props you passed. For the skill or the registry, start on /docs/skill or /openapi.json. Do not send secrets over email.",
 ] as const
 
 export const DEVELOPERS_PARAS = [
-  "Markdown Graphs exposes a read-only JSON API for agents and integrators. Version 1 is prefixed at /api/v1/. No API keys. Responses include RateLimit-* headers (1000 GET requests per hour). Errors are RFC 9457 application/problem+json with code, detail, and recovery links.",
+  "mdxcn exposes a read-only JSON API for agents and integrators. Version 1 is prefixed at /api/v1/. No API keys. Responses include RateLimit-* headers (1000 GET requests per hour). Errors are RFC 9457 application/problem+json with code, detail, and recovery links.",
   "Start at /api/v1 for the endpoint index, /api/v1/health for a health check, and /api/v1/components for the full graph catalog. OpenAPI 3.1 is at /openapi.json. RFC 9727 API catalog is at /.well-known/api-catalog.",
-  "Install graph source files with the shadcn CLI: pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/all.json. That is the official CLI path — there is no separate npm package of React components.",
+  `Install graph source files with the shadcn CLI: pnpm dlx shadcn@latest add ${SITE_URL}/r/all.json. That is the official CLI path — there is no separate npm package of React components.`,
   "Agent resources: /agents and /agents.md for the write/read story, /skill.md for the skill file, /llms.txt for the chooser, fenced ASCII blocks, Comark blocks, and Knap filters. Comark wiring: /docs/comark. Knap wiring: /docs/knap. Deprecation policy: /developers/deprecation.",
 ] as const
 
 export const DEPRECATION_PARAS = [
-  "Markdown Graphs API version 1 is stable under the /api/v1/ URL prefix. Breaking changes ship as /api/v2/ with at least six months notice on this page and in the OpenAPI description.",
+  "mdxcn API version 1 is stable under the /api/v1/ URL prefix. Breaking changes ship as /api/v2/ with at least six months notice on this page and in the OpenAPI description.",
   "When an endpoint or field is deprecated, responses may include Deprecation: true and Sunset: <HTTP-date> headers. After the sunset date the route returns 410 Gone with application/problem+json.",
   "The shadcn registry JSON under /r/ follows the same semver as the site. Registry item slugs are not removed without a replacement slug documented in the OpenAPI changelog.",
-  "Subscribe to GitHub releases on keshav-exe/markdown-graphs for API and registry changes. Mail hi@kshv.me if you depend on a private integration.",
+  `Subscribe to GitHub releases on ${GITHUB_REPO} for API and registry changes. Mail hi@kshv.me if you depend on a private integration.`,
 ] as const
 
 export const PRIVACY_PARAS = [
-  "Markdown Graphs does not have accounts, logins, or user profiles. Copying a graph into your repo does not send us the file.",
+  "mdxcn does not have accounts, logins, or user profiles. Copying a graph into your repo does not send us the file.",
   "The site is hosted on Vercel. Vercel Analytics records page views. We do not run ads, and we do not sell visitor data.",
-  "The header may fetch the public GitHub star count for keshav-exe/markdown-graphs. That request goes to api.github.com. We do not send your identity with it.",
+  `The header may fetch the public GitHub star count for ${GITHUB_REPO}. That request goes to api.github.com. We do not send your identity with it.`,
   `Mail to ${SITE_EMAIL} is ordinary email. Do not send secrets. The registry JSON under /r/ and the skill files are public.`,
   "If this policy changes, the new text replaces this page. There is no separate legal entity behind the project beyond the author named on /about.",
 ] as const
@@ -109,7 +109,7 @@ export const PRIVACY_PARAS = [
 export function developersMarkdown(origin = SITE_URL) {
   const host = origin || SITE_URL
 
-  return `# Markdown Graphs Developer API
+  return `# mdxcn developer api
 
 ${DEVELOPERS_PARAS.join("\n\n")}
 
@@ -124,45 +124,45 @@ ${DEVELOPERS_PARAS.join("\n\n")}
 }
 
 export function deprecationMarkdown(origin = SITE_URL) {
-  return `# Markdown Graphs API deprecation
+  return `# mdxcn API deprecation
 
 ${DEPRECATION_PARAS.join("\n\n")}
 
-- Developer API: ${origin}/developers
+- developer api: ${origin}/developers
 - OpenAPI: ${origin}/openapi.json
 `
 }
 
 export function aboutMarkdown(origin = SITE_URL) {
-  return `# About Markdown Graphs
+  return `# about mdxcn
 
 ${ABOUT_PARAS.join("\n\n")}
 
 ## Also
 
-- Contact: ${origin}/contact
-- Privacy: ${origin}/privacy
+- contact: ${origin}/contact
+- privacy: ${origin}/privacy
 - Source: ${GITHUB_URL}
 `
 }
 
 export function contactMarkdown(origin = SITE_URL) {
-  return `# Contact Markdown Graphs
+  return `# contact mdxcn
 
 ${CONTACT_PARAS.join("\n\n")}
 
-- About: ${origin}/about
-- Sponsor: ${origin}/sponsor
+- about: ${origin}/about
+- privacy: ${origin}/privacy
 `
 }
 
 export function privacyMarkdown(origin = SITE_URL) {
-  return `# Privacy · Markdown Graphs
+  return `# privacy · mdxcn
 
 ${PRIVACY_PARAS.join("\n\n")}
 
-- About: ${origin}/about
-- Contact: ${origin}/contact
+- about: ${origin}/about
+- contact: ${origin}/contact
 `
 }
 

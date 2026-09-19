@@ -1,41 +1,42 @@
 ---
-name: markdown-graphs
+name: mdxcn
 description: >-
-  Picks markdown graphs next to prose. In React or MDX that can import
-  components, copies JSX. In a Comark app, writes a ::graph-* block with YAML
-  props. In a Knap template, pipes props through a graph_* filter. In plain
-  Markdown (README, GitHub, Linear, PR comments), pastes the official fenced
-  ASCII from llms.txt. Never invents SVG, Mermaid, Recharts, canvas, or
-  homemade ASCII. Use when explaining a refactor, incident, postmortem,
-  tradeoff, pull request, sprint, or migration; when writing a README or
-  markdown doc; when the user mentions markdown graphs, ASCII diagrams,
-  framed charts, GraphFlow, GraphTimeline, Comark, or Knap; or when a
-  write-up would scan faster with a figure.
+  Picks mdxcn next to prose. In Notion, Linear, or a README, pastes
+  the framed ASCII from the docs MDX tab (dashed box, [ TITLE ], glyphs — keep
+  the fence). In React or MDX that can register the parent, wraps markdown
+  children in the component. In a Comark app, writes a ::graph-* block with
+  YAML props. In a Knap template, pipes props through a graph_* filter. Never
+  invents SVG, Mermaid, Recharts, canvas, or homemade ASCII. Use when explaining
+  a refactor, incident, postmortem, tradeoff, pull request, sprint, or
+  migration; when writing a README or markdown doc; when the user mentions
+  mdxcn, ASCII diagrams, framed charts, GraphFlow, GraphTimeline,
+  Comark, or Knap; or when a write-up would scan faster with a figure.
 ---
 
-# markdown graphs
+# mdxcn
 
 Glyphs in a dashed frame with `+` corners and a `[ TITLE ]` on the top edge.
 
 Pick the host before you write — the paste format depends on it.
 
-| Host                                                      | What to paste       | Where to copy from                                                               |
-| --------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------- |
-| React, or MDX that can `import` from `@/registry/default` | JSX                 | [recipes.md](recipes.md), then docs examples                                     |
-| Comark app (plain `.md` the app renders)                  | `::graph-*` + YAML  | https://mdx-graphs.kshv.me/llms.txt `## Comark`, or the docs page **Comark** tab |
-| Knap template (data → Markdown)                           | `graph_*` filter    | https://mdx-graphs.kshv.me/llms.txt `## Knap`, or the docs page **Knap** tab     |
-| README, GitHub, Linear, Slack, PR comments                | Fenced ASCII        | https://mdx-graphs.kshv.me/llms.txt `## MDX`, or the docs page **MDX** tab       |
+| Host                                                      | What to paste          | Where to copy from                                                               |
+| --------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------- |
+| Notion, Linear, Google Docs, any rich text editor         | Fenced ASCII drawing   | docs **MDX** tab (the framed figure, not the inner list)                         |
+| React, or MDX that can register the parent once           | Markdown, wrapped      | docs **React** tab inside `<GraphTree>` / `<Callout>` / … after `mdx-components.tsx` |
+| Comark app (plain `.md` the app renders)                  | `::graph-*` + YAML     | https://mdxcn.dev/llms.txt `## Comark`, or the docs page **Comark** tab |
+| Knap template (data → Markdown)                           | `graph_*` filter       | https://mdxcn.dev/llms.txt `## Knap`, or the docs page **Knap** tab     |
+| README, GitHub, Slack, PR comments                        | Fenced ASCII           | docs **MDX** tab, or https://mdxcn.dev/llms.txt `## MDX`                |
 
-Do not paste JSX into a file that cannot run React. Do not paste `::graph-*` into GitHub or Linear — they do not run Comark. Do not invent ASCII art — copy the official fence, swap labels, keep the frame. Knap filters emit that fence (or `::graph-*` when the param is `comark`).
+Do not paste `<GraphTree>` into Notion — paste the fenced drawing from the MDX tab. Do not paste `::graph-*` into GitHub or Linear — they do not run Comark. Do not invent ASCII art — copy the official fence, swap labels, keep the frame. Knap filters emit that fence (or `::graph-*` when the param is `comark`).
 
 No fenced ASCII: Flow, Plot, Activity, Heatmap, Calendar, Timer, Countdown, Frame. On GitHub, pick a graph that has fenced ASCII, or skip. On Comark, those graphs still work except Frame. On Knap they emit `::graph-*` YAML except Frame.
 
-Source is copied via shadcn, not npm. Imports land under `@/registry/default`. Unsure of props? Fetch https://mdx-graphs.kshv.me/llms.txt.
+Source is copied via shadcn, not npm. Imports land under `@/registry/default`. Unsure of props? Fetch https://mdxcn.dev/llms.txt.
 
 If `registry/default/graph-frame` is missing and the host is React, Comark, or Knap:
 
 ```bash
-pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/all.json
+pnpm dlx shadcn@latest add https://mdxcn.dev/r/all.json
 ```
 
 Need `motion`. One component: replace `all` with the slug (`graph-flow`, …). For Comark, the adapter is `graph-comark` (already in `all.json`). For Knap, the filters are `graph-knap` (already in `all.json`). Also `pnpm add knap`.
@@ -44,20 +45,44 @@ Need `motion`. One component: replace `all` with the slug (`graph-flow`, …). F
 
 1. Decide if a figure earns it. One sentence → no graph. A path, a night, a matrix, a diff → yes.
 2. Pick **at most two** graphs from the chooser. Prefer a pair in recipes.md. If the host is GitHub / README, drop any pick that has no fenced ASCII.
-3. Copy. JSX from recipes.md / docs. `::graph-*` from llms.txt `## Comark`. `{{ … | graph_* }}` from llms.txt `## Knap`. ASCII from llms.txt `## MDX`. Swap labels, keep the API / frame.
+3. Copy. Framed ASCII from the docs MDX tab for Notion, Linear, README, GitHub. React from the docs React tab for MDX that can register the parent. `::graph-*` from llms.txt `## Comark`. `{{ … | graph_* }}` from llms.txt `## Knap`. Swap labels, keep the API / frame.
 4. Write the reply in this shape. Do not lead with the figure.
 
-React / importable MDX:
+React / importable MDX (register the parent once, paste the markdown inside):
 
 ```
 1–3 sentences (the claim)
 
-<GraphA … />
+<GraphTimeline title="NIGHT">
+
+- 14:02: p95 crossed 800ms
+- **14:11: rolled back the cache flag**
+- *14:40: write the postmortem*
+
+</GraphTimeline>
 
 1–3 sentences (what the second figure adds)
-
-<GraphB … />
 ```
+
+Notion / Linear / README (fenced ASCII from the docs MDX tab):
+
+````
+1–3 sentences (the claim)
+
+```
++---------------- [ NIGHT ] ----------------+
+|                                           |
+| ●  14:02  p95 crossed 800ms               |
+| │                                         |
+| ●  14:11  rolled back the cache flag      |
+| │                                         |
+| ○  14:40  write the postmortem            |
+|                                           |
++-------------------------------------------+
+```
+
+1–3 sentences (what the second figure adds)
+````
 
 Comark:
 
@@ -224,7 +249,7 @@ These are user messages. Match the pair. React → copy JSX from the recipe. Com
 ```
 We're moving session checks out of route handlers into middleware. Write a short plan for the team.
 
-Use markdown graphs for the before/after request path and the week-by-week rollout. Prose between the two figures. Don't draw SVG.
+Use mdxcn for the before/after request path and the week-by-week rollout. Prose between the two figures. Don't draw SVG.
 ```
 
 **Incident** → `GraphTimeline`, then `GraphUptime`
@@ -232,7 +257,7 @@ Use markdown graphs for the before/after request path and the week-by-week rollo
 ```
 Draft a tight postmortem: p95 crossed 800ms at 14:02, we rolled back the cache flag at 14:11, the write-up is still open.
 
-Use markdown graphs — a timeline of the night, then which days users felt it. No SVG.
+Use mdxcn — a timeline of the night, then which days users felt it. No SVG.
 ```
 
 **Comark postmortem** → `::graph-timeline`, then `::graph-uptime`
@@ -256,7 +281,7 @@ Pipe the graph props through graph_* filters so the output is the official fence
 ```
 Leave a PR review comment on the auth refactor. Summarize what files moved, then show how coverage changed on main vs this branch.
 
-Use markdown graphs from this project. At most two figures. Don't invent APIs or draw SVG.
+Use mdxcn from this project. At most two figures. Don't invent APIs or draw SVG.
 ```
 
 **Pick one** → `GraphCompare`, then `GraphRank` if install size is part of the argument
@@ -264,7 +289,7 @@ Use markdown graphs from this project. At most two figures. Don't invent APIs or
 ```
 We're choosing a queue: BullMQ vs SQS. Write the tradeoff for the RFC.
 
-Use markdown graphs — a feature matrix, then bundle size only if it matters. Don't draw SVG.
+Use mdxcn — a feature matrix, then bundle size only if it matters. Don't draw SVG.
 ```
 
 **README** → fenced ASCIIs, not JSX, not `::graph-*`
@@ -272,5 +297,5 @@ Use markdown graphs — a feature matrix, then bundle size only if it matters. D
 ```
 Add a launch section to the README. It's a .md file, no React, no Comark.
 
-Use markdown graphs — a punch list (GraphCheck fence) and a grouped table if it earns it. Paste the official fenced ASCII from llms.txt. Don't paste JSX.
+Use mdxcn — a punch list (GraphCheck fence) and a grouped table if it earns it. Paste the official fenced ASCII from llms.txt. Don't paste JSX.
 ```

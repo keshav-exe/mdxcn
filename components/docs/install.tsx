@@ -19,7 +19,8 @@ import { GITHUB_TREE, GITHUB_URL } from "@/lib/github"
 import { scopedRegistryInstall } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
-type InstallTab = "cli" | "manual" | "agent" | "mdx" | "comark" | "knap"
+type InstallTab =
+  "cli" | "mdx" | "manual" | "agent" | "markdown" | "comark" | "knap"
 
 const COLLAPSED_HEIGHT = 256
 
@@ -27,8 +28,16 @@ type InstallCommandProps = {
   name: string
   doc?: Pick<
     ComponentDoc,
-    "title" | "name" | "description" | "dependencies" | "props" | "when" | "not"
+    | "title"
+    | "name"
+    | "description"
+    | "dependencies"
+    | "props"
+    | "when"
+    | "not"
+    | "mdx"
   >
+  /** MDX for the first example. Shown on the MDX tab and in the agent prompt. */
   example?: string
 }
 
@@ -36,31 +45,33 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
   const [tab, setTab] = useState<InstallTab>("cli")
   const origin = useOrigin()
   const prompt = agentPrompt({ origin, registry: name, doc, example })
-  const mdx = mdxExample(name)
+  const ascii = mdxExample(name)
   const comark = comarkExample(name)
   const knap = knapExample(name)
-  const tabs: [InstallTab, string][] = [
-    ["cli", "CLI"],
-    ["manual", "Manual"],
-    ["agent", "Agent"],
-  ]
+  const tabs: [InstallTab, string][] = [["cli", "cli"]]
 
-  if (mdx) {
-    tabs.push(["mdx", "MDX"])
+  if (doc) {
+    tabs.push(["mdx", "mdx"])
+  }
+
+  tabs.push(["manual", "manual"], ["agent", "agent"])
+
+  if (ascii) {
+    tabs.push(["markdown", "markdown"])
   }
 
   if (comark) {
-    tabs.push(["comark", "Comark"])
+    tabs.push(["comark", "comark"])
   }
 
   if (knap) {
-    tabs.push(["knap", "Knap"])
+    tabs.push(["knap", "knap"])
   }
 
   return (
     <div className="flex flex-col gap-4">
       <div
-        aria-label="Install method"
+        aria-label="install method"
         className="flex flex-wrap items-center gap-1"
         role="tablist"
       >
@@ -86,10 +97,12 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
       </div>
       {tab === "cli" ? (
         <CliInstall name={name} />
+      ) : tab === "mdx" && doc ? (
+        <MdxInstall doc={doc} example={example} name={name} />
       ) : tab === "manual" ? (
         <ManualInstall name={name} />
-      ) : tab === "mdx" && mdx ? (
-        <MdxInstall markdown={mdx.markdown} />
+      ) : tab === "markdown" && ascii ? (
+        <MarkdownInstall markdown={ascii.markdown} />
       ) : tab === "comark" && comark ? (
         <ComarkInstall markdown={comark.markdown} />
       ) : tab === "knap" && knap ? (
@@ -99,14 +112,14 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
           template={knap.template}
         />
       ) : (
-        <CopyBlock label="Prompt" value={prompt} />
+        <CopyBlock label="prompt" value={prompt} />
       )}
     </div>
   )
 }
 
 function CliInstall({ name }: { name: string }) {
-  return <Command label="Command" value={scopedRegistryInstall(name)} />
+  return <Command label="command" value={scopedRegistryInstall(name)} />
 }
 
 function fileUrl(file: string) {
@@ -127,16 +140,16 @@ function ManualInstall({ name }: { name: string }) {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <p className="text-pretty text-muted-foreground">
-          Install <code className="font-mono">motion</code>, paste the CSS, then
+          install <code className="font-mono">motion</code>, paste the css, then
           copy these files from the repo.
         </p>
-        <Command label="Dependency" value="pnpm add motion" />
+        <Command label="dependency" value="pnpm add motion" />
       </div>
 
-      <CopyBlock label="CSS" value={css} />
+      <CopyBlock label="css" value={css} />
 
       <div className="flex flex-col gap-2">
-        <MonoLabel>Files</MonoLabel>
+        <MonoLabel>files</MonoLabel>
         <ul
           className="flex flex-col gap-1 font-mono text-muted-foreground"
           role="list"
@@ -159,7 +172,7 @@ function ManualInstall({ name }: { name: string }) {
             href={fileUrl(source)}
             rel="noreferrer"
           >
-            Open on GitHub
+            open on github
           </a>
         </p>
       </div>
@@ -167,16 +180,64 @@ function ManualInstall({ name }: { name: string }) {
   )
 }
 
-function MdxInstall({ markdown }: { markdown: string }) {
+function mdxExports(doc: NonNullable<InstallCommandProps["doc"]>) {
+  const names = new Set<string>([doc.name])
+  for (const match of (doc.mdx ?? "").matchAll(/<([A-Z][A-Za-z]*)/g)) {
+    if (match[1]) {
+      names.add(match[1])
+    }
+  }
+  return [...names]
+}
+
+function MdxInstall({
+  doc,
+  example,
+  name,
+}: {
+  doc: NonNullable<InstallCommandProps["doc"]>
+  example?: string
+  name: string
+}) {
+  const names = mdxExports(doc)
+  const register = `// mdx-components.tsx
+import type { MDXComponents } from "mdx/types"
+import { ${names.join(", ")} } from "@/registry/default/${name}/${name}"
+
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+  return { ...components, ${names.join(", ")} }
+}`
+
   return (
     <div className="flex flex-col gap-6">
       <ProseP>
-        Paste this fenced block into a Markdown file that cannot import the
-        React component — README, GitHub, Linear, PR comments, a bare{" "}
-        <InlineCode>.md</InlineCode>. Monospace keeps the frame aligned. Swap
-        labels, keep the frame. Do not invent a different drawing.
+        register the parent once in <InlineCode>mdx-components.tsx</InlineCode>
+        {names.length > 1 ? (
+          <>
+            {" "}
+            — including <InlineCode>{names.slice(1).join(", ")}</InlineCode>
+          </>
+        ) : null}
+        . lists and tables inside the tag do not need extra imports. the .mdx
+        tab on the example is the framed figure — that is what you paste into
+        notion or a readme.
       </ProseP>
-      <CopyBlock label="Markdown" value={markdown} />
+      <CopyBlock label="mdx-components.tsx" value={register} />
+      {example ? <CopyBlock label="page.mdx" value={example} /> : null}
+    </div>
+  )
+}
+
+function MarkdownInstall({ markdown }: { markdown: string }) {
+  return (
+    <div className="flex flex-col gap-6">
+      <ProseP>
+        paste this fenced block into a markdown file that cannot import the
+        component — readme, github, linear, pr comments, a bare{" "}
+        <InlineCode>.md</InlineCode>. monospace keeps the frame aligned. swap
+        labels, keep the frame. do not invent a different drawing.
+      </ProseP>
+      <CopyBlock label="markdown" value={markdown} />
     </div>
   )
 }
@@ -185,13 +246,13 @@ function ComarkInstall({ markdown }: { markdown: string }) {
   return (
     <div className="flex flex-col gap-6">
       <ProseP>
-        Paste this into a <InlineCode>.md</InlineCode> file that a{" "}
-        <TextLink href={COMARK_URL}>Comark</TextLink> app will render. YAML
-        props match the React API. GitHub and Linear still need the MDX fence —
-        they do not run Comark. Wiring is on{" "}
+        paste this into a <InlineCode>.md</InlineCode> file that a{" "}
+        <TextLink href={COMARK_URL}>comark</TextLink> app will render. yaml
+        props match the react api. github and linear still need the mdx fence —
+        they do not run comark. wiring is on{" "}
         <TextLink href="/docs/comark">/docs/comark</TextLink>.
       </ProseP>
-      <CopyBlock label="Comark" value={markdown} />
+      <CopyBlock label="comark" value={markdown} />
     </div>
   )
 }
@@ -208,16 +269,16 @@ function KnapInstall({
   return (
     <div className="flex flex-col gap-6">
       <ProseP>
-        Pipe the graph props through a <TextLink href={KNAP_URL}>Knap</TextLink>{" "}
-        filter. The output is the official fence (or a{" "}
-        <InlineCode>::graph-*</InlineCode> block when the figure has no ASCII).
-        Wire <InlineCode>graphFilters</InlineCode> in{" "}
-        <TextLink href="/docs/knap">/docs/knap</TextLink>. The Knap CLI does
-        not load them.
+        pipe the graph props through a <TextLink href={KNAP_URL}>knap</TextLink>{" "}
+        filter. the output is the official fence (or a{" "}
+        <InlineCode>::graph-*</InlineCode> block when the figure has no ascii).
+        wire <InlineCode>graphFilters</InlineCode> in{" "}
+        <TextLink href="/docs/knap">/docs/knap</TextLink>. the knap cli does not
+        load them.
       </ProseP>
-      <CopyBlock label="Template" value={template} />
-      <CopyBlock label="Data" value={data} />
-      <CopyBlock label="Markdown" value={markdown} />
+      <CopyBlock label="template" value={template} />
+      <CopyBlock label="data" value={data} />
+      <CopyBlock label="markdown" value={markdown} />
     </div>
   )
 }
@@ -230,9 +291,9 @@ function CopyToggle({
   onClick: () => void
 }) {
   return (
-    <div className="flex justify-center graph-frame py-2">
+    <div className="flex justify-center site-rail py-2">
       <button
-        className="relative w-full px-2 py-1 font-mono tracking-wide text-muted-foreground uppercase hover:text-foreground"
+        className="relative w-full px-2 py-1 font-mono tracking-wide text-muted-foreground hover:text-foreground"
         onClick={onClick}
         type="button"
       >
@@ -278,7 +339,7 @@ function CopyBlock({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex min-w-0 flex-col gap-2" ref={boxRef}>
       <MonoLabel>{label}</MonoLabel>
-      <FrameBox className="min-w-0">
+      <FrameBox className="min-w-0" tone="rail">
         <button
           aria-label={copied ? "Copied" : `Copy ${label}`}
           className="w-full min-w-0 text-left hover:bg-muted/40"
@@ -301,10 +362,10 @@ function CopyBlock({ label, value }: { label: string; value: string }) {
           <CopyMark copied={copied} />
         </span>
         {collapsed ? (
-          <CopyToggle label="Show all" onClick={() => setOpen(true)} />
+          <CopyToggle label="show all" onClick={() => setOpen(true)} />
         ) : null}
         {open && (overflows || likelyLong) ? (
-          <CopyToggle label="Show less" onClick={collapse} />
+          <CopyToggle label="show less" onClick={collapse} />
         ) : null}
       </FrameBox>
     </div>
@@ -322,6 +383,7 @@ function Command({ label, value }: { label: string; value: string }) {
         as="button"
         className="flex w-full min-w-0 items-center gap-2 px-3 py-2 text-left text-muted-foreground hover:bg-muted/40"
         onClick={() => copy(value)}
+        tone="rail"
         type="button"
       >
         <pre className="graph-scroll-x min-w-0 flex-1 text-muted-foreground">

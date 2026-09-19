@@ -8,7 +8,7 @@ function CopyPage(props: PageCopy) {
   const origin = useOrigin()
   const text = pageMarkdown({ origin, ...props })
 
-  return <CopyButton caption="Copy page" label="Copy page" text={text} />
+  return <CopyButton caption="copy page" label="copy page" text={text} />
 }
 
 export { CopyPage }

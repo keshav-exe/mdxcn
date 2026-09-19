@@ -1,6 +1,7 @@
 import { mdxExample } from "@/lib/docs/ascii"
 import { comarkExample } from "@/lib/docs/comark"
 import { knapExample } from "@/lib/docs/knap"
+import { toMdxCopy } from "@/lib/docs/mdx"
 import type { ComponentDoc, PropRow } from "@/lib/docs/catalog"
 
 export const DESIGN_AND_MOOD = `Design
@@ -32,12 +33,13 @@ Chooser
 - overlapping work this week → GraphGantt
 
 Host
-- React, or MDX that can import the components → JSX from the examples.
-- Plain Markdown (README, GitHub, Linear, PR comments) → official fenced ASCII from /llms.txt ## MDX, or the docs MDX tab. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
+- Notion, Linear, a README → the framed ASCII from the docs MDX tab. Keep the fence so the + corners stay aligned. That is the figure, not the inner list.
+- React, or MDX that can register the parent → wrap markdown children in the parent tag. Register the parent once in mdx-components.tsx. No extra child imports.
+- Plain Markdown (README, GitHub, PR comments) → same framed ASCII from /llms.txt ## MDX, or the docs Markdown tab. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
 - Comark app (plain .md the app renders) → ::graph-* block from /llms.txt ## Comark, or the docs Comark tab. YAML props match the React API. Do not paste JSX. GitHub still gets fenced ASCII.
 - Knap template (data → Markdown) → graph_* filter from /llms.txt ## Knap, or the docs Knap tab. Pipe the React props object. A string param is the title. Pass comark for a ::graph-* block. Wire graphFilters in createEngine; the Knap CLI does not load them.
 - Reading an existing file: the figure is characters. Edit labels. Do not replace a graph with SVG.
-- No fenced ASCII: GraphFlow, GraphPlot, GraphActivity, GraphHeatmap, GraphCalendar, GraphTimer, GraphCountdown, GraphFrame. They still have a Comark block and a Knap filter (YAML) except GraphFrame. Pick another or skip.
+- No fenced ASCII: GraphFlow, GraphPlot, GraphActivity, GraphHeatmap, GraphCalendar, GraphTimer, GraphCountdown, GraphFrame still copy as a framed box of the labels. They have a Comark block and a Knap filter (YAML) except GraphFrame.
 
 Mood
 Typed, not illustrated. Quiet monospace figures that sit next to prose. Two graphs per section is enough. Restraint over decoration. Do not restyle the frame. Default is one accent; palette is opt-in.`
@@ -78,7 +80,7 @@ export function agentPrompt({
     : "`motion`"
 
   if (!doc) {
-    return `Install markdown graphs into this shadcn project.
+    return `Install mdxcn into this shadcn project.
 
 ${command}
 
@@ -88,10 +90,10 @@ ${DESIGN_AND_MOOD}`
   }
 
   const usage = example
-    ? `\nUsage\n\n${example.trim()}\n`
+    ? `\nUsage\n\nThe docs .mdx tab is the framed figure — dashed box, [ TITLE ], glyphs. Paste that into Notion or a README. Keep the fence. Register the parent once in mdx-components.tsx and wrap markdown children when you want it live.\n\n${toMdxCopy(example)}\n`
     : `\nImport\n\nimport { ${doc.name} } from "@/registry/default/${registry}/${registry}"\n`
 
-  return `Install ${doc.name} (${doc.title}) from markdown graphs into this shadcn project.
+  return `Install ${doc.name} (${doc.title}) from mdxcn into this shadcn project.
 
 ${command}
 
@@ -210,7 +212,7 @@ export function pageMarkdown({
       if (example.description) {
         parts.push("", example.description)
       }
-      parts.push("", example.code.trim())
+      parts.push("", toMdxCopy(example.code))
     }
   }
 

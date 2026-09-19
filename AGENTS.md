@@ -8,15 +8,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# markdown graphs
+# mdxcn
 
-ASCII-framed React diagrams for MDX. Source is copied via shadcn registry, not npm. Site: https://mdx-graphs.kshv.me. Repo: https://github.com/keshav-exe/markdown-graphs.
+Markdown-friendly React components for MDX. Source is copied via shadcn registry, not npm. Site: https://mdxcn.dev. Repo: https://github.com/keshav-exe/markdown-graphs.
 
 Nested agent notes:
 
 - [`registry/default/AGENTS.md`](registry/default/AGENTS.md) — how to build a graph
 - [`lib/docs/AGENTS.md`](lib/docs/AGENTS.md) — catalog, examples, recipes, **New** marks, OG, ASCII/MDX
-- [`skills/markdown-graphs/SKILL.md`](skills/markdown-graphs/SKILL.md) — Agent Skills file; copy into `.cursor/skills`, `.claude/skills`, `.agents/skills`, or `.opencode/skills`
+- [`skills/mdxcn/SKILL.md`](skills/mdxcn/SKILL.md) — Agent Skills file; copy into `.cursor/skills`, `.claude/skills`, `.agents/skills`, or `.opencode/skills`
 
 ## Adding a graph
 
@@ -35,7 +35,7 @@ Do the full list. Docs pages are generated from the catalog; there is no per-com
 11. Knap: `GRAPH_VALUE_KEY` / `ASCII` / `GRAPH_FILTER_SLUGS` in `graph-knap` (`props.ts`, `filters.ts`). Do not add a catalog row for `graph-knap`.
 12. `pnpm registry:build` so `public/r/` matches source
 
-OG is one static `app/opengraph-image.png` (+ `.alt.txt`) shared by every route. No per-page `opengraph-image.tsx`, no `ImageResponse` at request time. Redraw the PNG only if the mark or palette changes; `lib/og/mark.tsx` is the source of the mark.
+OG is one shared route: `app/opengraph-image.tsx` renders via `lib/og/opengraph.tsx` (`ImageResponse` at build time). Font: `lib/og/geist-mono-latin-400-normal.ttf` (official Geist Mono — fontsource subsets break satori). Alt text in `app/opengraph-image.alt.txt`. No per-page OG files. Mark geometry lives in `lib/og/mark.tsx`.
 
 ## Design
 

@@ -1,9 +1,21 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import { GraphArrow } from "@/registry/default/graph-frame/graph-arrow"
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  defineItem,
+  Graph,
+  GraphBody,
+  hasHost,
+  itemText,
+  listItems,
+  numbers,
+  splitLabel,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fillDelay,
   graphTransition,
@@ -20,10 +32,22 @@ type BarSeries = {
   size?: "sm" | "lg"
 }
 
+type SeriesProps = {
+  label: string
+  values?: number[] | string
+  size?: "sm" | "lg"
+}
+
+/** `<Series label="before">2 4 3 5 2</Series>` — first is from, second is to. */
+const Series = defineItem<SeriesProps>("Series")
+
 type GraphBarsProps = {
   title: string
-  from: BarSeries
-  to: BarSeries
+  /** Left series. Or write two `<Series>` children. */
+  from?: BarSeries
+  /** Right series. Or write two `<Series>` children. */
+  to?: BarSeries
+  children?: ReactNode
   processor?: string
   glyphs?: Glyphs
   palette?: GraphPalette
@@ -91,14 +115,33 @@ function MiniBars({
 
 function GraphBars({
   title,
-  from,
-  to,
+  from: fromProp,
+  to: toProp,
+  children,
   processor,
   glyphs,
   palette,
   corner,
   className,
 }: GraphBarsProps) {
+  const listed = listItems(children).map((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    const content = (item.props as { children?: ReactNode }).children
+    return {
+      label: label || itemText(item),
+      values: numbers(rest),
+      size: hasHost(content, ["strong", "b"]) ? ("lg" as const) : undefined,
+    }
+  })
+  const tagged = childItems(children, Series).map((entry) => ({
+    label: entry.label,
+    values: numbers(entry.values ?? textOf(entry.children)),
+    size: entry.size,
+  }))
+  const series = listed.length > 0 ? listed : tagged
+  const empty: BarSeries = { label: "", values: [] }
+  const from = fromProp ?? series[0] ?? empty
+  const to = toProp ?? series[1] ?? empty
   const marks = trackMarks(glyphs)
   const fromHeight = from.size === "lg" ? 8 : 5
   const toHeight = to.size === "lg" ? 8 : 5
@@ -141,5 +184,5 @@ function GraphBars({
   )
 }
 
-export { GraphBars }
-export type { BarSeries, GraphBarsProps }
+export { GraphBars, Series }
+export type { BarSeries, GraphBarsProps, SeriesProps }

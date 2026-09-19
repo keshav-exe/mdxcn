@@ -1,8 +1,20 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  defineItem,
+  firstToken,
+  Graph,
+  GraphBody,
+  hasHost,
+  itemText,
+  listItems,
+  splitDash,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
   staggerList,
@@ -17,24 +29,54 @@ const columnClass: Record<number, string> = {
 }
 
 type StatItem = {
-  value: string
-  label: string
+  value: string | number
+  /** Falls back to the child text: `<Stat value="860">shipped</Stat>`. */
+  label?: string
   hint?: string
   accent?: boolean
 }
 
 type GraphStatProps = {
   title: string
-  items: StatItem[]
+  /** Data form. Or write `<Stat />` children. */
+  items?: StatItem[]
+  children?: ReactNode
   corner?: string
   className?: string
 }
 
-function GraphStat({ title, items, corner, className }: GraphStatProps) {
+/** `<Stat value="12,400" label="docs" />` inside `<GraphStat>`. */
+const Stat = defineItem<StatItem>("Stat")
+
+function GraphStat({
+  title,
+  items: itemsProp,
+  children,
+  corner,
+  className,
+}: GraphStatProps) {
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.06)
-  const columns = Math.min(items.length, 4)
+  const listed = listItems(children).map((item) => {
+    const { token, rest } = firstToken(itemText(item))
+    const { label, rest: hint } = splitDash(rest)
+    const content = (item.props as { children?: ReactNode }).children
+    return {
+      value: token,
+      label,
+      hint: hint || undefined,
+      accent: hasHost(content, ["strong", "b"]),
+    }
+  })
+  const tagged = childItems(children, Stat).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+  const items = (itemsProp ?? (listed.length > 0 ? listed : tagged)).map(
+    (entry) => ({ ...entry, label: entry.label ?? "" })
+  )
+  const columns = Math.min(Math.max(items.length, 1), 4)
 
   return (
     <Graph title={title} className={className} corner={corner}>
@@ -73,5 +115,5 @@ function GraphStat({ title, items, corner, className }: GraphStatProps) {
   )
 }
 
-export { GraphStat }
+export { GraphStat, Stat }
 export type { GraphStatProps, StatItem }

@@ -1,5 +1,5 @@
 /**
- * Knap filters that turn data into framed Markdown graphs.
+ * Knap filters that turn data into framed mdxcn figures.
  *
  * Spread into createEngine. The CLI does not load these. Wire them in your app.
  *

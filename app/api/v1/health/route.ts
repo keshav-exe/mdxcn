@@ -8,7 +8,7 @@ export async function GET() {
   return jsonOk(
     {
       ok: true,
-      service: "Markdown Graphs",
+      service: "mdxcn",
       version: "1.0.0",
       url: SITE_URL,
     },

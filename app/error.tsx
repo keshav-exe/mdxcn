@@ -26,7 +26,7 @@ export default function ErrorPage({
       body="Something broke while rendering. Try again."
       code="ERROR"
       hint={error.digest}
-      title="Something broke"
+      title="something broke"
     />
   )
 }

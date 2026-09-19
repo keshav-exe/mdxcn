@@ -29,7 +29,7 @@ function AgentsFlowDemo() {
           ],
         },
       ]}
-      title="LOOP"
+      title="loop"
     />
   )
 }

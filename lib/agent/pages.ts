@@ -31,7 +31,7 @@ function hostOf(origin?: string) {
 
 function docsIntro(origin: string) {
   const extra = [
-    "## Components",
+    "## components",
     "",
     ...components.map(
       (item) => `- ${item.title} (${item.name}): ${item.description}`
@@ -40,7 +40,7 @@ function docsIntro(origin: string) {
 
   return pageMarkdown({
     origin,
-    title: "Introduction",
+    title: "introduction",
     description: DOCS_DESCRIPTION,
     registry: "all",
     extra,
@@ -50,47 +50,51 @@ function docsIntro(origin: string) {
 function installationMarkdown(origin: string) {
   return pageMarkdown({
     origin,
-    title: "Installation",
+    title: "installation",
     description:
-      "These are source files, not an npm package. You need an existing shadcn project and the motion dependency.",
+      "these are source files, not an npm package. you need an existing shadcn project and the motion dependency.",
     registry: "all",
-    extra: `## One component
+    extra: `## one component
 
-Run the shadcn CLI against this site's registry, or copy the files from GitHub.
+run the shadcn cli against this site's registry, or copy the files from github.
 
 pnpm dlx shadcn@latest add $ORIGIN/r/graph-table.json
 
-## Everything
+## everything
 
-Installs every graph and the shared frame code into registry/default.
+installs every graph and the shared frame code into registry/default.
 
 pnpm dlx shadcn@latest add $ORIGIN/r/all.json
 
-## Namespace
+## namespace
 
-Add the registry once in components.json, then install components by name.
+add the registry once in components.json, then install components by name.
 
-pnpm dlx shadcn@latest registry add @mdx-graphs=$ORIGIN/r/{name}.json
+pnpm dlx shadcn@latest registry add @mdxcn=$ORIGIN/r/{name}.json
 
-Then:
+then:
 
-pnpm dlx shadcn@latest add @mdx-graphs/graph-table
+pnpm dlx shadcn@latest add @mdxcn/graph-table
 
-## Import
+## import
 
-Files land under @/registry.
+files land under @/registry.
 
 import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
-## Agents
+## mdx
 
-$ORIGIN/agents is write vs read. $ORIGIN/docs/comark is ::graph-* in a plain .md file. $ORIGIN/docs/knap is graph_* filters that emit the fence. $ORIGIN/docs/skill is the SKILL.md. $ORIGIN/llms.txt is the chooser, the ASCII blocks, the Comark blocks, and the Knap filters.`,
+register the parent once in mdx-components.tsx. the mdx tab is the framed figure — copy it into notion or a readme.
+
+## agents
+
+$ORIGIN/agents is write vs read. $ORIGIN/docs/comark is ::graph-* in a plain .md file. $ORIGIN/docs/knap is graph_* filters that emit the fence. $ORIGIN/docs/skill is the skill.md. $ORIGIN/llms.txt is the chooser, the ascii blocks, the comark blocks, and the knap filters.`,
   })
 }
 
 function examplesMarkdown(origin: string) {
   const extra = [
-    "## Examples",
+    "## examples",
     "",
     ...recipes.flatMap((item) => [
       `### ${item.title}`,
@@ -104,7 +108,7 @@ function examplesMarkdown(origin: string) {
 
   return pageMarkdown({
     origin,
-    title: "Examples",
+    title: "examples",
     description:
       "Short write-ups with two graphs each. A refactor, an incident, a tradeoff, a pull request.",
     extra,
@@ -114,7 +118,7 @@ function examplesMarkdown(origin: string) {
 function comarkDocsMarkdown(origin: string) {
   return pageMarkdown({
     origin,
-    title: "Comark",
+    title: "comark",
     description: COMARK_DESCRIPTION,
     registry: "graph-comark",
     extra: `## Wire
@@ -130,7 +134,7 @@ GitHub, Linear, and a README still get the fenced ASCII. They do not run Comark.
 function comarkLandingMarkdown(origin: string) {
   return pageMarkdown({
     origin,
-    title: "Comark",
+    title: "comark",
     description: COMARK_DESCRIPTION,
     extra: `Write figures as ::graph-* blocks in Markdown. Comark parses the file. These graphs render it.
 
@@ -142,7 +146,7 @@ ${COMARK_WIRE}
 
 - Wiring: $ORIGIN/docs/comark
 - Skill: $ORIGIN/docs/skill
-- Demo: https://comark-graphs-demo.vercel.app
+- Demo: https://comark-demo.vercel.app
 - Comark: https://comark.dev`,
   })
 }
@@ -150,7 +154,7 @@ ${COMARK_WIRE}
 function knapDocsMarkdown(origin: string) {
   return pageMarkdown({
     origin,
-    title: "Knap",
+    title: "knap",
     description: KNAP_DESCRIPTION,
     registry: "graph-knap",
     extra: `## Wire
@@ -166,7 +170,7 @@ Output is Markdown. GitHub and a README can open the fence. A Comark app can ope
 function knapLandingMarkdown(origin: string) {
   return pageMarkdown({
     origin,
-    title: "Knap",
+    title: "knap",
     description: KNAP_DESCRIPTION,
     extra: `Pipe graph props through a graph_* filter. Knap renders Markdown. These filters draw the official fence.
 
@@ -191,11 +195,11 @@ async function skillMarkdown(origin: string) {
     "Same two files. Put them in the skills folder your agent already reads.",
     "",
     ...skillAgents.flatMap((item) => [
-      `${item.name}: ${item.project}/markdown-graphs (project) or ${item.personal}/markdown-graphs (personal)`,
+      `${item.name}: ${item.project}/mdxcn (project) or ${item.personal}/mdxcn (personal)`,
     ]),
     "",
-    "curl -fsSL $ORIGIN/skill.md -o <dir>/markdown-graphs/SKILL.md",
-    "curl -fsSL $ORIGIN/skill/recipes.md -o <dir>/markdown-graphs/recipes.md",
+    "curl -fsSL $ORIGIN/skill.md -o <dir>/mdxcn/SKILL.md",
+    "curl -fsSL $ORIGIN/skill/recipes.md -o <dir>/mdxcn/recipes.md",
     "",
     "## What it does",
     "",
@@ -208,7 +212,7 @@ async function skillMarkdown(origin: string) {
 
   return pageMarkdown({
     origin,
-    title: "Skill",
+    title: "skill",
     description:
       "A SKILL.md that tells the agent which graph to put next to the prose.",
     extra,
@@ -243,7 +247,7 @@ function agentsMarkdown(origin: string) {
     .map((item) => `### ${item.label}\n\n${item.prompt}`)
     .join("\n\n")
 
-  return `# For agents
+  return `# for agents
 
 ${AGENTS_DESCRIPTION}
 
@@ -283,19 +287,8 @@ ${prompts}
 - Examples: ${host}/docs/examples
 - OpenAPI: ${host}/openapi.json
 - JSON catalog: ${host}/api/v1/components
-- Developer API: ${host}/developers
+- developer api: ${host}/developers
 - agents.md: ${host}/agents.md
-`
-}
-
-function sponsorMarkdown(origin: string) {
-  return `# Sponsor Markdown Graphs
-
-Four cells beside the title on the homepage. $100 a cell per month. 100k+ impressions on X, and counting.
-
-Docs stay clean. Creative is SVG, one ink, 24 characters or less.
-
-Mail Keshav from ${origin}/sponsor.
 `
 }
 
@@ -318,8 +311,6 @@ export async function markdownForPath(path: string, origin = SITE_URL) {
       return contactMarkdown(host)
     case "/privacy":
       return privacyMarkdown(host)
-    case "/sponsor":
-      return sponsorMarkdown(host)
     case "/docs":
       return docsIntro(host)
     case "/docs/installation":
@@ -340,7 +331,7 @@ export async function markdownForPath(path: string, origin = SITE_URL) {
       break
   }
 
-  const docMatch = /^\/docs\/(graph-[a-z0-9-]+)$/.exec(clean)
+  const docMatch = /^\/docs\/([a-z0-9-]+)$/.exec(clean)
   if (docMatch?.[1]) {
     return componentMarkdown(docMatch[1], host)
   }
@@ -357,7 +348,6 @@ export function knownMarkdownPaths() {
     "/about",
     "/contact",
     "/privacy",
-    "/sponsor",
     "/docs",
     "/docs/installation",
     "/docs/examples",

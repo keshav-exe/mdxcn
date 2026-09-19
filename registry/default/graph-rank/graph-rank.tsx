@@ -1,12 +1,20 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  childItems,
+  defineItem,
+  firstToken,
   Graph,
   GraphBody,
   GraphTick,
   GraphTrack,
+  itemText,
+  listItems,
+  numberOf,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -18,14 +26,17 @@ import {
 } from "@/registry/default/graph-frame/graph-motion"
 
 type RankItem = {
-  label: string
-  value: number
+  /** Falls back to the child text: `<Rank value={12400}>/docs</Rank>`. */
+  label?: string
+  value: number | string
   display?: string
 }
 
 type GraphRankProps = {
   title: string
-  items: RankItem[]
+  /** Data form. Or write `<Rank />` children. */
+  items?: RankItem[]
+  children?: ReactNode
   max?: number
   ticks?: number
   glyphs?: Glyphs
@@ -34,7 +45,12 @@ type GraphRankProps = {
   className?: string
 }
 
-function formatValue(item: RankItem) {
+/** `<Rank value={4100}>/install</Rank>` inside `<GraphRank>`. */
+const Rank = defineItem<RankItem>("Rank")
+
+type RankRow = { label: string; value: number; display?: string }
+
+function formatValue(item: RankRow) {
   if (item.display) {
     return item.display
   }
@@ -46,7 +62,8 @@ function formatValue(item: RankItem) {
 
 function GraphRank({
   title,
-  items,
+  items: itemsProp,
+  children,
   max,
   ticks = 20,
   glyphs,
@@ -57,6 +74,25 @@ function GraphRank({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
+  const listed = listItems(children).map((item) => {
+    const { token, rest } = firstToken(itemText(item))
+    return {
+      display: token,
+      value: numberOf(token),
+      label: rest,
+    }
+  })
+  const tagged = childItems(children, Rank).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+  const items: RankRow[] = (
+    itemsProp ?? (listed.length > 0 ? listed : tagged)
+  ).map((entry) => ({
+    label: entry.label ?? "",
+    value: numberOf(entry.value),
+    display: entry.display,
+  }))
   const peak = max ?? Math.max(...items.map((entry) => entry.value), 1)
   const marks = trackMarks(glyphs, {
     empty: "-",
@@ -133,5 +169,5 @@ function GraphRank({
   )
 }
 
-export { GraphRank }
+export { GraphRank, Rank }
 export type { GraphRankProps, RankItem }

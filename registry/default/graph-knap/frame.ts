@@ -26,25 +26,58 @@ function dash(count: number) {
   return "-".repeat(Math.max(0, count))
 }
 
-function frameAscii(title: string, lines: string[], minInner = MIN_INNER) {
-  const caption = `[ ${title.trim().toUpperCase()} ]`
+function wrapText(text: string, width = 56): string[] {
+  const words = text.split(/\s+/).filter(Boolean)
+  if (words.length === 0) {
+    return []
+  }
+
+  const lines: string[] = []
+  let current = ""
+
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word
+    if (current && next.length > width) {
+      lines.push(current)
+      current = word
+    } else {
+      current = next
+    }
+  }
+
+  if (current) {
+    lines.push(current)
+  }
+
+  return lines
+}
+
+function frameAscii(
+  title: string | undefined,
+  lines: string[],
+  minInner = MIN_INNER
+) {
+  const caption = title?.trim() ? `[ ${title.trim().toUpperCase()} ]` : ""
   const contentWidth = Math.max(0, ...lines.map(widthOf))
-  const inner = Math.max(minInner, contentWidth, caption.length + 4)
+  const inner = Math.max(
+    minInner,
+    contentWidth,
+    caption ? caption.length + 4 : 0
+  )
   const span = inner + 2
-  const label = ` ${caption} `
-  const leftover = Math.max(0, span - label.length)
-  const left = Math.floor(leftover / 2)
-  const right = leftover - left
   const empty = `| ${" ".repeat(inner)} |`
   const body = lines.map((line) => `| ${padEnd(line, inner)} |`)
+  const top = caption
+    ? (() => {
+        const label = ` ${caption} `
+        const leftover = Math.max(0, span - label.length)
+        const left = Math.floor(leftover / 2)
+        const right = leftover - left
+        return `+${dash(left)}${label}${dash(right)}+`
+      })()
+    : `+${dash(span)}+`
 
-  return [
-    `+${dash(left)}${label}${dash(right)}+`,
-    empty,
-    ...body,
-    empty,
-    `+${dash(span)}+`,
-  ].join("\n")
+  return [top, empty, ...body, empty, `+${dash(span)}+`].join("\n")
 }
 
 function rule(size: number) {
@@ -79,5 +112,6 @@ export {
   padStart,
   rule,
   widthOf,
+  wrapText,
 }
 export { MIN_INNER }

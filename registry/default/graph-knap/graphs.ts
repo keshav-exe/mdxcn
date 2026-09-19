@@ -4,6 +4,7 @@ import {
   fillTrack,
   frameAscii,
   rule,
+  wrapText,
 } from "@/registry/default/graph-knap/frame"
 
 function clamp01(value: number) {
@@ -277,6 +278,45 @@ function cellText(value: string | boolean) {
   return value
 }
 
+function gridLines({
+  headers,
+  rows,
+  footer,
+  align,
+}: {
+  headers: string[]
+  rows: string[][]
+  footer?: string[]
+  align?: ("left" | "right")[]
+}) {
+  const all = [headers, ...rows, ...(footer ? [footer] : [])]
+  const count = Math.max(1, ...all.map((row) => row.length))
+  const widths = Array.from({ length: count }, (_, index) =>
+    colWidth(all.map((row) => row[index] ?? ""))
+  )
+
+  function side(index: number): "left" | "right" {
+    return align?.[index] ?? (index === 0 ? "left" : "right")
+  }
+
+  function cells(row: string[]) {
+    return Array.from({ length: count }, (_, index) =>
+      col(row[index] ?? "", widths[index] ?? 0, side(index))
+    ).join(" | ")
+  }
+
+  function ruleLine() {
+    return widths.map((width) => rule(width)).join("-+-")
+  }
+
+  const lines = [cells(headers), ruleLine(), ...rows.map(cells)]
+  if (footer) {
+    lines.push(ruleLine(), cells(footer))
+  }
+
+  return { lines, cells, ruleLine }
+}
+
 function asciiCompare({
   title,
   columns,
@@ -286,20 +326,17 @@ function asciiCompare({
   columns: string[]
   rows: { label: string; values: (string | boolean)[] }[]
 }) {
-  const labels = colWidth(rows.map((row) => row.label))
-  const cells = columns.map((column, index) =>
-    colWidth([column, ...rows.map((row) => cellText(row.values[index] ?? ""))])
+  return frameAscii(
+    title,
+    gridLines({
+      headers: ["", ...columns],
+      rows: rows.map((row) => [
+        row.label,
+        ...row.values.map((value) => cellText(value)),
+      ]),
+      align: ["left", ...columns.map(() => "right" as const)],
+    }).lines
   )
-  const header = `${col("", labels)}  ${columns.map((column, index) => col(column, cells[index] ?? 0, "right")).join("  ")}`
-  const body = rows.map((row) => {
-    const values = row.values
-      .map((value, index) => col(cellText(value), cells[index] ?? 0, "right"))
-      .join("  ")
-
-    return `${col(row.label, labels)}  ${values}`
-  })
-
-  return frameAscii(title, [header, ...body])
 }
 
 function asciiMatrix({
@@ -340,27 +377,7 @@ function asciiTable({
   footer?: string[]
   align?: ("left" | "right")[]
 }) {
-  const all = [headers, ...rows, ...(footer ? [footer] : [])]
-  const widths = headers.map((_, index) =>
-    colWidth(all.map((row) => row[index] ?? ""))
-  )
-
-  function line(cells: string[]) {
-    return cells
-      .map((cell, index) => {
-        const side = align?.[index] ?? (index === 0 ? "left" : "right")
-
-        return col(cell, widths[index] ?? 0, side)
-      })
-      .join("  ")
-  }
-
-  const lines = [line(headers), rule(line(headers).length), ...rows.map(line)]
-  if (footer) {
-    lines.push(rule(line(headers).length), line(footer))
-  }
-
-  return frameAscii(title, lines)
+  return frameAscii(title, gridLines({ headers, rows, footer, align }).lines)
 }
 
 function asciiSheet({
@@ -376,38 +393,24 @@ function asciiSheet({
   footer?: string[]
   align?: ("left" | "right")[]
 }) {
-  const all = [
+  const grid = gridLines({
     headers,
-    ...sections.flatMap((section) => section.rows),
-    ...(footer ? [footer] : []),
-  ]
-  const widths = headers.map((_, index) =>
-    colWidth(all.map((row) => row[index] ?? ""))
-  )
-
-  function line(cells: string[]) {
-    return cells
-      .map((cell, index) => {
-        const side = align?.[index] ?? (index === 0 ? "left" : "right")
-
-        return col(cell, widths[index] ?? 0, side)
-      })
-      .join("  ")
-  }
-
-  const span = line(headers).length
-  const lines = [line(headers), rule(span)]
+    rows: sections.flatMap((section) => section.rows),
+    footer,
+    align,
+  })
+  const lines = [grid.cells(headers), grid.ruleLine()]
 
   sections.forEach((section, index) => {
     if (index > 0) {
-      lines.push(rule(span))
+      lines.push(grid.ruleLine())
     }
     lines.push(section.title)
-    lines.push(...section.rows.map(line))
+    lines.push(...section.rows.map(grid.cells))
   })
 
   if (footer) {
-    lines.push(rule(span), line(footer))
+    lines.push(grid.ruleLine(), grid.cells(footer))
   }
 
   return frameAscii(title, lines)
@@ -959,38 +962,16 @@ function asciiInvoice({
     ...(showRate ? ["Rate"] : []),
     "Amount",
   ]
-  const table = [
+  const grid = gridLines({
     headers,
-    ...items.map((item) => [
+    rows: items.map((item) => [
       item.description,
       ...(showQty ? [item.qty ?? ""] : []),
       ...(showRate ? [item.rate ?? ""] : []),
       item.amount,
     ]),
-  ]
-  const widths = headers.map((_, index) =>
-    colWidth(table.map((row) => row[index] ?? ""))
-  )
-
-  function rowLine(cells: string[]) {
-    return cells
-      .map((cell, index) =>
-        col(cell, widths[index] ?? 0, index === 0 ? "left" : "right")
-      )
-      .join("  ")
-  }
-
-  lines.push(rowLine(headers), rule(rowLine(headers).length))
-  for (const item of items) {
-    lines.push(
-      rowLine([
-        item.description,
-        ...(showQty ? [item.qty ?? ""] : []),
-        ...(showRate ? [item.rate ?? ""] : []),
-        item.amount,
-      ])
-    )
-  }
+  })
+  lines.push(...grid.lines)
 
   if (totals && totals.length > 0) {
     const totalWidth = colWidth(totals.map((entry) => entry.label))
@@ -999,11 +980,9 @@ function asciiInvoice({
       (entry) =>
         `${col(entry.label, totalWidth)}  ${col(entry.value, amountWidth, "right")}`
     )
-    const indent = Math.max(
-      0,
-      rowLine(headers).length - (block[0]?.length ?? 0)
-    )
-    lines.push(rule(rowLine(headers).length))
+    const span = grid.cells(headers).length
+    const indent = Math.max(0, span - (block[0]?.length ?? 0))
+    lines.push(grid.ruleLine())
     for (const line of block) {
       lines.push(`${" ".repeat(indent)}${line}`)
     }
@@ -1069,19 +1048,155 @@ function asciiBars({
   return frameAscii(title, lines)
 }
 
+const CALLOUT_GLYPH: Record<string, string> = {
+  note: "i",
+  tip: "+",
+  warning: "!",
+  danger: "×",
+}
+
+function asciiCallout({
+  type = "note",
+  title,
+  body,
+}: {
+  type?: string
+  title?: string
+  body: string
+}) {
+  const glyph = CALLOUT_GLYPH[type] ?? "i"
+  const lines = body.split(/\n/).flatMap((line) => wrapText(line, 56))
+  const drawn =
+    lines.length === 0
+      ? [`${glyph}`]
+      : lines.map((line, index) =>
+          index === 0 ? `${glyph}  ${line}` : `   ${line}`
+        )
+
+  return frameAscii(title ?? type, drawn)
+}
+
+function asciiQuote({
+  title,
+  by,
+  source,
+  body,
+}: {
+  title?: string
+  by?: string
+  source?: string
+  body: string
+}) {
+  const wrapped = wrapText(body.replace(/\s+/g, " ").trim(), 54)
+  const lines =
+    wrapped.length === 0
+      ? ["“"]
+      : wrapped.map((line, index) =>
+          index === 0 ? `“  ${line}` : `   ${line}`
+        )
+
+  if (by || source) {
+    lines.push("")
+    lines.push(`—  ${[by, source].filter(Boolean).join("  ")}`)
+  }
+
+  return frameAscii(title, lines)
+}
+
+function asciiSteps({
+  title,
+  steps,
+}: {
+  title?: string
+  steps: { title: string; body?: string }[]
+}) {
+  const lines: string[] = []
+
+  steps.forEach((step, index) => {
+    const n = String(index + 1)
+    const head = wrapText(step.title, 54)
+    lines.push(`${n}  ${head[0] ?? ""}`)
+    head.slice(1).forEach((line) => lines.push(`   ${line}`))
+    if (step.body) {
+      wrapText(step.body, 54).forEach((line) => lines.push(`   ${line}`))
+    }
+    if (index < steps.length - 1) {
+      lines.push("│")
+    }
+  })
+
+  return frameAscii(title ?? "STEPS", lines)
+}
+
+function asciiTerminal({ title, lines }: { title?: string; lines: string[] }) {
+  return frameAscii(title ?? "SHELL", lines.length > 0 ? lines : [""])
+}
+
+function asciiChangelog({
+  title,
+  version,
+  date,
+  items,
+}: {
+  title?: string
+  version?: string
+  date?: string
+  items: { type: string; text: string }[]
+}) {
+  const glyph: Record<string, string> = {
+    add: "+",
+    change: "~",
+    fix: "*",
+    remove: "-",
+  }
+  const label: Record<string, string> = {
+    add: "added",
+    change: "changed",
+    fix: "fixed",
+    remove: "removed",
+  }
+  const kinds = colWidth(items.map((item) => label[item.type] ?? item.type))
+  const drawn: string[] = []
+
+  if (version || date) {
+    drawn.push([version, date].filter(Boolean).join("  "))
+    drawn.push("")
+  }
+
+  for (const item of items) {
+    const mark = glyph[item.type] ?? "-"
+    const kind = col(label[item.type] ?? item.type, kinds)
+    const wrapped = wrapText(item.text, 48)
+    drawn.push(`${mark}  ${kind}  ${wrapped[0] ?? ""}`)
+    wrapped
+      .slice(1)
+      .forEach((line) => drawn.push(`      ${" ".repeat(kinds)}${line}`))
+  }
+
+  return frameAscii(title ?? version ?? "CHANGELOG", drawn)
+}
+
+function asciiFlow({ title, rows }: { title: string; rows: string[] }) {
+  return frameAscii(title, rows.length > 0 ? rows : [""])
+}
+
 export {
   asciiBars,
   asciiBullet,
+  asciiCallout,
   asciiCells,
+  asciiChangelog,
   asciiCheck,
   asciiCompare,
   asciiDiff,
+  asciiFlow,
   asciiFunnel,
   asciiGantt,
   asciiInvoice,
   asciiKpi,
   asciiMatrix,
   asciiMeter,
+  asciiQuote,
   asciiRank,
   asciiSheet,
   asciiSlope,
@@ -1089,7 +1204,9 @@ export {
   asciiSpec,
   asciiStack,
   asciiStat,
+  asciiSteps,
   asciiTable,
+  asciiTerminal,
   asciiTimeline,
   asciiTree,
   asciiUptime,

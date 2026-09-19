@@ -13,7 +13,7 @@ ${where.trim()}
 ## Where to look
 
 - Docs: ${host}/docs
-- For agents: ${host}/agents
+- for agents: ${host}/agents
 - Skill: ${host}/docs/skill
 - llms.txt: ${host}/llms.txt
 - OpenAPI: ${host}/openapi.json

@@ -1,52 +1,51 @@
-export const SITE_URL = "https://mdx-graphs.kshv.me"
-export const REGISTRY_SCOPE = "@mdx-graphs"
+export const SITE_URL = "https://mdxcn.dev"
+export const SITE_HOST = "mdxcn.dev"
+export const REGISTRY_SCOPE = "@mdxcn"
 
 export function scopedRegistryInstall(name: string) {
   return `pnpm dlx shadcn@latest add ${REGISTRY_SCOPE}/${name}`
 }
-export const SITE_NAME = "Markdown Graphs"
-export const SITE_NAME_SHORT = "markdown graphs"
+export const SITE_NAME = "mdxcn"
+export const SITE_NAME_SHORT = "mdxcn"
 /** Browser / OG homepage title — what people search for. */
-export const SITE_TITLE =
-  "markdown-friendly React components with an acquired taste"
+export const SITE_TITLE = "mdxcn — markdown-friendly components"
+export const SITE_TAGLINE = "markdown-friendly components."
 export const SITE_KEYWORDS = [
-  "markdown-friendly React components",
-  "React markdown components",
+  "mdxcn",
+  "markdown-friendly components",
+  "mdx components",
   "markdown components",
-  "MDX components",
-  "React MDX",
-  "Markdown Graphs",
-  "mdx-graphs",
-  "markdown graphs",
-  "ASCII charts",
-  "ASCII diagrams",
-  "ASCII graphs",
-  "MDX graphs",
+  "react mdx components",
+  "markdown-friendly react components",
+  "mdx callout",
+  "mdx steps",
+  "mdx charts",
+  "ascii charts",
+  "ascii diagrams",
   "markdown charts",
-  "shadcn charts",
   "shadcn registry",
-  "Comark",
-  "Knap",
-  "graph components",
-  "diagram components",
-  "Markdown Graphs API",
+  "shadcn mdx",
+  "comark",
+  "knap",
+  "mdxcn api",
 ] as const
 export const SITE_DESCRIPTION =
-  "ASCII-framed React diagrams you copy into a shadcn project and drop next to prose — JSX in MDX, a ::graph-* block in Comark, a Knap filter, or the official fence in a README."
+  "markdown-friendly react components for mdx. callouts, steps, terminals, charts, and timelines that sit between paragraphs — copied into your project with the shadcn cli, not installed from npm."
 export const SITE_ALTERNATE_NAMES = [
-  SITE_NAME_SHORT,
-  "mdx-graphs",
-  "markdown-graphs",
-  "markdown-friendly React components",
-  "React markdown components",
+  "mdxcn.dev",
+  "mdxcn",
+  "mdx",
+  "markdown-friendly components",
+  "mdx components",
 ] as const
 export const AGENTS_DESCRIPTION =
-  "A skill and chooser that tell an agent which graph to use, and whether to emit JSX, a ::graph-* block, a Knap filter, or fenced ASCII it can read back later."
+  "a skill and chooser that tell an agent which mdxcn component to put next to the prose, and whether to write mdx, a ::graph-* block, a knap filter, or fenced ascii it can read back later."
 export const DOCS_DESCRIPTION =
-  "ASCII-framed graphs for MDX, with a skill so agents reach for a component instead of inventing SVG."
+  "markdown-friendly components for mdx. the mdx tab is the framed figure — copy it into notion or a readme. register the parent once to render it live."
 export const SITE_NAV = [
+  { href: "/docs", label: "components" },
+  { href: "/docs/examples", label: "examples" },
   { href: "/agents", label: "agents" },
-  { href: "/docs", label: "library" },
   { href: "/comark", label: "comark" },
   { href: "/knap", label: "knap" },
 ] as const

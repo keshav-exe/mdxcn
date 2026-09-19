@@ -1,11 +1,19 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  childItems,
+  defineItem,
   Graph,
   GraphBody,
   GraphRule,
+  hasHost,
+  itemText,
+  listItems,
+  splitLabel,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -18,18 +26,53 @@ import { cn } from "@/lib/utils"
 type DiffSign = "add" | "remove" | "keep"
 
 type DiffRow = {
-  label: string
+  /** Falls back to the child text: `<Line sign="add" value="31 kb">app</Line>`. */
+  label?: string
   value: string
   sign?: DiffSign
 }
 
+type DiffLineProps = DiffRow & {
+  /** Draw this row under a rule as the total. */
+  total?: boolean
+}
+
 type GraphDiffProps = {
   title: string
-  rows: DiffRow[]
+  /** Data form. Or write `<Line />` children. */
+  rows?: DiffRow[]
   footer?: DiffRow
+  children?: ReactNode
   palette?: GraphPalette
   corner?: string
   className?: string
+}
+
+/** `<Line sign="add" value="31 kb">app</Line>`. `total` puts it under the rule. */
+const Line = defineItem<DiffLineProps>("Line")
+
+function signOf(value: string): DiffSign | undefined {
+  const text = value.trim()
+  if (/^\+/.test(text)) {
+    return "add"
+  }
+  if (/^[−\-]/.test(text)) {
+    return "remove"
+  }
+  return undefined
+}
+
+function diffFromList(children: ReactNode): DiffLineProps[] {
+  return listItems(children).map((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    const content = (item.props as { children?: ReactNode }).children
+    return {
+      label,
+      value: rest.replace(/^[+\-−]\s*/, "") || rest,
+      sign: signOf(rest),
+      total: hasHost(content, ["strong", "b"]),
+    }
+  })
 }
 
 const signGlyph: Record<DiffSign, string> = {
@@ -74,8 +117,9 @@ function DiffLine({
 
 function GraphDiff({
   title,
-  rows,
-  footer,
+  rows: rowsProp,
+  footer: footerProp,
+  children,
   palette,
   corner,
   className,
@@ -83,6 +127,19 @@ function GraphDiff({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
+  const listed = diffFromList(children)
+  const tagged = childItems(children, Line).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+  const lines = listed.length > 0 ? listed : tagged
+  const rows = (rowsProp ?? lines.filter((entry) => !entry.total)).map(
+    (entry) => ({ ...entry, label: entry.label ?? "" })
+  )
+  const footerLine = footerProp ?? lines.find((entry) => entry.total)
+  const footer = footerLine
+    ? { ...footerLine, label: footerLine.label ?? "" }
+    : undefined
 
   return (
     <Graph title={title} className={className} corner={corner}>
@@ -119,5 +176,5 @@ function GraphDiff({
   )
 }
 
-export { GraphDiff }
-export type { DiffRow, DiffSign, GraphDiffProps }
+export { GraphDiff, Line }
+export type { DiffLineProps, DiffRow, DiffSign, GraphDiffProps }

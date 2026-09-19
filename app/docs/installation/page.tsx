@@ -1,56 +1,61 @@
 import type { Metadata } from "next"
 
+import { Callout, Steps } from "@/components/graphs"
 import { Command, InstallCommand } from "@/components/docs/install"
 import { DocsPageHeader } from "@/components/docs/page-header"
 import { NamespaceSetup } from "@/components/docs/namespace"
 import { JsonLd } from "@/components/seo/json-ld"
-import { InlineCode, ProseP, TextLink } from "@/components/site/prose"
+import { InlineCode, ProseLead, ProseP, TextLink } from "@/components/site/prose"
 import { COMARK_URL } from "@/lib/docs/comark"
 import { KNAP_URL } from "@/lib/docs/knap"
 import { getComponent } from "@/lib/docs/catalog"
 import { installationJsonLd, pageMeta } from "@/lib/seo"
 
 export const metadata: Metadata = pageMeta({
-  title: "Installation",
+  title: "installation",
   description:
-    "Copy the source into a shadcn project. Then give the agent the skill.",
+    "copy the source into a shadcn project. then give the agent the skill.",
   path: "/docs/installation",
 })
 
 const description =
-  "These are source files, not an npm package. You need an existing shadcn project and the motion dependency."
+  "these are source files, not an npm package. you need an existing shadcn project and the motion dependency."
 
-const extra = `## One component
+const extra = `## one component
 
-Run the shadcn CLI against this site's registry, or copy the files from GitHub.
+run the shadcn cli against this site's registry, or copy the files from github.
 
 pnpm dlx shadcn@latest add $ORIGIN/r/graph-table.json
 
-## Everything
+## everything
 
-Installs every graph and the shared frame code into registry/default.
+installs every graph and the shared frame code into registry/default.
 
 pnpm dlx shadcn@latest add $ORIGIN/r/all.json
 
-## Namespace
+## namespace
 
-Add the registry once in components.json, then install components by name.
+add the registry once in components.json, then install components by name.
 
-pnpm dlx shadcn@latest registry add @mdx-graphs=$ORIGIN/r/{name}.json
+pnpm dlx shadcn@latest registry add @mdxcn=$ORIGIN/r/{name}.json
 
-Then:
+then:
 
-pnpm dlx shadcn@latest add @mdx-graphs/graph-table
+pnpm dlx shadcn@latest add @mdxcn/graph-table
 
-## Import
+## import
 
-Files land under @/registry. Add your own barrel export if you want a shorter import path.
+files land under @/registry. add your own barrel export if you want a shorter import path.
 
 import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
-## Agents
+## mdx
 
-$ORIGIN/agents is write vs read — JSX in MDX, ::graph-* in Comark, graph_* in Knap, official ASCII in a README. $ORIGIN/docs/skill is the SKILL.md. Same files in Cursor, Claude Code, Codex, OpenCode, or any agent that loads Agent Skills. $ORIGIN/llms.txt is the chooser, recipes, fenced ASCII blocks, Comark blocks, and Knap filters in one file.`
+register the parent once in mdx-components.tsx. the mdx tab is the framed figure — copy it into notion or a readme. wrap the children in the parent when you want it live.
+
+## agents
+
+$ORIGIN/agents is write vs read — markdown in mdx and in notion, ::graph-* in comark, graph_* in knap, official ascii in a readme. $ORIGIN/docs/skill is the skill.md. $ORIGIN/llms.txt is the chooser, recipes, fenced ascii blocks, comark blocks, and knap filters in one file.`
 
 export default function InstallationPage() {
   const table = getComponent("graph-table")
@@ -63,72 +68,119 @@ export default function InstallationPage() {
           description,
           extra,
           registry: "all",
-          title: "Installation",
+          title: "installation",
         }}
         lead={
-          <>
-            These are source files, not an npm package. You need an existing{" "}
+          <ProseLead>
+            these are source files, not an npm package. you need an existing{" "}
             <TextLink href="https://ui.shadcn.com">shadcn</TextLink> project and
             the <InlineCode>motion</InlineCode> dependency.
-          </>
+          </ProseLead>
         }
-        title="Installation"
+        title="installation"
       />
 
       <div className="flex flex-col gap-6 lg:gap-8">
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold tracking-tight">
-            One component
+            one component
           </h2>
           <ProseP>
-            Run the shadcn CLI against this site&apos;s registry, or copy the
-            files from GitHub.
+            run the shadcn cli against this site&apos;s registry, or copy the
+            files from github. they land under{" "}
+            <InlineCode>registry/default</InlineCode>.
           </ProseP>
           <InstallCommand doc={table} name="graph-table" />
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold tracking-tight">Everything</h2>
+          <h2 className="text-xl font-semibold tracking-tight">everything</h2>
           <ProseP>
-            Installs every graph and the shared frame code into{" "}
-            <InlineCode>registry/default</InlineCode>.
+            installs every graph and the shared frame code into{" "}
+            <InlineCode>registry/default</InlineCode>.{" "}
+            <InlineCode>graph-comark</InlineCode> and{" "}
+            <InlineCode>graph-knap</InlineCode> are already in{" "}
+            <InlineCode>all.json</InlineCode>.
           </ProseP>
           <InstallCommand name="all" />
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold tracking-tight">Namespace</h2>
+          <h2 className="text-xl font-semibold tracking-tight">namespace</h2>
           <ProseP>
-            Add the registry once in <InlineCode>components.json</InlineCode>,
-            then install components by name.
+            add the registry once in <InlineCode>components.json</InlineCode>,
+            then install components by name as{" "}
+            <InlineCode>@mdxcn/graph-table</InlineCode>.
           </ProseP>
           <NamespaceSetup />
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold tracking-tight">Import</h2>
+          <h2 className="text-xl font-semibold tracking-tight">import</h2>
           <ProseP>
-            Files land under <InlineCode>@/registry</InlineCode>. Add your own
+            files land under <InlineCode>@/registry</InlineCode>. add your own
             barrel export if you want a shorter import path.
           </ProseP>
           <Command
-            label="Import"
+            label="import"
             value={`import { GraphTable } from "@/registry/default/graph-table/graph-table"`}
           />
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold tracking-tight">Agents</h2>
+          <h2 className="text-xl font-semibold tracking-tight">mdx</h2>
           <ProseP>
-            A skill file so the agent picks a component instead of drawing SVG.
-            JSX in MDX. A <InlineCode>::graph-*</InlineCode> block in{" "}
-            <TextLink href={COMARK_URL}>Comark</TextLink>. A{" "}
+            register the parent once. lists and tables inside the tag do not
+            need extra imports. the mdx tab is the framed figure — paste that
+            into notion or a readme. wrap the children in the parent when you
+            want it live.
+          </ProseP>
+          <Callout type="tip">
+            register the parent once in{" "}
+            <InlineCode>mdx-components.tsx</InlineCode>. the mdx tab is the
+            framed drawing. copy that into notion or a readme. react is the
+            other tab.
+          </Callout>
+          <Steps title="mdx">
+            <ol>
+              <li>
+                <p>copy the files</p>
+                <p>cli or github. they land under registry/default.</p>
+              </li>
+              <li>
+                <p>
+                  <strong>register the parent</strong>
+                </p>
+                <p>
+                  once in mdx-components.tsx. lists and tables inside do not
+                  need their own imports.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <em>paste</em>
+                </p>
+                <p>
+                  the mdx tab is the framed figure. paste it into notion or a
+                  readme. wrap the children in the parent when you want it live.
+                </p>
+              </li>
+            </ol>
+          </Steps>
+        </section>
+
+        <section className="flex flex-col gap-4">
+          <h2 className="text-xl font-semibold tracking-tight">agents</h2>
+          <ProseP>
+            a skill file so the agent picks a component instead of drawing svg.
+            markdown in mdx and in notion. a <InlineCode>::graph-*</InlineCode>{" "}
+            block in <TextLink href={COMARK_URL}>comark</TextLink>. a{" "}
             <InlineCode>graph_*</InlineCode> filter in{" "}
-            <TextLink href={KNAP_URL}>Knap</TextLink>. Official ASCII in a
-            README. <TextLink href="/agents">For agents</TextLink> is the write
-            and read story. <TextLink href="/docs/skill">Skill</TextLink> is the
+            <TextLink href={KNAP_URL}>knap</TextLink>. official ascii in a
+            readme. <TextLink href="/agents">for agents</TextLink> is the write
+            and read story. <TextLink href="/docs/skill">skill</TextLink> is the
             install. <TextLink href="/llms.txt">/llms.txt</TextLink> is the
-            chooser plus the ASCII, Comark, and Knap blocks, in one file.
+            chooser plus the ascii, comark, and knap blocks, in one file.
           </ProseP>
         </section>
       </div>

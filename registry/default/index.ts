@@ -1,13 +1,40 @@
 export {
+  alignsOf,
+  Cell,
+  cellsOf,
+  childElements,
+  childItems,
+  defineItem,
+  Foot,
+  fraction,
   Graph,
   GraphBody,
   GraphCorners,
+  GraphProse,
+  graphProseClass,
   GraphRule,
   GraphRuleY,
   GraphTick,
   GraphTitle,
   GraphTrack,
+  Head,
+  linesOf,
+  numberOf,
+  numbers,
+  Row,
+  textOf,
+  words,
 } from "./graph-frame/graph-frame"
+export type {
+  CellProps,
+  GraphItemComponent,
+  RowProps,
+} from "./graph-frame/graph-frame"
+export { Callout } from "./callout/callout"
+export { Quote } from "./quote/quote"
+export { Step, Steps } from "./steps/steps"
+export { Terminal } from "./terminal/terminal"
+export { Change, Changelog } from "./changelog/changelog"
 export { GraphArrow } from "./graph-frame/graph-arrow"
 export {
   fadeUp,
@@ -29,35 +56,42 @@ export type {
   GraphPalette,
 } from "./graph-frame/graph-motion"
 export { GraphTable } from "./graph-table/graph-table"
-export { GraphSheet } from "./graph-sheet/graph-sheet"
-export { GraphFlow } from "./graph-flow/graph-flow"
-export { GraphBars } from "./graph-bars/graph-bars"
-export { GraphRank } from "./graph-rank/graph-rank"
-export { GraphCells } from "./graph-cells/graph-cells"
+export { GraphSheet, Section } from "./graph-sheet/graph-sheet"
+export { GraphFlow, Path } from "./graph-flow/graph-flow"
+export { GraphBars, Series } from "./graph-bars/graph-bars"
+export { GraphRank, Rank } from "./graph-rank/graph-rank"
+export { GraphCells, Grid } from "./graph-cells/graph-cells"
 export { GraphMeter } from "./graph-meter/graph-meter"
 export { GraphSpark } from "./graph-spark/graph-spark"
-export { GraphTree } from "./graph-tree/graph-tree"
-export { GraphTimeline } from "./graph-timeline/graph-timeline"
-export { GraphCheck } from "./graph-check/graph-check"
-export { GraphStack } from "./graph-stack/graph-stack"
-export { GraphFunnel } from "./graph-funnel/graph-funnel"
-export { GraphGantt } from "./graph-gantt/graph-gantt"
-export { GraphDiff } from "./graph-diff/graph-diff"
+export { GraphTree, Node } from "./graph-tree/graph-tree"
+export { Event, GraphTimeline } from "./graph-timeline/graph-timeline"
+export { GraphCheck, Task } from "./graph-check/graph-check"
+export { Bar, GraphStack, Segment } from "./graph-stack/graph-stack"
+export { GraphFunnel, Stage } from "./graph-funnel/graph-funnel"
+export { GraphGantt, Span } from "./graph-gantt/graph-gantt"
+export { GraphDiff, Line } from "./graph-diff/graph-diff"
 export { GraphPlot } from "./graph-plot/graph-plot"
 export { GraphWaffle } from "./graph-waffle/graph-waffle"
-export { GraphInvoice } from "./graph-invoice/graph-invoice"
-export { GraphCompare } from "./graph-compare/graph-compare"
+export {
+  From,
+  GraphInvoice,
+  Item,
+  Meta,
+  To,
+  Total,
+} from "./graph-invoice/graph-invoice"
+export { Col, GraphCompare } from "./graph-compare/graph-compare"
 export { GraphMatrix } from "./graph-matrix/graph-matrix"
-export { GraphStat } from "./graph-stat/graph-stat"
+export { GraphStat, Stat } from "./graph-stat/graph-stat"
 export { GraphKpi } from "./graph-kpi/graph-kpi"
-export { GraphSpec } from "./graph-spec/graph-spec"
+export { Field, GraphSpec } from "./graph-spec/graph-spec"
 export { GraphActivity } from "./graph-activity/graph-activity"
 export { GraphHeatmap } from "./graph-heatmap/graph-heatmap"
 export { GraphCalendar } from "./graph-calendar/graph-calendar"
-export { GraphWaterfall } from "./graph-waterfall/graph-waterfall"
+export { Delta, GraphWaterfall } from "./graph-waterfall/graph-waterfall"
 export { GraphUptime } from "./graph-uptime/graph-uptime"
-export { GraphSlope } from "./graph-slope/graph-slope"
-export { GraphBullet } from "./graph-bullet/graph-bullet"
+export { GraphSlope, Slope } from "./graph-slope/graph-slope"
+export { GraphBullet, Target } from "./graph-bullet/graph-bullet"
 export { GraphTimer } from "./graph-timer/graph-timer"
 export { GraphCountdown } from "./graph-countdown/graph-countdown"
 export {

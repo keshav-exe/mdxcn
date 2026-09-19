@@ -6,6 +6,7 @@ import { DocsPageHeader } from "@/components/docs/page-header"
 import { SkillInstall } from "@/components/docs/skill-install"
 import { JsonLd } from "@/components/seo/json-ld"
 import {
+  SKILL_INSTALL,
   skillAgents,
   skillChooser,
   skillExamples,
@@ -18,7 +19,7 @@ const description =
   "A SKILL.md that tells the agent which graph to put next to the prose. Same files in Cursor, Claude Code, Codex, OpenCode, or any agent that loads Agent Skills."
 
 export const metadata: Metadata = pageMeta({
-  title: "Skill",
+  title: "skill",
   description,
   path: "/docs/skill",
 })
@@ -26,22 +27,22 @@ export const metadata: Metadata = pageMeta({
 export default async function SkillPage() {
   const source = await readSkillFile("SKILL.md")
   const extra = [
-    "## Install",
+    "## install",
     "",
     "Same two files. Put them in the skills folder your agent already reads.",
     "",
     ...skillAgents.flatMap((item) => [
-      `${item.name}: ${item.project}/markdown-graphs (project) or ${item.personal}/markdown-graphs (personal)`,
+      `${item.name}: ${item.project}/${SKILL_INSTALL} (project) or ${item.personal}/${SKILL_INSTALL} (personal)`,
     ]),
     "",
-    "curl -fsSL $ORIGIN/skill.md -o <dir>/markdown-graphs/SKILL.md",
-    "curl -fsSL $ORIGIN/skill/recipes.md -o <dir>/markdown-graphs/recipes.md",
+    `curl -fsSL $ORIGIN/skill.md -o <dir>/${SKILL_INSTALL}/SKILL.md`,
+    `curl -fsSL $ORIGIN/skill/recipes.md -o <dir>/${SKILL_INSTALL}/recipes.md`,
     "",
-    "## What it does",
+    "## what it does",
     "",
     "When the agent is explaining a path, an incident, a tradeoff, or a PR, it puts at most two framed graphs next to the prose. React or importable MDX gets JSX. A Comark app gets a ::graph-* block. A Knap template gets a graph_* filter. Plain Markdown (README, GitHub, Linear) gets the official fenced ASCII from /llms.txt.",
     "",
-    "## Files",
+    "## files",
     "",
     source,
   ].join("\n")
@@ -53,33 +54,33 @@ export default async function SkillPage() {
         copy={{
           description,
           extra,
-          title: "Skill",
+          title: "skill",
         }}
         lead={description}
-        title="Skill"
+        title="skill"
       >
-        <p className="max-w-[56ch] text-pretty text-muted-foreground">
+        <p className="max-w-prose text-pretty text-muted-foreground">
           Write vs read, and why this exists:{" "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/agents"
           >
-            For agents
+            for agents
           </Link>
           . The graphs themselves still need to be in the project.{" "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/docs/installation"
           >
-            Install the components
+            install the components
           </Link>{" "}
           first if they are missing.
         </p>
       </DocsPageHeader>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Install</h2>
-        <p className="max-w-[56ch] text-pretty text-muted-foreground">
+        <h2 className="text-xl font-semibold tracking-tight">install</h2>
+        <p className="max-w-prose text-pretty text-muted-foreground">
           Project copy travels with the repo. Personal copy is this machine
           only. The agent picks it up from the description when the writing
           would scan faster with a figure. If yours watches some other folder,
@@ -89,8 +90,8 @@ export default async function SkillPage() {
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Try it</h2>
-        <p className="max-w-[56ch] text-pretty text-muted-foreground">
+        <h2 className="text-xl font-semibold tracking-tight">try it</h2>
+        <p className="max-w-prose text-pretty text-muted-foreground">
           Paste one of these after install. Each should pick two graphs from the
           chooser and put prose between them.
         </p>
@@ -106,8 +107,8 @@ export default async function SkillPage() {
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">When to use</h2>
-        <p className="max-w-[56ch] text-pretty text-muted-foreground">
+        <h2 className="text-xl font-semibold tracking-tight">when to use</h2>
+        <p className="max-w-prose text-pretty text-muted-foreground">
           Before a wall of bullets, the skill asks if a framed figure would scan
           faster. Skip it if the whole point is one sentence.
         </p>
@@ -149,7 +150,7 @@ export default async function SkillPage() {
             </table>
           </div>
         </div>
-        <p className="max-w-[56ch] text-pretty text-muted-foreground">
+        <p className="max-w-prose text-pretty text-muted-foreground">
           Worked write-ups with JSX:{" "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
@@ -176,28 +177,28 @@ export default async function SkillPage() {
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Rules</h2>
+        <h2 className="text-xl font-semibold tracking-tight">rules</h2>
         <ul
-          className="flex max-w-[56ch] flex-col gap-2 text-pretty text-muted-foreground"
+          className="flex max-w-prose flex-col gap-2 text-pretty text-muted-foreground"
           role="list"
         >
           {skillRules.map((rule) => (
             <li key={rule}>{rule}</li>
           ))}
         </ul>
-        <p className="max-w-[56ch] text-pretty text-muted-foreground">
-          Do not draw the chart in SVG. In GitHub or a README, paste the
-          official fenced ASCII from /llms.txt. In a Comark app, paste a
-          ::graph-* block. In a Knap template, pipe props through a graph_*
-          filter. Do not invent ASCII, and do not paste JSX into a file that
-          cannot import the components. Do not restyle the frame. Do not dump
-          every graph into one reply.
+        <p className="max-w-prose text-pretty text-muted-foreground">
+          Do not draw the chart in SVG. Copy the framed figure from the docs MDX
+          tab into Notion or a README. Keep the fence. Wrap markdown children in
+          the parent tag in MDX. In a Comark app, paste a ::graph-* block. In a
+          Knap template, pipe props through a graph_* filter. Do not invent
+          ASCII. Do not restyle the frame. Do not dump every graph into one
+          reply.
         </p>
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">The file</h2>
-        <p className="max-w-[56ch] text-pretty text-muted-foreground">
+        <h2 className="text-xl font-semibold tracking-tight">the file</h2>
+        <p className="max-w-prose text-pretty text-muted-foreground">
           This is what the agent loads.{" "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
@@ -222,7 +223,7 @@ export default async function SkillPage() {
           is the chooser plus the MDX ASCII blocks, the Comark blocks, and the
           Knap filters if the skill is not installed.
         </p>
-        <CopyBlock label="SKILL.md" value={source} />
+        <CopyBlock label="skill.md" value={source} />
       </section>
     </div>
   )

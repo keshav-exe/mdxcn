@@ -6,6 +6,7 @@ import {
   Graph,
   GraphBody,
   GraphRule,
+  numbers,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   clamp01,
@@ -20,7 +21,8 @@ import { cn } from "@/lib/utils"
 
 type GraphPlotProps = {
   title: string
-  data: number[]
+  /** `[2, 3, 4]` or `"2 3 4"`. One value per column. */
+  data: number[] | string
   labels?: string[]
   height?: number
   variant?: "line" | "area"
@@ -41,7 +43,7 @@ function formatTick(value: number) {
 
 function GraphPlot({
   title,
-  data,
+  data: dataProp,
   labels,
   height = 7,
   variant = "area",
@@ -51,6 +53,7 @@ function GraphPlot({
   corner,
   className,
 }: GraphPlotProps) {
+  const data = numbers(dataProp)
   const reduce = useReducedMotion()
   const max = Math.max(...data, 0)
   const min = Math.min(0, ...data)

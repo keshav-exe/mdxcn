@@ -12,7 +12,7 @@ function MonoLabel({
   return (
     <p
       className={cn(
-        "font-mono tracking-wide text-graph-accent uppercase",
+        "font-mono tracking-wide text-graph-accent",
         className
       )}
     >

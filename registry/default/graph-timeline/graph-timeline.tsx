@@ -1,8 +1,19 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  defineItem,
+  Graph,
+  GraphBody,
+  hasHost,
+  itemText,
+  listItems,
+  splitLabel,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
   staggerList,
@@ -15,17 +26,23 @@ type TimelineState = "done" | "now" | "next"
 
 type TimelineEvent = {
   date: string
-  label: string
+  /** Falls back to the child text: `<Event date="14:02">p95 crossed</Event>`. */
+  label?: string
   state?: TimelineState
 }
 
 type GraphTimelineProps = {
   title: string
-  events: TimelineEvent[]
+  /** Data form. Or write `<Event />` children. */
+  events?: TimelineEvent[]
+  children?: ReactNode
   palette?: GraphPalette
   corner?: string
   className?: string
 }
+
+/** `<Event date="Mar 18" state="now">Docs, live previews</Event>`. */
+const Event = defineItem<TimelineEvent>("Event")
 
 const mark: Record<TimelineState, string> = {
   done: "●",
@@ -35,7 +52,8 @@ const mark: Record<TimelineState, string> = {
 
 function GraphTimeline({
   title,
-  events,
+  events: eventsProp,
+  children,
   palette,
   corner,
   className,
@@ -43,6 +61,25 @@ function GraphTimeline({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
+  const listed = listItems(children).map((item) => {
+    const text = itemText(item)
+    const { label: date, rest } = splitLabel(text)
+    const content = (item.props as { children?: ReactNode }).children
+    const now = hasHost(content, ["strong", "b"])
+    const next = !now && hasHost(content, ["em", "i"])
+    return {
+      date,
+      label: rest || date,
+      state: (now ? "now" : next ? "next" : "done") as TimelineState,
+    }
+  })
+  const tagged = childItems(children, Event).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+  const events = (eventsProp ?? (listed.length > 0 ? listed : tagged)).map(
+    (entry) => ({ ...entry, label: entry.label ?? "" })
+  )
 
   return (
     <Graph title={title} className={className} corner={corner}>
@@ -115,5 +152,5 @@ function GraphTimeline({
   )
 }
 
-export { GraphTimeline }
+export { Event, GraphTimeline }
 export type { GraphTimelineProps, TimelineEvent, TimelineState }

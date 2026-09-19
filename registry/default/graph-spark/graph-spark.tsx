@@ -7,6 +7,7 @@ import {
   GraphBody,
   GraphTick,
   GraphTrack,
+  numbers,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   DIM_OPACITY,
@@ -24,7 +25,8 @@ const SPARK_DEFAULT = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
 
 type GraphSparkProps = {
   title: string
-  data: number[]
+  /** `[2, 3, 4]` or `"2 3 4"`. Scaled to the max. */
+  data: number[] | string
   caption?: string
   glyphs?: Glyphs
   palette?: GraphPalette
@@ -34,13 +36,14 @@ type GraphSparkProps = {
 
 function GraphSpark({
   title,
-  data,
+  data: dataProp,
   caption,
   glyphs,
   palette,
   corner,
   className,
 }: GraphSparkProps) {
+  const data = numbers(dataProp)
   const reduce = useReducedMotion()
   const max = Math.max(...data, 1)
   const last = data.length - 1

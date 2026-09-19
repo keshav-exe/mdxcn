@@ -65,17 +65,21 @@ export default async function ComponentDocPage({ params }: PageProps) {
         }}
         kicker={item.name}
         lead={item.description}
-        note={[item.when, item.not].filter(Boolean).join(" ") || undefined}
         title={item.title}
       />
 
-      <InstallCommand
-        doc={item}
-        example={examples[0]?.code}
-        name={item.registry}
-      />
+      {examples[0] ? <Examples items={[examples[0]]} /> : null}
 
-      {examples.length > 0 ? <Examples items={examples} /> : null}
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl font-semibold tracking-tight">install</h2>
+        <InstallCommand
+          doc={item}
+          example={examples[0]?.code}
+          name={item.registry}
+        />
+      </section>
+
+      {examples.length > 1 ? <Examples items={examples.slice(1)} /> : null}
 
       <PropsTable rows={item.props} />
     </div>

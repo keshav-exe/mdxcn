@@ -20,9 +20,11 @@ describe("openApiSpec", () => {
 
   it("is OpenAPI 3.1 with identity fields", () => {
     expect(spec.openapi).toBe("3.1.0")
-    expect(spec.info.title).toBe("Markdown Graphs API")
+    expect(spec.info.title).toBe("mdxcn API")
     expect(spec.servers[0]?.url).toBe("https://example.test")
-    expect(spec.info["x-deprecation-policy"]).toContain("/developers/deprecation")
+    expect(spec.info["x-deprecation-policy"]).toContain(
+      "/developers/deprecation"
+    )
   })
 
   it("gives every operation an id, description, typed response, and rate headers", () => {
@@ -63,7 +65,7 @@ describe("openApiSpec", () => {
 describe("apiIndex", () => {
   it("lists public endpoints", () => {
     const index = apiIndex("https://example.test")
-    expect(index.name).toBe("Markdown Graphs API")
+    expect(index.name).toBe("mdxcn API")
     expect(index.endpoints.some((item) => item.path === "/api/v1/health")).toBe(
       true
     )

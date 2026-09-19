@@ -1,8 +1,19 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  defineItem,
+  Graph,
+  GraphBody,
+  hasHost,
+  itemText,
+  listItems,
+  nestedList,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   DIM_OPACITY,
   fadeUp,
@@ -17,11 +28,61 @@ type TreeNode = {
   children?: TreeNode[]
 }
 
+/**
+ * Nested `<Node>` children. `label` falls back to the text child when the
+ * node has no nested nodes: `<Node meta="ui">graph-frame.tsx</Node>`.
+ */
+type NodeProps = {
+  label?: string
+  meta?: string
+  accent?: boolean
+  children?: ReactNode
+}
+
 type GraphTreeProps = {
   title: string
-  nodes: TreeNode[]
+  /** Data form. Or nest `<Node />` children. */
+  nodes?: TreeNode[]
+  children?: ReactNode
   corner?: string
   className?: string
+}
+
+/** `<Node label="platform"><Node meta="priya">api</Node></Node>` inside `<GraphTree>`. */
+const Node = defineItem<NodeProps>("Node")
+
+function nodesFromList(items: ReturnType<typeof listItems>): TreeNode[] {
+  return items.map((item) => {
+    const kids = nodesFromList(nestedList(item))
+    const text = itemText(item)
+    const [name, extra] = text.split(/\s+[—–]\s+/)
+    return {
+      label: name || text,
+      meta: extra,
+      accent: hasHost((item.props as { children?: ReactNode }).children, [
+        "strong",
+        "b",
+      ]),
+      children: kids.length > 0 ? kids : undefined,
+    }
+  })
+}
+
+function nodesOf(children: ReactNode): TreeNode[] {
+  const listed = nodesFromList(listItems(children))
+  if (listed.length > 0) {
+    return listed
+  }
+
+  return childItems(children, Node).map((node) => {
+    const kids = nodesOf(node.children)
+    return {
+      label: node.label ?? (kids.length === 0 ? textOf(node.children) : ""),
+      meta: node.meta,
+      accent: node.accent,
+      children: kids.length > 0 ? kids : undefined,
+    }
+  })
 }
 
 type FlatRow = {
@@ -59,11 +120,17 @@ function flatten(
   })
 }
 
-function GraphTree({ title, nodes, corner, className }: GraphTreeProps) {
+function GraphTree({
+  title,
+  nodes,
+  children,
+  corner,
+  className,
+}: GraphTreeProps) {
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.03)
-  const rows = flatten(nodes)
+  const rows = flatten(nodes ?? nodesOf(children))
   const hasAccent = rows.some((row) => row.accent)
 
   return (
@@ -119,5 +186,5 @@ function GraphTree({ title, nodes, corner, className }: GraphTreeProps) {
   )
 }
 
-export { GraphTree }
-export type { GraphTreeProps, TreeNode }
+export { GraphTree, Node }
+export type { GraphTreeProps, NodeProps, TreeNode }

@@ -1,12 +1,20 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  childItems,
+  defineItem,
   Graph,
   GraphBody,
   GraphTick,
   GraphTrack,
+  itemText,
+  listItems,
+  numberOf,
+  splitLabel,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -22,24 +30,55 @@ import {
 const DEFAULT_GLYPHS = ["█", "▓", "▒", "░", "#", "=", "+", "-"]
 
 type StackSegment = {
-  label: string
-  value: number
+  /** Falls back to the child text: `<Segment value={48}>js</Segment>`. */
+  label?: string
+  value: number | string
 }
 
 type StackRow = {
   label: string
-  segments: StackSegment[]
+  /** Data form. Or nest `<Segment />` children inside `<Bar>`. */
+  segments?: StackSegment[]
+  children?: ReactNode
 }
 
 type GraphStackProps = {
   title: string
-  rows: StackRow[]
+  /** Data form. Or write `<Bar>` children with `<Segment>` inside. */
+  rows?: StackRow[]
+  children?: ReactNode
   accent?: string
   ticks?: number
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
   className?: string
+}
+
+/** `<Bar label="marketing"><Segment value={48}>js</Segment></Bar>` inside `<GraphStack>`. */
+const Bar = defineItem<StackRow>("Bar")
+
+/** One part of a `<Bar>`. */
+const Segment = defineItem<StackSegment>("Segment")
+
+type SegmentRow = { label: string; value: number }
+type BarRow = { label: string; segments: SegmentRow[] }
+
+function segmentsOf(row: StackRow): SegmentRow[] {
+  const source = row.segments ?? childItems(row.children, Segment)
+  return source.map((segment) => ({
+    label:
+      segment.label ?? textOf((segment as { children?: ReactNode }).children),
+    value: numberOf(segment.value),
+  }))
+}
+
+function segmentsFromText(text: string): SegmentRow[] {
+  const parts = [...text.matchAll(/([\d,.]+)\s+(\S+)/g)]
+  return parts.map((part) => ({
+    label: part[2] ?? "",
+    value: numberOf(part[1]),
+  }))
 }
 
 type Painted = {
@@ -50,7 +89,7 @@ type Painted = {
 }
 
 function paintRow(
-  segments: StackSegment[],
+  segments: SegmentRow[],
   ticks: number,
   glyphs: readonly string[],
   accentLabel?: string
@@ -80,7 +119,8 @@ function paintRow(
 
 function GraphStack({
   title,
-  rows,
+  rows: rowsProp,
+  children,
   accent,
   ticks = 24,
   glyphs,
@@ -92,6 +132,25 @@ function GraphStack({
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
   const set = glyphs == null ? DEFAULT_GLYPHS : resolveGlyphs(glyphs)
+  const listed = listItems(children).map((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    return {
+      label,
+      segments: segmentsFromText(rest),
+    }
+  })
+  const tagged = childItems(children, Bar).map((row) => ({
+    label: row.label,
+    segments: segmentsOf(row),
+  }))
+  const rows: BarRow[] = rowsProp
+    ? rowsProp.map((row) => ({
+        label: row.label,
+        segments: segmentsOf(row),
+      }))
+    : listed.length > 0
+      ? listed
+      : tagged
   const legend: string[] = []
 
   for (const row of rows) {
@@ -186,5 +245,5 @@ function GraphStack({
   )
 }
 
-export { GraphStack }
+export { Bar, GraphStack, Segment }
 export type { GraphStackProps, StackRow, StackSegment }

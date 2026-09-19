@@ -1,13 +1,26 @@
 export {
+  Cell,
+  childItems,
+  defineItem,
+  Foot,
   Graph,
   GraphBody,
   GraphCorners,
+  GraphProse,
   GraphRule,
   GraphRuleY,
   GraphTick,
   GraphTitle,
   GraphTrack,
+  Head,
+  Row,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
+export { Callout } from "@/registry/default/callout/callout"
+export { Quote } from "@/registry/default/quote/quote"
+export { Step, Steps } from "@/registry/default/steps/steps"
+export { Terminal } from "@/registry/default/terminal/terminal"
+export { Change, Changelog } from "@/registry/default/changelog/changelog"
 export { GraphArrow } from "@/registry/default/graph-frame/graph-arrow"
 export {
   fadeUp,
@@ -24,35 +37,61 @@ export {
   trackMarks,
 } from "@/registry/default/graph-frame/graph-motion"
 export { GraphTable } from "@/registry/default/graph-table/graph-table"
-export { GraphSheet } from "@/registry/default/graph-sheet/graph-sheet"
-export { GraphFlow } from "@/registry/default/graph-flow/graph-flow"
-export { GraphBars } from "@/registry/default/graph-bars/graph-bars"
-export { GraphRank } from "@/registry/default/graph-rank/graph-rank"
-export { GraphCells } from "@/registry/default/graph-cells/graph-cells"
+export { GraphSheet, Section } from "@/registry/default/graph-sheet/graph-sheet"
+export { GraphFlow, Path } from "@/registry/default/graph-flow/graph-flow"
+export { GraphBars, Series } from "@/registry/default/graph-bars/graph-bars"
+export { GraphRank, Rank } from "@/registry/default/graph-rank/graph-rank"
+export { GraphCells, Grid } from "@/registry/default/graph-cells/graph-cells"
 export { GraphMeter } from "@/registry/default/graph-meter/graph-meter"
 export { GraphSpark } from "@/registry/default/graph-spark/graph-spark"
-export { GraphTree } from "@/registry/default/graph-tree/graph-tree"
-export { GraphTimeline } from "@/registry/default/graph-timeline/graph-timeline"
-export { GraphCheck } from "@/registry/default/graph-check/graph-check"
-export { GraphStack } from "@/registry/default/graph-stack/graph-stack"
-export { GraphFunnel } from "@/registry/default/graph-funnel/graph-funnel"
-export { GraphGantt } from "@/registry/default/graph-gantt/graph-gantt"
-export { GraphDiff } from "@/registry/default/graph-diff/graph-diff"
+export { GraphTree, Node } from "@/registry/default/graph-tree/graph-tree"
+export {
+  Event,
+  GraphTimeline,
+} from "@/registry/default/graph-timeline/graph-timeline"
+export { GraphCheck, Task } from "@/registry/default/graph-check/graph-check"
+export {
+  Bar,
+  GraphStack,
+  Segment,
+} from "@/registry/default/graph-stack/graph-stack"
+export {
+  GraphFunnel,
+  Stage,
+} from "@/registry/default/graph-funnel/graph-funnel"
+export { GraphGantt, Span } from "@/registry/default/graph-gantt/graph-gantt"
+export { GraphDiff, Line } from "@/registry/default/graph-diff/graph-diff"
 export { GraphPlot } from "@/registry/default/graph-plot/graph-plot"
 export { GraphWaffle } from "@/registry/default/graph-waffle/graph-waffle"
-export { GraphInvoice } from "@/registry/default/graph-invoice/graph-invoice"
-export { GraphCompare } from "@/registry/default/graph-compare/graph-compare"
+export {
+  From,
+  GraphInvoice,
+  Item,
+  Meta,
+  To,
+  Total,
+} from "@/registry/default/graph-invoice/graph-invoice"
+export {
+  Col,
+  GraphCompare,
+} from "@/registry/default/graph-compare/graph-compare"
 export { GraphMatrix } from "@/registry/default/graph-matrix/graph-matrix"
-export { GraphStat } from "@/registry/default/graph-stat/graph-stat"
+export { GraphStat, Stat } from "@/registry/default/graph-stat/graph-stat"
 export { GraphKpi } from "@/registry/default/graph-kpi/graph-kpi"
-export { GraphSpec } from "@/registry/default/graph-spec/graph-spec"
+export { Field, GraphSpec } from "@/registry/default/graph-spec/graph-spec"
 export { GraphActivity } from "@/registry/default/graph-activity/graph-activity"
 export { GraphHeatmap } from "@/registry/default/graph-heatmap/graph-heatmap"
 export { GraphCalendar } from "@/registry/default/graph-calendar/graph-calendar"
-export { GraphWaterfall } from "@/registry/default/graph-waterfall/graph-waterfall"
+export {
+  Delta,
+  GraphWaterfall,
+} from "@/registry/default/graph-waterfall/graph-waterfall"
 export { GraphUptime } from "@/registry/default/graph-uptime/graph-uptime"
-export { GraphSlope } from "@/registry/default/graph-slope/graph-slope"
-export { GraphBullet } from "@/registry/default/graph-bullet/graph-bullet"
+export { GraphSlope, Slope } from "@/registry/default/graph-slope/graph-slope"
+export {
+  GraphBullet,
+  Target,
+} from "@/registry/default/graph-bullet/graph-bullet"
 export { GraphTimer } from "@/registry/default/graph-timer/graph-timer"
 export { GraphCountdown } from "@/registry/default/graph-countdown/graph-countdown"
 
@@ -61,6 +100,22 @@ export type {
   Glyphs,
   GraphPalette,
 } from "@/registry/default/graph-frame/graph-motion"
+export type {
+  CalloutProps,
+  CalloutType,
+} from "@/registry/default/callout/callout"
+export type { QuoteProps } from "@/registry/default/quote/quote"
+export type {
+  StepProps,
+  StepsProps,
+  StepState,
+} from "@/registry/default/steps/steps"
+export type { TerminalProps } from "@/registry/default/terminal/terminal"
+export type {
+  ChangelogProps,
+  ChangeProps,
+  ChangeType,
+} from "@/registry/default/changelog/changelog"
 export type { GraphTableProps } from "@/registry/default/graph-table/graph-table"
 export type {
   GraphSheetProps,

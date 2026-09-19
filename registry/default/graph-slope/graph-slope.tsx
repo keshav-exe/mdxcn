@@ -1,8 +1,19 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  defineItem,
+  Graph,
+  GraphBody,
+  itemText,
+  listItems,
+  numberOf,
+  splitLabel,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
   staggerList,
@@ -12,20 +23,28 @@ import {
 import { cn } from "@/lib/utils"
 
 type SlopeItem = {
-  label: string
-  from: number
-  to: number
+  /** Falls back to the child text: `<Slope from={160} to={142}>read</Slope>`. */
+  label?: string
+  from: number | string
+  to: number | string
 }
 
 type GraphSlopeProps = {
   title: string
   fromLabel: string
   toLabel: string
-  items: SlopeItem[]
+  /** Data form. Or write `<Slope />` children. */
+  items?: SlopeItem[]
+  children?: ReactNode
   palette?: GraphPalette
   corner?: string
   className?: string
 }
+
+/** `<Slope from={8200} to={12400}>docs</Slope>` inside `<GraphSlope>`. */
+const Slope = defineItem<SlopeItem>("Slope")
+
+type SlopeRow = { label: string; from: number; to: number }
 
 function format(value: number) {
   return value.toLocaleString("en-US", {
@@ -37,7 +56,8 @@ function GraphSlope({
   title,
   fromLabel,
   toLabel,
-  items,
+  items: itemsProp,
+  children,
   palette,
   corner,
   className,
@@ -45,6 +65,22 @@ function GraphSlope({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
+  const listed = listItems(children).map((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    const [from, to] = rest.split(/\s*(?:→|->|—>|=>)\s*/)
+    return { label, from, to }
+  })
+  const tagged = childItems(children, Slope).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+  const items: SlopeRow[] = (
+    itemsProp ?? (listed.length > 0 ? listed : tagged)
+  ).map((entry) => ({
+    label: entry.label ?? "",
+    from: numberOf(entry.from),
+    to: numberOf(entry.to),
+  }))
 
   return (
     <Graph title={title} className={className} corner={corner}>
@@ -108,5 +144,5 @@ function GraphSlope({
   )
 }
 
-export { GraphSlope }
+export { GraphSlope, Slope }
 export type { GraphSlopeProps, SlopeItem }

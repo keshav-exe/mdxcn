@@ -1,50 +1,70 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
+import { GraphSpec } from "@/components/graphs"
 import { JsonLd } from "@/components/seo/json-ld"
-import { ProsePage } from "@/components/site/prose-page"
+import {
+  LandingHero,
+  LandingLinks,
+  LandingSection,
+} from "@/components/site/landing"
+import { ProseP } from "@/components/site/prose"
 import { ABOUT_PARAS } from "@/lib/agent/copy"
+import { GITHUB_URL } from "@/lib/github"
 import { pageMeta, webPageJsonLd } from "@/lib/seo"
+import { SITE_EMAIL } from "@/lib/site"
 
 const description =
   "Open-source ASCII-framed React diagrams for MDX. Source on GitHub, MIT license, copied with the shadcn CLI."
 
 export const metadata: Metadata = pageMeta({
-  title: "About",
+  title: "about",
   description,
   path: "/about",
 })
 
 export default function AboutPage() {
   return (
-    <>
+    <main id="main">
       <JsonLd
         data={webPageJsonLd({
-          name: "About Markdown Graphs",
+          name: "About mdxcn",
           description,
           path: "/about",
         })}
       />
-      <ProsePage kicker="Markdown Graphs" title="About">
-        {ABOUT_PARAS.map((para) => (
-          <p key={para}>{para}</p>
+      <LandingHero
+        actions={[
+          { href: "/contact", label: "contact" },
+          { href: GITHUB_URL, label: "github" },
+        ]}
+        figure={
+          <GraphSpec
+            rows={[
+              { label: "license", value: "mit", accent: true },
+              { label: "install", value: "shadcn cli" },
+              { label: "registry", value: "@mdxcn" },
+              { label: "skill", value: "skills/mdxcn" },
+              { label: "site", value: "mdxcn.dev" },
+              { label: "mail", value: SITE_EMAIL },
+            ]}
+            title="spec"
+          />
+        }
+        lead={ABOUT_PARAS[0]}
+        title="open source, copied into your repo"
+      />
+      <LandingSection title="what it is">
+        {ABOUT_PARAS.slice(1).map((para) => (
+          <ProseP key={para}>{para}</ProseP>
         ))}
-        <p>
-          <Link
-            className="text-foreground underline-offset-4 hover:underline"
-            href="/contact"
-          >
-            Contact
-          </Link>
-          {" · "}
-          <Link
-            className="text-foreground underline-offset-4 hover:underline"
-            href="/privacy"
-          >
-            Privacy
-          </Link>
-        </p>
-      </ProsePage>
-    </>
+        <LandingLinks
+          items={[
+            { href: "/contact", label: "contact" },
+            { href: "/privacy", label: "privacy" },
+            { href: GITHUB_URL, label: "github" },
+          ]}
+        />
+      </LandingSection>
+    </main>
   )
 }
