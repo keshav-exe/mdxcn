@@ -8,7 +8,7 @@ React components for ASCII-style tables, charts, and diagrams in MDX. Built so a
 
 You need an existing [shadcn](https://ui.shadcn.com) project and [`motion`](https://motion.dev).
 
-Scoped registry (same idea as `@dotmatrix/dotm-square-3`):
+Add the `@mdxcn` registry once, then install by name:
 
 ```bash
 pnpm dlx shadcn@latest registry add @mdxcn=https://mdxcn.dev/r/{name}.json

@@ -17,13 +17,13 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/:path*",
-        has: [{ type: "host", value: "mdxcn.dev" }],
+        has: [{ type: "host", value: "markdown-graphs.vercel.app" }],
         destination: "https://mdxcn.dev/:path*",
         permanent: true,
       },
       {
         source: "/:path*",
-        has: [{ type: "host", value: "mdxcn.dev" }],
+        has: [{ type: "host", value: "mdx-graphs.kshv.me" }],
         destination: "https://mdxcn.dev/:path*",
         permanent: true,
       },
