@@ -6,6 +6,7 @@ import { DocsPageHeader } from "@/components/docs/page-header"
 import { SkillInstall } from "@/components/docs/skill-install"
 import { JsonLd } from "@/components/seo/json-ld"
 import {
+  SKILL_INSTALL,
   skillAgents,
   skillChooser,
   skillExamples,
@@ -31,11 +32,11 @@ export default async function SkillPage() {
     "Same two files. Put them in the skills folder your agent already reads.",
     "",
     ...skillAgents.flatMap((item) => [
-      `${item.name}: ${item.project}/markdown-graphs (project) or ${item.personal}/markdown-graphs (personal)`,
+      `${item.name}: ${item.project}/${SKILL_INSTALL} (project) or ${item.personal}/${SKILL_INSTALL} (personal)`,
     ]),
     "",
-    "curl -fsSL $ORIGIN/skill.md -o <dir>/markdown-graphs/SKILL.md",
-    "curl -fsSL $ORIGIN/skill/recipes.md -o <dir>/markdown-graphs/recipes.md",
+    `curl -fsSL $ORIGIN/skill.md -o <dir>/${SKILL_INSTALL}/SKILL.md`,
+    `curl -fsSL $ORIGIN/skill/recipes.md -o <dir>/${SKILL_INSTALL}/recipes.md`,
     "",
     "## What it does",
     "",
@@ -186,12 +187,12 @@ export default async function SkillPage() {
           ))}
         </ul>
         <p className="max-w-[56ch] text-pretty text-muted-foreground">
-          Do not draw the chart in SVG. In GitHub or a README, paste the
-          official fenced ASCII from /llms.txt. In a Comark app, paste a
-          ::graph-* block. In a Knap template, pipe props through a graph_*
-          filter. Do not invent ASCII, and do not paste JSX into a file that
-          cannot import the components. Do not restyle the frame. Do not dump
-          every graph into one reply.
+          Do not draw the chart in SVG. Copy the framed figure from the docs MDX
+          tab into Notion or a README. Keep the fence. Wrap markdown children in
+          the parent tag in MDX. In a Comark app, paste a ::graph-* block. In a
+          Knap template, pipe props through a graph_* filter. Do not invent
+          ASCII. Do not restyle the frame. Do not dump every graph into one
+          reply.
         </p>
       </section>
 

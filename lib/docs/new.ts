@@ -1,4 +1,10 @@
-export const NEW_SLUGS = ["graph-sheet", "graph-matrix", "graph-check"] as const
+export const NEW_SLUGS = [
+  "callout",
+  "quote",
+  "steps",
+  "terminal",
+  "changelog",
+] as const
 
 const newSlugSet = new Set<string>(NEW_SLUGS)
 

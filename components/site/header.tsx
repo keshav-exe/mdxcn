@@ -28,7 +28,7 @@ function SiteHeader({ stars }: { stars: number | null }) {
         {docs ? (
           <SiteMark className="bottom-0 left-64 -translate-x-1/2 translate-y-1/2 max-lg:hidden" />
         ) : null}
-        <div className="flex items-center gap-4 justify-between py-4">
+        <div className="flex items-center justify-between gap-4 py-4">
           <div className="flex items-center gap-4">
             <Link
               aria-label="Homepage"
@@ -36,7 +36,7 @@ function SiteHeader({ stars }: { stars: number | null }) {
               href="/"
             >
               <Mark className="size-4" palette={MARK_THEME} size={16} />
-              markdown graphs
+              mdxcn
             </Link>
 
             <nav aria-label="Primary" className="max-lg:hidden">
@@ -65,9 +65,7 @@ function SiteHeader({ stars }: { stars: number | null }) {
       <Dialog.Root>
         <Dialog.Trigger
           nativeButton={false}
-          render={
-            <HeaderButton className="lg:hidden" label="Open menu" />
-          }
+          render={<HeaderButton className="lg:hidden" label="Open menu" />}
         >
           <HugeiconsIcon
             className="size-5 shrink-0"
@@ -86,9 +84,7 @@ function SiteHeader({ stars }: { stars: number | null }) {
             )}
           >
             <div className="flex items-center justify-between">
-              <Dialog.Title className="text-foreground">
-                menu
-              </Dialog.Title>
+              <Dialog.Title className="text-foreground">menu</Dialog.Title>
               <Dialog.Close
                 nativeButton={false}
                 render={<HeaderButton label="Close menu" />}

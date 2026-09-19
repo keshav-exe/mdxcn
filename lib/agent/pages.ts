@@ -70,11 +70,11 @@ pnpm dlx shadcn@latest add $ORIGIN/r/all.json
 
 Add the registry once in components.json, then install components by name.
 
-pnpm dlx shadcn@latest registry add @mdx-graphs=$ORIGIN/r/{name}.json
+pnpm dlx shadcn@latest registry add @mdxcn=$ORIGIN/r/{name}.json
 
 Then:
 
-pnpm dlx shadcn@latest add @mdx-graphs/graph-table
+pnpm dlx shadcn@latest add @mdxcn/graph-table
 
 ## Import
 
@@ -142,7 +142,7 @@ ${COMARK_WIRE}
 
 - Wiring: $ORIGIN/docs/comark
 - Skill: $ORIGIN/docs/skill
-- Demo: https://comark-graphs-demo.vercel.app
+- Demo: https://comark-demo.vercel.app
 - Comark: https://comark.dev`,
   })
 }
@@ -191,11 +191,11 @@ async function skillMarkdown(origin: string) {
     "Same two files. Put them in the skills folder your agent already reads.",
     "",
     ...skillAgents.flatMap((item) => [
-      `${item.name}: ${item.project}/markdown-graphs (project) or ${item.personal}/markdown-graphs (personal)`,
+      `${item.name}: ${item.project}/mdxcn (project) or ${item.personal}/mdxcn (personal)`,
     ]),
     "",
-    "curl -fsSL $ORIGIN/skill.md -o <dir>/markdown-graphs/SKILL.md",
-    "curl -fsSL $ORIGIN/skill/recipes.md -o <dir>/markdown-graphs/recipes.md",
+    "curl -fsSL $ORIGIN/skill.md -o <dir>/mdxcn/SKILL.md",
+    "curl -fsSL $ORIGIN/skill/recipes.md -o <dir>/mdxcn/recipes.md",
     "",
     "## What it does",
     "",
@@ -288,17 +288,6 @@ ${prompts}
 `
 }
 
-function sponsorMarkdown(origin: string) {
-  return `# Sponsor Markdown Graphs
-
-Four cells beside the title on the homepage. $100 a cell per month. 100k+ impressions on X, and counting.
-
-Docs stay clean. Creative is SVG, one ink, 24 characters or less.
-
-Mail Keshav from ${origin}/sponsor.
-`
-}
-
 export async function markdownForPath(path: string, origin = SITE_URL) {
   const host = hostOf(origin)
   const clean = path.replace(/\.md$/i, "") || "/"
@@ -318,8 +307,6 @@ export async function markdownForPath(path: string, origin = SITE_URL) {
       return contactMarkdown(host)
     case "/privacy":
       return privacyMarkdown(host)
-    case "/sponsor":
-      return sponsorMarkdown(host)
     case "/docs":
       return docsIntro(host)
     case "/docs/installation":
@@ -340,7 +327,7 @@ export async function markdownForPath(path: string, origin = SITE_URL) {
       break
   }
 
-  const docMatch = /^\/docs\/(graph-[a-z0-9-]+)$/.exec(clean)
+  const docMatch = /^\/docs\/([a-z0-9-]+)$/.exec(clean)
   if (docMatch?.[1]) {
     return componentMarkdown(docMatch[1], host)
   }
@@ -357,7 +344,6 @@ export function knownMarkdownPaths() {
     "/about",
     "/contact",
     "/privacy",
-    "/sponsor",
     "/docs",
     "/docs/installation",
     "/docs/examples",

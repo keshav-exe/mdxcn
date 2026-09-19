@@ -1,11 +1,17 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  childItems,
   Graph,
   GraphBody,
   GraphRule,
+  labeledTable,
+  Row,
+  textOf,
+  words,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   DIM_OPACITY,
@@ -23,12 +29,25 @@ type MatrixRow = {
 
 type GraphMatrixProps = {
   title: string
-  columns: string[]
-  rows: MatrixRow[]
+  /** Data form. Or `"Pos Neg"`. */
+  columns?: string[] | string
+  /** Data form. Or write `<Row label="Pos">41 3</Row>`. */
+  rows?: MatrixRow[]
+  children?: ReactNode
   accent?: string
   palette?: GraphPalette
   corner?: string
   className?: string
+}
+
+function matrixValues(text: string): (number | string)[] {
+  return text
+    .split(/[\s,]+/)
+    .filter(Boolean)
+    .map((token) => {
+      const parsed = Number(token)
+      return Number.isFinite(parsed) ? parsed : token
+    })
 }
 
 function formatCell(value: number | string) {
@@ -52,13 +71,30 @@ function RuleY() {
 
 function GraphMatrix({
   title,
-  columns,
-  rows,
+  columns: columnsProp,
+  rows: rowsProp,
+  children,
   accent,
   palette,
   corner,
   className,
 }: GraphMatrixProps) {
+  const markdown = labeledTable(children)
+  const columns =
+    columnsProp == null ? (markdown?.columns ?? []) : words(columnsProp)
+  const taggedRows = childItems(children, Row).map((row) => ({
+    label: row.label ?? "",
+    values: matrixValues(textOf(row.children)),
+  }))
+  const rows = (
+    rowsProp ??
+    (taggedRows.length > 0
+      ? taggedRows
+      : (markdown?.rows.map((row) => ({
+          label: row.label,
+          values: matrixValues(row.values.join(" ")),
+        })) ?? []))
+  ).map((row) => ({ ...row, label: row.label ?? "" }))
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
@@ -139,5 +175,5 @@ function GraphMatrix({
   )
 }
 
-export { GraphMatrix }
+export { GraphMatrix, Row }
 export type { GraphMatrixProps, MatrixRow }

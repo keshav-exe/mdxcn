@@ -37,7 +37,7 @@ describe("homepage copy", () => {
 
   it("includes when-to-use jobs in the markdown export", () => {
     const md = homeMarkdown()
-    expect(md).toContain("# Markdown Graphs")
+    expect(md).toContain("# mdxcn")
     expect(md).toContain("## Write")
     expect(md).toContain("## Read")
     expect(md).toContain("/llms.txt")

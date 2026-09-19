@@ -2,7 +2,11 @@
 
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  Graph,
+  GraphBody,
+  numbers,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
   isMonoPalette,
@@ -39,7 +43,8 @@ type GraphCalendarProps = {
   year: number
   month: number
   weekStartsOn?: 0 | 1
-  marks?: CalendarMark[] | number[]
+  /** `[12, 18]`, `"12 18"`, or `{ day, accent }` objects. */
+  marks?: CalendarMark[] | number[] | string
   today?: number
   palette?: GraphPalette
   corner?: string
@@ -55,7 +60,7 @@ function leadingBlanks(year: number, monthIndex: number, weekStartsOn: 0 | 1) {
   return (weekday - weekStartsOn + 7) % 7
 }
 
-function markSet(marks: GraphCalendarProps["marks"]) {
+function markSet(marks?: CalendarMark[] | number[]) {
   const map = new Map<number, boolean>()
 
   if (!marks) {
@@ -79,12 +84,13 @@ function GraphCalendar({
   year,
   month,
   weekStartsOn = 1,
-  marks,
+  marks: marksProp,
   today,
   palette,
   corner,
   className,
 }: GraphCalendarProps) {
+  const marks = typeof marksProp === "string" ? numbers(marksProp) : marksProp
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)

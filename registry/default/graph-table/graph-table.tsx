@@ -5,9 +5,18 @@ import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  alignsOf,
+  Cell,
+  cellsOf,
+  childItems,
+  Foot,
   Graph,
   GraphBody,
   GraphRule,
+  Head,
+  Row,
+  tableOf,
+  words,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -28,23 +37,50 @@ function RuleY() {
 
 type GraphTableProps = {
   title: string
-  headers: string[]
-  rows: ReactNode[][]
+  /** Data form. Or write `<Head>Name | Value</Head>`. */
+  headers?: string[] | string
+  /** Data form. Or write `<Row>docs | 12,400</Row>`. */
+  rows?: ReactNode[][]
   footer?: ReactNode[]
-  align?: GraphAlign[]
+  align?: GraphAlign[] | string
+  children?: ReactNode
   corner?: string
   className?: string
 }
 
 function GraphTable({
   title,
-  headers,
-  rows,
-  footer,
-  align,
+  headers: headersProp,
+  rows: rowsProp,
+  footer: footerProp,
+  align: alignProp,
+  children,
   corner,
   className,
 }: GraphTableProps) {
+  const markdown = tableOf(children)
+  const head = childItems(children, Head)[0]
+  const headers = (
+    headersProp == null
+      ? head
+        ? cellsOf(undefined, head?.children)
+        : (markdown?.headers ?? [])
+      : cellsOf(headersProp)
+  ).map((cell) => String(cell ?? ""))
+  const taggedRows = childItems(children, Row).map((row) =>
+    cellsOf(row.cells, row.children)
+  )
+  const rows =
+    rowsProp ?? (taggedRows.length > 0 ? taggedRows : markdown?.rows) ?? []
+  const foot = childItems(children, Foot)[0]
+  const footer =
+    footerProp ?? (foot ? cellsOf(foot.cells, foot.children) : markdown?.footer)
+  const align =
+    (typeof alignProp === "string"
+      ? (words(alignProp) as GraphAlign[])
+      : alignProp) ??
+    alignsOf(head?.children) ??
+    markdown?.align
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
@@ -84,7 +120,7 @@ function GraphTable({
               viewport={{ once: true, amount: 0.4 }}
               whileInView="show"
             >
-              {rows.map((row, rowIndex) => (
+              {rows?.map((row, rowIndex) => (
                 <motion.tr key={rowIndex} variants={item}>
                   {row.map((cell, cellIndex) => (
                     <td
@@ -137,5 +173,5 @@ function GraphTable({
   )
 }
 
-export { GraphTable }
+export { Cell, Foot, GraphTable, Head, Row }
 export type { GraphTableProps }

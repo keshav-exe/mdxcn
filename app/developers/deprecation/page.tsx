@@ -7,7 +7,7 @@ import { DEPRECATION_PARAS } from "@/lib/agent/copy"
 import { pageMeta, webPageJsonLd } from "@/lib/seo"
 
 const description =
-  "Markdown Graphs API versioning and deprecation. URL version prefixes, Sunset headers, and six-month notice."
+  "mdxcn API versioning and deprecation. URL version prefixes, Sunset headers, and six-month notice."
 
 export const metadata: Metadata = pageMeta({
   title: "API deprecation",
@@ -20,12 +20,12 @@ export default function DeprecationPage() {
     <>
       <JsonLd
         data={webPageJsonLd({
-          name: "Markdown Graphs API deprecation",
+          name: "mdxcn API deprecation",
           description,
           path: "/developers/deprecation",
         })}
       />
-      <ProsePage kicker="Markdown Graphs API" title="Deprecation policy">
+      <ProsePage title="deprecation policy">
         {DEPRECATION_PARAS.map((para) => (
           <p key={para}>{para}</p>
         ))}

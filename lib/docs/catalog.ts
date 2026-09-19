@@ -13,6 +13,42 @@ export type PropRow = {
   description: string
 }
 
+export type Category =
+  "content" | "diagrams" | "data" | "charts" | "time" | "primitives"
+
+export const CATEGORIES: { id: Category; label: string; blurb: string }[] = [
+  {
+    id: "content",
+    label: "Content",
+    blurb: "Markdown children. Callouts, quotes, steps, a shell, a release.",
+  },
+  {
+    id: "diagrams",
+    label: "Diagrams",
+    blurb: "Paths, trees, timelines, schedules. Written as children.",
+  },
+  {
+    id: "data",
+    label: "Data",
+    blurb: "Numbers with labels. Stats, specs, tables, diffs.",
+  },
+  {
+    id: "charts",
+    label: "Charts",
+    blurb: "Glyphs on a track. Ranks, meters, sparks, grids.",
+  },
+  {
+    id: "time",
+    label: "Time",
+    blurb: "Days and clocks. Uptime, a month, elapsed, remaining.",
+  },
+  {
+    id: "primitives",
+    label: "Primitives",
+    blurb: "The frame every component is drawn in.",
+  },
+]
+
 export type ComponentDoc = {
   slug: string
   title: string
@@ -21,6 +57,9 @@ export type ComponentDoc = {
   registry: string
   dependencies: string[]
   props: PropRow[]
+  category: Category
+  /** The MDX child the component reads, if any. Shown in docs and llms.txt. */
+  mdx?: string
   when?: string
   not?: string
 }
@@ -35,12 +74,184 @@ export const getStarted: NavLink[] = [
   { href: "/docs/skill", label: "Skill" },
 ]
 
-const catalog: ComponentDoc[] = [
+type CatalogEntry = Omit<ComponentDoc, "category">
+
+const corner: PropRow = {
+  name: "corner",
+  type: "string",
+  default: '"+"',
+  description: "Character at each corner of the frame.",
+}
+
+const className: PropRow = {
+  name: "className",
+  type: "string",
+  description: "Passed to the outer frame.",
+}
+
+const markdownChildren = (what: string): PropRow => ({
+  name: "children",
+  type: "ReactNode",
+  description: `Markdown. ${what}`,
+})
+
+const content: CatalogEntry[] = [
+  {
+    slug: "callout",
+    title: "Callout",
+    name: "Callout",
+    description:
+      "An aside between paragraphs — a caveat, a tip, a warning. The body is Markdown. A quote is Quote.",
+    registry: "callout",
+    dependencies: ["motion"],
+    props: [
+      {
+        name: "type",
+        type: '"note" | "tip" | "warning" | "danger"',
+        default: '"note"',
+        description: "Sets the frame title and the glyph in the margin.",
+      },
+      {
+        name: "title",
+        type: "string",
+        description: "Overrides the frame title. Defaults to the type.",
+      },
+      markdownChildren("Paragraphs, lists, inline code, links."),
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "quote",
+    title: "Quote",
+    name: "Quote",
+    description:
+      "Someone else's sentence, with a name under it. Your own caveat is Callout.",
+    registry: "quote",
+    dependencies: ["motion"],
+    props: [
+      {
+        name: "by",
+        type: "string",
+        description: "Who said it. Drawn after an em dash.",
+      },
+      {
+        name: "source",
+        type: "string",
+        description: "Where. Muted, after the name.",
+      },
+      {
+        name: "title",
+        type: "string",
+        description: "Optional frame title. Off by default.",
+      },
+      markdownChildren("The quote itself."),
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "steps",
+    title: "Steps",
+    name: "Steps",
+    description:
+      "A numbered procedure. Write an ordered list; bold the current step, italic the next. Dated events are Timeline. A punch list is Check.",
+    registry: "steps",
+    dependencies: ["motion"],
+    mdx: "1. **Register it**\n\n   Export it from mdx-components.",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "children",
+        type: "<Step />",
+        description:
+          "Markdown ordered list. Bold is now, italic is next. Nested paragraphs are the body.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "terminal",
+    title: "Terminal",
+    name: "Terminal",
+    description:
+      "A shell session. `$` is a command, `#` a comment, `✓` a pass. Source code stays in a fence. A file tree is Tree.",
+    registry: "terminal",
+    dependencies: ["motion"],
+    props: [
+      {
+        name: "title",
+        type: "string",
+        default: '"shell"',
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "prompt",
+        type: "string",
+        default: '"$"',
+        description: "The glyph that marks a command line.",
+      },
+      {
+        name: "children",
+        type: "string | fenced code",
+        description:
+          "Plain lines or a fenced code block. Whitespace is kept. Leading and trailing blank lines are dropped.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "changelog",
+    title: "Changelog",
+    name: "Changelog",
+    description:
+      "One release. A markdown list: `added:`, `changed:`, `fixed:`, `removed:`. Numeric deltas are Diff.",
+    registry: "changelog",
+    dependencies: ["motion"],
+    mdx: "- added: Callout, Steps, Terminal",
+    props: [
+      {
+        name: "version",
+        type: "string",
+        description: "Drawn as the frame title unless title is set.",
+      },
+      {
+        name: "date",
+        type: "string",
+        description: "Muted, on the first row.",
+      },
+      {
+        name: "title",
+        type: "string",
+        description:
+          "Overrides the frame title; the version moves into the body.",
+      },
+      {
+        name: "children",
+        type: "<Change />",
+        description:
+          "Change takes type (add | change | fix | remove) and Markdown children.",
+      },
+      corner,
+      className,
+    ],
+  },
+]
+
+const catalog: CatalogEntry[] = [
+  ...content,
   {
     slug: "graph-table",
     title: "Table",
     name: "GraphTable",
-    description: "Framed data table with an optional footer row for totals.",
+    description:
+      "A framed table. Write a markdown table inside the tag. Grouped sections are Sheet. Label/value rows are Spec.",
     registry: "graph-table",
     dependencies: ["motion"],
     props: [
@@ -89,7 +300,7 @@ const catalog: ComponentDoc[] = [
     title: "Sheet",
     name: "GraphSheet",
     description:
-      "A table with section titles. API surfaces, RFCs, grouped specs.",
+      "A table with section titles — an API, an RFC. Write `### Scope` then a markdown table. A flat table is Table.",
     registry: "graph-sheet",
     dependencies: ["motion"],
     props: [
@@ -138,7 +349,7 @@ const catalog: ComponentDoc[] = [
     title: "Flow",
     name: "GraphFlow",
     description:
-      "Process diagram with nodes on a dashed arrow. Accent a node to highlight a path.",
+      "A process on a dashed arrow. One markdown line per path, split on →. Bold the node you're on. A dated list is Timeline. A schedule is Gantt.",
     registry: "graph-flow",
     dependencies: ["motion"],
     props: [
@@ -170,7 +381,7 @@ const catalog: ComponentDoc[] = [
     title: "Bars",
     name: "GraphBars",
     description:
-      "Two bar groups side by side, drawn with glyphs. The right group is usually the larger one.",
+      "Two small histograms, before and after. Write `- before: 2 4 3 5 2`. A ranked list is Rank.",
     registry: "graph-bars",
     dependencies: ["motion"],
     props: [
@@ -219,7 +430,7 @@ const catalog: ComponentDoc[] = [
     title: "Rank",
     name: "GraphRank",
     description:
-      "A list of labels with a bar of characters and a number on the right.",
+      "Labels ranked by a number. Write `- 12,400 /docs`. Two histograms side by side is Bars.",
     registry: "graph-rank",
     dependencies: ["motion"],
     props: [
@@ -270,7 +481,7 @@ const catalog: ComponentDoc[] = [
     title: "Cells",
     name: "GraphCells",
     description:
-      "Grid of filled and empty cells, drawn with glyphs. Useful for density or comparing two sets.",
+      "A small 0/1 grid. Write `- fragments: 1 0 1 0 0 / 0 1 0 1 0`. A share of a hundred cells is Waffle.",
     registry: "graph-cells",
     dependencies: ["motion"],
     props: [
@@ -403,7 +614,7 @@ const catalog: ComponentDoc[] = [
     title: "Tree",
     name: "GraphTree",
     description:
-      "Nested tree with branch glyphs. Accent a node to highlight it.",
+      "Nested list drawn with branch glyphs. Bold a node to highlight it — files, an org chart. Not a timeline or a table.",
     registry: "graph-tree",
     dependencies: ["motion"],
     props: [
@@ -436,7 +647,7 @@ const catalog: ComponentDoc[] = [
     title: "Timeline",
     name: "GraphTimeline",
     description:
-      "Vertical list of dates. Mark one row as current with the accent color.",
+      "A dated list. Write `- Mar 18: Docs`; bold the current row, italic the next. A punch list is Check. A schedule with start and end is Gantt.",
     registry: "graph-timeline",
     dependencies: ["motion"],
     props: [
@@ -467,7 +678,8 @@ const catalog: ComponentDoc[] = [
     slug: "graph-check",
     title: "Check",
     name: "GraphCheck",
-    description: "Punch list. Done rows mark [x], the rest stay [ ].",
+    description:
+      "A punch list. Write `- [x] freeze tokens`. A note after an em dash sits under the row. Dated steps are Timeline.",
     registry: "graph-check",
     dependencies: ["motion"],
     props: [
@@ -499,7 +711,7 @@ const catalog: ComponentDoc[] = [
     title: "Stack",
     name: "GraphStack",
     description:
-      "Stacked bar for parts of a whole. Different glyphs per segment instead of colors.",
+      "Parts of a whole on one track. Write `- marketing: 48 js, 22 css, 30 images`. A share of cells is Waffle.",
     registry: "graph-stack",
     dependencies: ["motion"],
     props: [
@@ -549,7 +761,7 @@ const catalog: ComponentDoc[] = [
     title: "Funnel",
     name: "GraphFunnel",
     description:
-      "Steps get narrower as values drop. Percentages compare to the first step.",
+      "Steps that get narrower as people drop off. Write `- 12,400 docs`. A ranked list is Rank. A process is Flow.",
     registry: "graph-funnel",
     dependencies: ["motion"],
     props: [
@@ -599,7 +811,7 @@ const catalog: ComponentDoc[] = [
     title: "Gantt",
     name: "GraphGantt",
     description:
-      "Schedule chart. start and end are fractions from 0 to 1 along the track.",
+      "Work that overlaps on a shared calendar. Write `- build: 0.2 0.75 0.55`. A dated log is Timeline.",
     registry: "graph-gantt",
     dependencies: ["motion"],
     props: [
@@ -776,7 +988,7 @@ const catalog: ComponentDoc[] = [
     title: "Diff",
     name: "GraphDiff",
     description:
-      "List with add, remove, and unchanged rows. Works for changelogs or bundle sizes.",
+      "What was added, removed, or kept. Write `- app: +31 kb`. Bold the total. Numeric before/after is Slope.",
     registry: "graph-diff",
     dependencies: ["motion"],
     props: [
@@ -813,7 +1025,7 @@ const catalog: ComponentDoc[] = [
     title: "Invoice",
     name: "GraphInvoice",
     description:
-      "Document table for invoices and quotes. From, bill-to, line items, and a totals block.",
+      "From, bill-to, line items, and a totals block. Write a markdown table; from and to are strings. A generic grid is Table.",
     registry: "graph-invoice",
     dependencies: ["motion"],
     props: [
@@ -824,13 +1036,13 @@ const catalog: ComponentDoc[] = [
       },
       {
         name: "from",
-        type: "InvoiceParty",
-        description: "Issuer name and optional address lines.",
+        type: "InvoiceParty | string",
+        description: "Issuer name. A string, or name plus address lines.",
       },
       {
         name: "to",
-        type: "InvoiceParty",
-        description: "Recipient name and optional address lines.",
+        type: "InvoiceParty | string",
+        description: "Recipient name. A string, or name plus address lines.",
       },
       {
         name: "meta",
@@ -871,7 +1083,7 @@ const catalog: ComponentDoc[] = [
     title: "Compare",
     name: "GraphCompare",
     description:
-      "Feature matrix. Cells are text or true/false, drawn as ✓ and –.",
+      "Two options side by side. Write a markdown table; `yes`/`no` become ✓ and –. Exact numbers on both axes are Matrix.",
     registry: "graph-compare",
     dependencies: ["motion"],
     props: [
@@ -913,7 +1125,7 @@ const catalog: ComponentDoc[] = [
     title: "Matrix",
     name: "GraphMatrix",
     description:
-      "Exact numbers on both axes. Confusion matrices, latency by region.",
+      "Exact numbers on both axes. Write a markdown table. Intensities are Heatmap. Yes/no features are Compare.",
     registry: "graph-matrix",
     dependencies: ["motion"],
     props: [
@@ -954,7 +1166,8 @@ const catalog: ComponentDoc[] = [
     slug: "graph-stat",
     title: "Stat",
     name: "GraphStat",
-    description: "A row of large numbers with labels.",
+    description:
+      "Two to four large numbers. Write `- 12,400 docs`; bold the one that matters. One number with a trend is KPI.",
     registry: "graph-stat",
     dependencies: ["motion"],
     props: [
@@ -1037,7 +1250,7 @@ const catalog: ComponentDoc[] = [
     title: "Spec",
     name: "GraphSpec",
     description:
-      "Aligned label and value rows. Spec sheets, shipping labels, type samples.",
+      "Aligned label and value rows. Write `- Family: Geist Mono`. Headline numbers are Stat. A table with headers is Table.",
     registry: "graph-spec",
     dependencies: ["motion"],
     props: [
@@ -1131,7 +1344,7 @@ const catalog: ComponentDoc[] = [
     title: "Heatmap",
     name: "GraphHeatmap",
     description:
-      "Labeled rows and columns with the same intensity glyphs as Activity. Punchcards, hours, anything 2d.",
+      "A labeled grid of intensities. Write a markdown table. Exact numbers are Matrix. A contribution calendar is Activity.",
     registry: "graph-heatmap",
     dependencies: ["motion"],
     props: [
@@ -1586,19 +1799,265 @@ const paletteProp: PropRow = {
     "mono is one accent plus muted. duo paints the second series with --graph-accent-2. multi cycles three accents.",
 }
 
-export const components = catalog.map((item) => {
-  const hint = CHOOSER[item.slug]
-  const base = hint ? { ...item, when: hint.when, not: hint.not } : item
+/**
+ * Order is the docs order. Content first — it is the most Markdown-like —
+ * then the graphs that read children, then the ones that take data.
+ */
+const ORDER: Record<Category, string[]> = {
+  content: ["callout", "quote", "steps", "terminal", "changelog"],
+  diagrams: ["graph-flow", "graph-timeline", "graph-tree", "graph-gantt"],
+  data: [
+    "graph-stat",
+    "graph-spec",
+    "graph-check",
+    "graph-diff",
+    "graph-kpi",
+    "graph-table",
+    "graph-sheet",
+    "graph-compare",
+    "graph-matrix",
+    "graph-invoice",
+  ],
+  charts: [
+    "graph-rank",
+    "graph-funnel",
+    "graph-slope",
+    "graph-bullet",
+    "graph-waterfall",
+    "graph-stack",
+    "graph-spark",
+    "graph-plot",
+    "graph-meter",
+    "graph-waffle",
+    "graph-cells",
+    "graph-bars",
+    "graph-heatmap",
+    "graph-activity",
+  ],
+  time: ["graph-uptime", "graph-calendar", "graph-timer", "graph-countdown"],
+  primitives: ["graph-frame"],
+}
 
-  if (!PALETTE_SLUGS.has(item.slug)) {
-    return base
+const categoryOf = new Map<string, Category>()
+for (const [category, slugs] of Object.entries(ORDER) as [
+  Category,
+  string[],
+][]) {
+  for (const slug of slugs) {
+    categoryOf.set(slug, category)
+  }
+}
+
+const rank = new Map(
+  Object.values(ORDER)
+    .flat()
+    .map((slug, index) => [slug, index] as const)
+)
+
+/**
+ * Graphs that read MDX children instead of an array prop. `data` is the prop
+ * the children replace; `child` is the tag; `usage` is the one-line MDX.
+ */
+const CHILD_ITEMS: Record<
+  string,
+  { data: string; child: string; usage: string; note?: string }
+> = {
+  "graph-stat": {
+    data: "items",
+    child: "list",
+    usage: "- **860** shipped",
+  },
+  "graph-timeline": {
+    data: "events",
+    child: "list",
+    usage: "- **Mar 18: Docs, live previews**",
+  },
+  "graph-check": {
+    data: "items",
+    child: "list",
+    usage: "- [x] freeze tokens",
+  },
+  "graph-spec": {
+    data: "rows",
+    child: "list",
+    usage: "- Family: Geist Mono",
+  },
+  "graph-diff": {
+    data: "rows",
+    child: "list",
+    usage: "- app: +31 kb",
+  },
+  "graph-rank": {
+    data: "items",
+    child: "list",
+    usage: "- 12,400 /docs",
+  },
+  "graph-funnel": {
+    data: "steps",
+    child: "list",
+    usage: "- 4,100 copy",
+  },
+  "graph-slope": {
+    data: "items",
+    child: "list",
+    usage: "- read: 160 → 142",
+  },
+  "graph-bullet": {
+    data: "items",
+    child: "list",
+    usage: "- CPU: 72 / 80",
+  },
+  "graph-gantt": {
+    data: "items",
+    child: "list",
+    usage: "- build: 0.2 0.75 0.55",
+  },
+  "graph-waterfall": {
+    data: "items",
+    child: "list",
+    usage: "- Refunds: -6",
+  },
+  "graph-stack": {
+    data: "rows",
+    child: "list",
+    usage: "- docs: 28 js, 18 css, 54 images",
+  },
+  "graph-tree": {
+    data: "nodes",
+    child: "list",
+    usage: "- registry/default\n  - **graph-tree.tsx** — ui",
+  },
+  "graph-flow": {
+    data: "rows",
+    child: "list",
+    usage: "request → **middleware** → handler",
+  },
+  "graph-table": {
+    data: "rows",
+    child: "table",
+    usage: "| Agent | Tokens |\n| --- | ---: |\n| Inks and paper | 115,207 |",
+  },
+  "graph-sheet": {
+    data: "sections",
+    child: "headings",
+    usage:
+      "### Scope\n\n| Item | Owner |\n| --- | --- |\n| CLI copies files | priya |",
+  },
+  "graph-compare": {
+    data: "rows",
+    child: "table",
+    usage: "| | Solo | Studio |\n| --- | --- | --- |\n| Registry | yes | yes |",
+  },
+  "graph-matrix": {
+    data: "rows",
+    child: "table",
+    usage: "| | Pos | Neg |\n| --- | --- | --- |\n| Pos | 41 | 3 |",
+  },
+  "graph-heatmap": {
+    data: "rows",
+    child: "table",
+    usage: "| | 0 | 4 | 8 |\n| --- | --- | --- | --- |\n| Mon | 0 | 1 | 4 |",
+  },
+  "graph-invoice": {
+    data: "items",
+    child: "table",
+    usage: "| Description | Amount |\n| --- | --- |\n| Design system | 4,200 |",
+  },
+  "graph-bars": {
+    data: "from",
+    child: "list",
+    usage: "- before: 2 4 3 5 2",
+  },
+  "graph-cells": {
+    data: "items",
+    child: "list",
+    usage: "- fragments: 1 0 1 0 0 / 0 1 0 1 0",
+  },
+}
+
+/** Props that also read a plain string, so MDX attributes stay short. */
+const STRING_PROPS: Record<string, Record<string, string>> = {
+  "graph-spark": { data: 'number[] | "2 3 4"' },
+  "graph-plot": { data: 'number[] | "2 3 4"' },
+  "graph-kpi": { data: 'number[] | "2 3 4"' },
+  "graph-meter": { value: 'number | "67%"' },
+  "graph-waffle": { value: 'number | "73%"' },
+  "graph-uptime": { days: 'UptimeStatus[] | "ok ok down"' },
+  "graph-calendar": { marks: 'number[] | CalendarMark[] | "12 18"' },
+  "graph-table": {
+    headers: 'string[] | "Agent, Tokens"',
+    align: '("left" | "right")[] | "left right"',
+  },
+  "graph-sheet": {
+    headers: 'string[] | "Item, Owner, Status"',
+    align: '("left" | "right")[] | "left left left"',
+  },
+  "graph-compare": { columns: 'string[] | "Solo Studio"' },
+  "graph-matrix": { columns: 'string[] | "Pos Neg"' },
+  "graph-heatmap": { columns: 'string[] | "0 4 8 12"' },
+}
+
+function withProps(item: CatalogEntry): PropRow[] {
+  let props = [...item.props]
+  const child = CHILD_ITEMS[item.slug]
+  const strings = STRING_PROPS[item.slug]
+
+  if (strings) {
+    props = props.map((prop) =>
+      strings[prop.name] ? { ...prop, type: strings[prop.name] } : prop
+    )
   }
 
-  const corner = base.props.findIndex((prop) => prop.name === "corner")
-  const props = [...base.props]
-  props.splice(corner === -1 ? props.length : corner, 0, paletteProp)
-  return { ...base, props }
-})
+  if (child) {
+    props = props.map((prop) =>
+      prop.name === child.data
+        ? {
+            ...prop,
+            description: `${prop.description} Optional when children are Markdown.`,
+          }
+        : prop
+    )
+    const at = props.findIndex((prop) => prop.name === child.data)
+    props.splice(at === -1 ? 0 : at + 1, 0, {
+      name: "children",
+      type: "Markdown",
+      description: `${child.usage}${child.note ? ` ${child.note}` : ""}`,
+    })
+  }
+
+  if (PALETTE_SLUGS.has(item.slug)) {
+    const at = props.findIndex((prop) => prop.name === "corner")
+    props.splice(at === -1 ? props.length : at, 0, paletteProp)
+  }
+
+  return props
+}
+
+export const components: ComponentDoc[] = [...catalog]
+  .sort(
+    (a, b) =>
+      (rank.get(a.slug) ?? Number.MAX_SAFE_INTEGER) -
+      (rank.get(b.slug) ?? Number.MAX_SAFE_INTEGER)
+  )
+  .map((item) => {
+    const hint = CHOOSER[item.slug]
+    const child = CHILD_ITEMS[item.slug]
+
+    return {
+      ...item,
+      category: categoryOf.get(item.slug) ?? "charts",
+      props: withProps(item),
+      mdx: item.mdx ?? child?.usage,
+      ...(hint ? { when: hint.when, not: hint.not } : {}),
+    }
+  })
+
+export function componentsByCategory() {
+  return CATEGORIES.map((category) => ({
+    ...category,
+    items: components.filter((item) => item.category === category.id),
+  })).filter((group) => group.items.length > 0)
+}
 
 export function getComponent(slug: string) {
   return components.find((item) => item.slug === slug)

@@ -1,4 +1,4 @@
-export const GITHUB_REPO = "keshav-exe/markdown-graphs"
+export { GITHUB_REPO } from "@/lib/github"
 
 export const registryFiles: Record<string, string[]> = {
   "graph-frame": [
@@ -6,6 +6,31 @@ export const registryFiles: Record<string, string[]> = {
     "registry/default/graph-frame/graph-motion.ts",
     "registry/default/graph-frame/graph-clock.ts",
     "registry/default/graph-frame/graph-arrow.tsx",
+  ],
+  callout: [
+    "registry/default/graph-frame/graph-frame.tsx",
+    "registry/default/graph-frame/graph-motion.ts",
+    "registry/default/callout/callout.tsx",
+  ],
+  quote: [
+    "registry/default/graph-frame/graph-frame.tsx",
+    "registry/default/graph-frame/graph-motion.ts",
+    "registry/default/quote/quote.tsx",
+  ],
+  steps: [
+    "registry/default/graph-frame/graph-frame.tsx",
+    "registry/default/graph-frame/graph-motion.ts",
+    "registry/default/steps/steps.tsx",
+  ],
+  terminal: [
+    "registry/default/graph-frame/graph-frame.tsx",
+    "registry/default/graph-frame/graph-motion.ts",
+    "registry/default/terminal/terminal.tsx",
+  ],
+  changelog: [
+    "registry/default/graph-frame/graph-frame.tsx",
+    "registry/default/graph-frame/graph-motion.ts",
+    "registry/default/changelog/changelog.tsx",
   ],
   "graph-table": [
     "registry/default/graph-frame/graph-frame.tsx",

@@ -21,7 +21,7 @@ import { pageMeta, webPageJsonLd } from "@/lib/seo"
 
 const extra = `## Install
 
-pnpm dlx shadcn@latest add @mdx-graphs/all
+pnpm dlx shadcn@latest add @mdxcn/all
 
 The adapter is graph-comark. all.json already includes it.
 
@@ -77,7 +77,7 @@ export default function ComarkDocsPage() {
         <ProseMuted>
           Landing and live pair: <TextLink href="/comark">/comark</TextLink>.
           Full catalog demo:{" "}
-          <TextLink href={COMARK_DEMO_URL}>comark-graphs-demo</TextLink>.
+          <TextLink href={COMARK_DEMO_URL}>comark-demo</TextLink>.
         </ProseMuted>
       </DocsPageHeader>
 
@@ -153,10 +153,10 @@ caption: 86% of statements
           Auto-close completes a dangling <InlineCode>::graph-table</InlineCode>
           , so a half-written tag does not swallow the rest of the page. YAML is
           all-or-nothing: a timeline grows an event at a time. A prefix that
-          cuts mid-key can throw. Hold the last good tree. Missing required props
-          render an empty frame instead of crashing. Graphs remount when data
-          changes so <InlineCode>once: true</InlineCode> motion does not leave
-          new rows at opacity 0.
+          cuts mid-key can throw. Hold the last good tree. Missing required
+          props render an empty frame instead of crashing. Graphs remount when
+          data changes so <InlineCode>once: true</InlineCode> motion does not
+          leave new rows at opacity 0.
         </ProseP>
       </section>
 

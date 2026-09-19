@@ -29,11 +29,11 @@ type Hit = {
 const HITS: Hit[] = [
   {
     href: "/developers",
-    title: "Markdown Graphs API",
+    title: "mdxcn API",
     detail: "/developers",
     group: "Get started",
     haystack:
-      "markdown graphs api developer openapi json catalog health rate limit deprecation",
+      "mdxcn api developer openapi json catalog health rate limit deprecation",
   },
   {
     href: "/agents.md",
@@ -71,14 +71,14 @@ const HITS: Hit[] = [
     title: "About",
     detail: "/about",
     group: "Get started",
-    haystack: "about markdown graphs keshav bagaade mit open source",
+    haystack: "about mdxcn mdxcn keshav bagaade mit open source",
   },
   {
     href: "/contact",
     title: "Contact",
     detail: "/contact",
     group: "Get started",
-    haystack: "contact email hi@kshv.me github issues sponsor",
+    haystack: "contact email hi@kshv.me github issues",
   },
   {
     href: "/privacy",

@@ -17,8 +17,7 @@ export const proseLinkClass =
   "text-foreground underline decoration-dashed decoration-graph-frame underline-offset-[0.2em] transition-[color,text-decoration-color] duration-200 ease-out hover:decoration-foreground/70"
 
 /** Inline code — bold mono, no box. */
-export const proseCodeClass =
-  "font-mono font-semibold text-foreground"
+export const proseCodeClass = "font-mono font-semibold text-foreground"
 
 function Prose({ className, ...props }: ComponentProps<"div">) {
   return <div className={cn("flex flex-col gap-4", className)} {...props} />

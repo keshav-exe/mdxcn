@@ -5,9 +5,20 @@ import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  alignsOf,
+  Cell,
+  cellsOf,
+  childItems,
+  defineItem,
+  Foot,
   Graph,
   GraphBody,
   GraphRule,
+  Head,
+  headingSections,
+  Row,
+  tableOf,
+  words,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -22,12 +33,23 @@ type SheetSection = {
   rows: ReactNode[][]
 }
 
+type SectionProps = {
+  title: string
+  rows?: ReactNode[][]
+}
+
+/** `<Section title="Scope"><Row>CLI copies files | priya | done</Row></Section>` */
+const Section = defineItem<SectionProps>("Section")
+
 type GraphSheetProps = {
   title: string
-  headers: string[]
-  sections: SheetSection[]
+  /** Data form. Or write `<Head>Item | Owner | Status</Head>`. */
+  headers?: string[] | string
+  /** Data form. Or write `<Section>` children. */
+  sections?: SheetSection[]
   footer?: ReactNode[]
-  align?: GraphAlign[]
+  align?: GraphAlign[] | string
+  children?: ReactNode
   corner?: string
   className?: string
 }
@@ -47,13 +69,51 @@ function RuleY() {
 
 function GraphSheet({
   title,
-  headers,
-  sections,
-  footer,
-  align,
+  headers: headersProp,
+  sections: sectionsProp,
+  footer: footerProp,
+  align: alignProp,
+  children,
   corner,
   className,
 }: GraphSheetProps) {
+  const markdownSections = headingSections(children).map((section) => {
+    const table = tableOf(section.children)
+    return {
+      title: section.title,
+      rows: table?.rows ?? [],
+      headers: table?.headers,
+      align: table?.align,
+    }
+  })
+  const head = childItems(children, Head)[0]
+  const headers = (
+    headersProp == null
+      ? head
+        ? cellsOf(undefined, head?.children)
+        : (markdownSections[0]?.headers ?? [])
+      : cellsOf(headersProp)
+  ).map((cell) => String(cell ?? ""))
+  const taggedSections = childItems(children, Section).map((section) => ({
+    title: section.title,
+    rows:
+      section.rows ??
+      childItems(section.children, Row).map((row) =>
+        cellsOf(row.cells, row.children)
+      ),
+  }))
+  const sections =
+    sectionsProp ??
+    (taggedSections.length > 0 ? taggedSections : markdownSections)
+  const foot = childItems(children, Foot)[0]
+  const footer =
+    footerProp ?? (foot ? cellsOf(foot.cells, foot.children) : undefined)
+  const align =
+    (typeof alignProp === "string"
+      ? (words(alignProp) as GraphAlign[])
+      : alignProp) ??
+    alignsOf(head?.children) ??
+    markdownSections[0]?.align
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
@@ -160,5 +220,5 @@ function GraphSheet({
   )
 }
 
-export { GraphSheet }
-export type { GraphAlign, GraphSheetProps, SheetSection }
+export { Cell, Foot, GraphSheet, Head, Row, Section }
+export type { GraphAlign, GraphSheetProps, SectionProps, SheetSection }

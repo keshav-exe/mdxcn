@@ -1,4 +1,4 @@
-export const TOAST_EVENT = "markdown-graphs:toast"
+export const TOAST_EVENT = "mdxcn:toast"
 
 export type ToastDetail = {
   title: string

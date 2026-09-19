@@ -8,15 +8,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# markdown graphs
+# mdxcn
 
-ASCII-framed React diagrams for MDX. Source is copied via shadcn registry, not npm. Site: https://mdx-graphs.kshv.me. Repo: https://github.com/keshav-exe/markdown-graphs.
+Markdown-friendly React components for MDX. Source is copied via shadcn registry, not npm. Site: https://mdxcn.dev. Repo: https://github.com/keshav-exe/markdown-graphs.
 
 Nested agent notes:
 
 - [`registry/default/AGENTS.md`](registry/default/AGENTS.md) — how to build a graph
 - [`lib/docs/AGENTS.md`](lib/docs/AGENTS.md) — catalog, examples, recipes, **New** marks, OG, ASCII/MDX
-- [`skills/markdown-graphs/SKILL.md`](skills/markdown-graphs/SKILL.md) — Agent Skills file; copy into `.cursor/skills`, `.claude/skills`, `.agents/skills`, or `.opencode/skills`
+- [`skills/mdxcn/SKILL.md`](skills/mdxcn/SKILL.md) — Agent Skills file; copy into `.cursor/skills`, `.claude/skills`, `.agents/skills`, or `.opencode/skills`
 
 ## Adding a graph
 

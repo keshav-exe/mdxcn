@@ -1,8 +1,18 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  Graph,
+  GraphBody,
+  labeledTable,
+  numbers,
+  Row,
+  textOf,
+  words,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
   intensityClass,
@@ -22,8 +32,11 @@ type HeatRow = {
 
 type GraphHeatmapProps = {
   title: string
-  columns: string[]
-  rows: HeatRow[]
+  /** Data form. Or `"0 4 8 12"`. */
+  columns?: string[] | string
+  /** Data form. Or write `<Row label="Mon">0 1 4 8</Row>`. */
+  rows?: HeatRow[]
+  children?: ReactNode
   max?: number
   legend?: boolean
   caption?: string
@@ -66,8 +79,9 @@ function IntensityScale({
 
 function GraphHeatmap({
   title,
-  columns,
-  rows,
+  columns: columnsProp,
+  rows: rowsProp,
+  children,
   max,
   legend = true,
   caption,
@@ -76,6 +90,22 @@ function GraphHeatmap({
   corner,
   className,
 }: GraphHeatmapProps) {
+  const markdown = labeledTable(children)
+  const columns =
+    columnsProp == null ? (markdown?.columns ?? []) : words(columnsProp)
+  const taggedRows = childItems(children, Row).map((row) => ({
+    label: row.label ?? "",
+    values: numbers(textOf(row.children)),
+  }))
+  const rows = (
+    rowsProp ??
+    (taggedRows.length > 0
+      ? taggedRows
+      : (markdown?.rows.map((row) => ({
+          label: row.label,
+          values: numbers(row.values.join(" ")),
+        })) ?? []))
+  ).map((row) => ({ ...row, label: row.label ?? "" }))
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
@@ -152,5 +182,5 @@ function GraphHeatmap({
   )
 }
 
-export { GraphHeatmap }
+export { GraphHeatmap, Row }
 export type { GraphHeatmapProps, HeatRow }

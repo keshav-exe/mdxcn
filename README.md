@@ -1,8 +1,8 @@
-# markdown graphs
+# mdxcn
 
 React components for ASCII-style tables, charts, and diagrams in MDX. Built so an agent can drop a figure next to prose — JSX in MDX, `::graph-*` in Comark, `graph_*` in Knap, official ASCII in a README. Each graph sits in a dashed frame with a title on the top edge. One accent color by default; drawing graphs can take `palette="duo"` or `palette="multi"`. You copy the source into your project — this is not an npm package.
 
-[Docs](https://mdx-graphs.kshv.me/docs) · [Comark](https://mdx-graphs.kshv.me/comark) · [Knap](https://mdx-graphs.kshv.me/knap) · [For agents](https://mdx-graphs.kshv.me/agents) · [Examples](https://mdx-graphs.kshv.me/docs/examples) · [Install](https://mdx-graphs.kshv.me/docs/installation) · [Skill](https://mdx-graphs.kshv.me/docs/skill) · [GitHub](https://github.com/keshav-exe/markdown-graphs)
+[Docs](https://mdxcn.dev/docs) · [Comark](https://mdxcn.dev/comark) · [Knap](https://mdxcn.dev/knap) · [For agents](https://mdxcn.dev/agents) · [Examples](https://mdxcn.dev/docs/examples) · [Install](https://mdxcn.dev/docs/installation) · [Skill](https://mdxcn.dev/docs/skill) · [GitHub](https://github.com/keshav-exe/markdown-graphs)
 
 ## Install
 
@@ -11,16 +11,16 @@ You need an existing [shadcn](https://ui.shadcn.com) project and [`motion`](http
 Scoped registry (same idea as `@dotmatrix/dotm-square-3`):
 
 ```bash
-pnpm dlx shadcn@latest registry add @mdx-graphs=https://mdx-graphs.kshv.me/r/{name}.json
-pnpm dlx shadcn@latest add @mdx-graphs/graph-table
-pnpm dlx shadcn@latest add @mdx-graphs/all
+pnpm dlx shadcn@latest registry add @mdxcn=https://mdxcn.dev/r/{name}.json
+pnpm dlx shadcn@latest add @mdxcn/graph-table
+pnpm dlx shadcn@latest add @mdxcn/all
 ```
 
 Or paste the full URL once:
 
 ```bash
-pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/graph-table.json
-pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/all.json
+pnpm dlx shadcn@latest add https://mdxcn.dev/r/graph-table.json
+pnpm dlx shadcn@latest add https://mdxcn.dev/r/all.json
 ```
 
 `components.json` after `registry add`:
@@ -28,7 +28,7 @@ pnpm dlx shadcn@latest add https://mdx-graphs.kshv.me/r/all.json
 ```json
 {
   "registries": {
-    "@mdx-graphs": "https://mdx-graphs.kshv.me/r/{name}.json"
+    "@mdxcn": "https://mdxcn.dev/r/{name}.json"
   }
 }
 ```
@@ -79,11 +79,11 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
 Each docs page has CLI, manual, agent, MDX, Comark, and Knap install tabs. Copy page puts the markdown (install, prompt, examples, props) on the clipboard.
 
-Comark apps render the same figures from `::graph-*` blocks in a plain `.md` file — no MDX. Copy `graph-comark` (already in `all.json`). Full install: `graphComponents` from `graph-comark.tsx`. Subset: `createGraphComponents`. Wiring: [Comark](https://mdx-graphs.kshv.me/docs/comark). Pitch: [Comark landing](https://mdx-graphs.kshv.me/comark).
+Comark apps render the same figures from `::graph-*` blocks in a plain `.md` file — no MDX. Copy `graph-comark` (already in `all.json`). Full install: `graphComponents` from `graph-comark.tsx`. Subset: `createGraphComponents`. Wiring: [Comark](https://mdxcn.dev/docs/comark). Pitch: [Comark landing](https://mdxcn.dev/comark).
 
-Knap templates pipe the same props through `graph_*` filters and emit the official fence (or a `::graph-*` block). Copy `graph-knap` (already in `all.json`). Spread `graphFilters` into `createEngine`. The Knap CLI does not load them. Wiring: [Knap](https://mdx-graphs.kshv.me/docs/knap). Pitch: [Knap landing](https://mdx-graphs.kshv.me/knap).
+Knap templates pipe the same props through `graph_*` filters and emit the official fence (or a `::graph-*` block). Copy `graph-knap` (already in `all.json`). Spread `graphFilters` into `createEngine`. The Knap CLI does not load them. Wiring: [Knap](https://mdxcn.dev/docs/knap). Pitch: [Knap landing](https://mdxcn.dev/knap).
 
-Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on [Examples](https://mdx-graphs.kshv.me/docs/examples). [For agents](https://mdx-graphs.kshv.me/agents) is the write and read story. The [skill](https://mdx-graphs.kshv.me/docs/skill) tells an agent which graph to put next to the prose — JSX in React, `::graph-*` in Comark, `graph_*` in Knap, fenced ASCII in GitHub. Agents can also fetch [`/llms.txt`](https://mdx-graphs.kshv.me/llms.txt) for the chooser, the ASCII blocks, the Comark blocks, and the Knap filters.
+Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on [Examples](https://mdxcn.dev/docs/examples). [For agents](https://mdxcn.dev/agents) is the write and read story. The [skill](https://mdxcn.dev/docs/skill) tells an agent which graph to put next to the prose — JSX in React, `::graph-*` in Comark, `graph_*` in Knap, fenced ASCII in GitHub. Agents can also fetch [`/llms.txt`](https://mdxcn.dev/llms.txt) for the chooser, the ASCII blocks, the Comark blocks, and the Knap filters.
 
 ## Design
 
@@ -98,14 +98,8 @@ Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on
 ```bash
 pnpm install
 pnpm dev
-```
-
-Rebuild the shadcn registry after changing files under `registry/default`:
-
-```bash
+pnpm typecheck
 pnpm registry:build
 ```
 
-## License
-
-[MIT](LICENSE)
+Site: [mdxcn.dev](https://mdxcn.dev). MIT license.

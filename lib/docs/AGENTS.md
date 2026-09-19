@@ -11,7 +11,7 @@ Sidenav, `/docs/[slug]`, install copy, and props tables all read from here. Addi
 | `new.ts`                              | `NEW_SLUGS` — which sidenav links get a **new** mark                            |
 | `recipes.ts`                          | Composed write-ups on `/docs/examples` and `/llms.txt`                          |
 | `skill.ts`                            | Agent skill copy, chooser table, example prompts, curl install on `/docs/skill` |
-| `skill-files.ts`                      | Reads `skills/markdown-graphs` for `/skill.md` and the docs page                |
+| `skill-files.ts`                      | Reads `skills/mdxcn` for `/skill.md` and the docs page                   |
 | `ascii.ts`                            | Fenced ASCII examples for the MDX install tab and `/llms.txt` `## MDX`          |
 | `comark.ts` / `comark-props.ts`       | `::graph-*` YAML for the Comark tab, `/llms.txt` `## Comark`, `/comark`         |
 | `knap.ts`                             | `graph_*` templates for the Knap tab, `/llms.txt` `## Knap`, `/knap`            |

@@ -83,7 +83,7 @@ const apiIndexSchema = {
   required: ["version", "name", "description", "endpoints"],
   properties: {
     version: { type: "string", example: "1.0.0" },
-    name: { type: "string", example: "Markdown Graphs API" },
+    name: { type: "string", example: "mdxcn API" },
     description: { type: "string" },
     deprecation: { type: "string", format: "uri" },
     openapi: { type: "string", format: "uri" },
@@ -108,7 +108,7 @@ const healthSchema = {
   required: ["ok", "service", "version", "url"],
   properties: {
     ok: { type: "boolean", example: true },
-    service: { type: "string", example: "Markdown Graphs" },
+    service: { type: "string", example: "mdxcn" },
     version: { type: "string", example: "1.0.0" },
     url: { type: "string", format: "uri" },
   },
@@ -203,9 +203,9 @@ export function apiIndex(origin = SITE_URL) {
 
   return {
     version: "1.0.0",
-    name: "Markdown Graphs API",
+    name: "mdxcn API",
     description:
-      "Read-only JSON catalog for Markdown Graphs. No authentication. URL versioned under /api/v1/.",
+      "Read-only JSON catalog for mdxcn. No authentication. URL versioned under /api/v1/.",
     deprecation: `${host}/developers/deprecation`,
     openapi: `${host}/openapi.json`,
     endpoints: [
@@ -273,7 +273,7 @@ export function openApiSpec(origin = SITE_URL) {
   return {
     openapi: "3.1.0",
     info: {
-      title: "Markdown Graphs API",
+      title: "mdxcn API",
       summary: SITE_DESCRIPTION,
       description: `Public read API for ${SITE_NAME}. Version 1 is URL-prefixed at /api/v1/. Breaking changes ship as /api/v2/ with at least six months notice. Deprecation policy: ${host}/developers/deprecation. Rate limit: 1000 GET requests per hour per client; see RateLimit-* response headers. No authentication. Graph source files are copied with the shadcn CLI; this API does not install them.`,
       version: "1.0.0",
@@ -322,7 +322,7 @@ export function openApiSpec(origin = SITE_URL) {
           operationId: "getHealth",
           tags: ["meta"],
           summary: "Health check",
-          description: "Returns ok when the Markdown Graphs API is reachable.",
+          description: "Returns ok when the mdxcn API is reachable.",
           responses: {
             "200": {
               description: "Healthy.",

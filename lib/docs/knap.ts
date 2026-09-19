@@ -14,7 +14,7 @@ export const KNAP_API_URL = "https://knap.md/api"
 export const KNAP_REPO = "https://github.com/obsidianmd/knap"
 
 export const KNAP_DESCRIPTION =
-  "Turn data into framed Markdown graphs with Knap filters. Pipe a props object through graph_timeline, graph_meter, … and get the official fence, or a ::graph-* block."
+  "Turn data into framed mdxcn figures with Knap filters. Pipe a props object through graph_timeline, graph_meter, … and get the official fence, or a ::graph-* block."
 
 export function isKnapSlug(slug: string): slug is GraphFilterSlug {
   return (GRAPH_FILTER_SLUGS as readonly string[]).includes(slug)
@@ -104,7 +104,7 @@ ${example.markdown}`
 
 Install the filters after the graphs:
 
-pnpm dlx shadcn@latest add @mdx-graphs/graph-knap
+pnpm dlx shadcn@latest add @mdxcn/graph-knap
 
 Wiring: ${host}/docs/knap
 Landing: ${host}/knap

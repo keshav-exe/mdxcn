@@ -1,8 +1,20 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childElements,
+  childItems,
+  defineItem,
+  Graph,
+  GraphBody,
+  itemText,
+  linesOf,
+  listItems,
+  splitLabel,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fillDelay,
   graphTransition,
@@ -19,23 +31,75 @@ type CellGrid = {
   cells: number[][]
 }
 
+type GridProps = {
+  label: string
+  cells?: number[][]
+}
+
+/** `<Grid label="fragments">1 0 1 0 0\n0 1 0 1 0</Grid>` */
+const Grid = defineItem<GridProps>("Grid")
+
 type GraphCellsProps = {
   title: string
-  items: CellGrid[]
+  /** Data form. Or write `<Grid>` children. */
+  items?: CellGrid[]
+  children?: ReactNode
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
   className?: string
 }
 
+function parseRow(line: string): number[] {
+  return line
+    .split(/[\s,]+/)
+    .filter(Boolean)
+    .map(Number)
+    .filter((value) => Number.isFinite(value))
+}
+
+function gridCells(node: ReactNode): number[][] {
+  const blocks = childElements(node)
+  if (blocks.length > 1) {
+    return blocks
+      .map((block) => parseRow(textOf(block.element)))
+      .filter((row) => row.length > 0)
+  }
+
+  const text = textOf(node).trim()
+  if (text.includes("/")) {
+    return text
+      .split("/")
+      .map(parseRow)
+      .filter((row) => row.length > 0)
+  }
+
+  return linesOf(node)
+    .map(parseRow)
+    .filter((row) => row.length > 0)
+}
+
 function GraphCells({
   title,
-  items,
+  items: itemsProp,
+  children,
   glyphs,
   palette,
   corner,
   className,
 }: GraphCellsProps) {
+  const listed = listItems(children).map((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    return {
+      label,
+      cells: gridCells(rest),
+    }
+  })
+  const tagged = childItems(children, Grid).map((entry) => ({
+    label: entry.label,
+    cells: entry.cells ?? gridCells(entry.children),
+  }))
+  const items = itemsProp ?? (listed.length > 0 ? listed : tagged)
   const reduce = useReducedMotion()
   const marks = trackMarks(glyphs, {
     empty: "·",
@@ -100,5 +164,5 @@ function GraphCells({
   )
 }
 
-export { GraphCells }
-export type { CellGrid, GraphCellsProps }
+export { GraphCells, Grid }
+export type { CellGrid, GraphCellsProps, GridProps }

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { RecipeList } from "@/components/docs/recipe-card"
 import { DocsPageHeader } from "@/components/docs/page-header"
 import { JsonLd } from "@/components/seo/json-ld"
+import { Callout } from "@/components/graphs"
 import { recipes, recipeCopy } from "@/lib/docs/recipes"
 import { pageMeta } from "@/lib/seo"
 import { SITE_AUTHOR, SITE_NAME_SHORT, SITE_URL } from "@/lib/site"
@@ -37,7 +38,7 @@ export default function ExamplesPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "markdown graphs examples",
+          name: "mdxcn examples",
           description,
           url: `${SITE_URL}/docs/examples`,
           author: {
@@ -60,7 +61,8 @@ export default function ExamplesPage() {
         }}
         lead={
           <>
-            {description} Copy the JSX and swap the labels for yours. Each graph
+            {description} Copy the MDX tab — it is the framed figure. Paste it
+            into Notion or a README and the drawing is still there. Each graph
             has its own page if you want the props.
           </>
         }
@@ -79,6 +81,11 @@ export default function ExamplesPage() {
           ))}
         </ul>
       </DocsPageHeader>
+
+      <Callout type="tip">
+        Copy is the framed figure from the MDX tab. Paste it into Notion or a
+        README and the drawing is still there.
+      </Callout>
 
       <RecipeList />
 

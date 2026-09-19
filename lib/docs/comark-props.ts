@@ -170,7 +170,7 @@ export const COMARK_PROPS: Record<string, Record<string, unknown>> = {
   "graph-invoice": {
     title: "INVOICE 0041",
     from: {
-      name: "markdown graphs",
+      name: "mdxcn",
       lines: ["kshv.me", "GSTIN 29AXXXXX1234Z5"],
     },
     to: {

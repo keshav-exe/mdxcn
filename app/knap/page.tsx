@@ -1,25 +1,26 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
 import { SourcePreview } from "@/components/comark/source-preview"
-import { Command } from "@/components/docs/install"
-import { JsonLd } from "@/components/seo/json-ld"
-import { SiteContainer } from "@/components/site/container"
-import {
-  InlineCode,
-  ProseLead,
-  ProseMuted,
-  ProseP,
-  proseMutedClass,
-  TextLink,
-} from "@/components/site/prose"
-import { Button } from "@/components/ui/button"
 import {
   GraphCheck,
   GraphCompare,
   GraphTimeline,
   GraphUptime,
 } from "@/components/graphs"
+import { JsonLd } from "@/components/seo/json-ld"
+import {
+  LandingHero,
+  LandingLinks,
+  LandingSection,
+} from "@/components/site/landing"
+import { PipelineFigure } from "@/components/site/pipeline-figure"
+import {
+  InlineCode,
+  ProseMuted,
+  ProseP,
+  proseMutedClass,
+  TextLink,
+} from "@/components/site/prose"
 import {
   KNAP_API_URL,
   KNAP_DEMO_DATA,
@@ -29,7 +30,6 @@ import {
   KNAP_URL,
 } from "@/lib/docs/knap"
 import { pageMeta, webPageJsonLd } from "@/lib/seo"
-import { scopedRegistryInstall } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = pageMeta({
@@ -40,37 +40,90 @@ export const metadata: Metadata = pageMeta({
 
 const steps = [
   {
-    name: "Data",
+    name: "data",
     detail: (
       <>
-        Pass plain JSON (or any variables{" "}
-        <TextLink href={KNAP_API_URL}>Knap</TextLink> can resolve). The filter
+        pass plain json (or any variables{" "}
+        <TextLink href={KNAP_API_URL}>knap</TextLink> can resolve). the filter
         reads the typed value, not a schema this library invented.
       </>
     ),
   },
   {
-    name: "Filter",
+    name: "filter",
     detail: (
       <>
-        Pipe the graph props through <InlineCode>graph_timeline</InlineCode>,{" "}
-        <InlineCode>graph_meter</InlineCode>, and the rest. A string param is
-        the title. Pass <InlineCode>comark</InlineCode> for a{" "}
+        pipe the graph props through <InlineCode>graph_timeline</InlineCode>,{" "}
+        <InlineCode>graph_meter</InlineCode>, and the rest. a string param is
+        the title. pass <InlineCode>comark</InlineCode> for a{" "}
         <InlineCode>::graph-*</InlineCode> block.
       </>
     ),
   },
   {
-    name: "Markdown",
+    name: "markdown",
     detail: (
       <>
-        Output is the official fenced ASCII, the same drawing as the MDX tab.
-        Obsidian, GitHub, and a README can open it. Graphs with no ASCII emit
-        Comark YAML instead.
+        output is the official fenced ascii, the same drawing as the mdx tab.
+        obsidian, github, and a readme can open it. graphs with no ascii emit
+        comark yaml instead.
       </>
     ),
   },
 ]
+
+function KnapPipeline() {
+  return (
+    <PipelineFigure
+      label="Knap pipeline from a props object to fenced ascii"
+      plate={{ dwg: "kn-01", rev: "2026.09" }}
+      rail="template"
+      stages={[
+        {
+          id: "data",
+          name: "data",
+          nodes: [
+            { label: "json", hint: "props object" },
+            { label: "events[]", hint: "timeline" },
+            { label: "days[]", hint: "uptime" },
+            { label: "title", hint: "string param" },
+          ],
+        },
+        {
+          id: "filter",
+          name: "filter",
+          fanIn: true,
+          nodes: [
+            { label: "graph_timeline", hint: "createEngine" },
+            { label: "graph_uptime", hint: "same api as react" },
+          ],
+        },
+        {
+          id: "emit",
+          name: "emit",
+          fanIn: true,
+          nodes: [
+            {
+              label: "fenced ascii",
+              hint: "readme / github / linear",
+              accent: true,
+              wide: true,
+            },
+          ],
+        },
+        {
+          id: "or",
+          name: "or",
+          nodes: [
+            { label: "::graph-*", hint: "pass comark" },
+            { label: "yaml", hint: "no ascii graphs" },
+          ],
+        },
+      ]}
+      title="FILTER"
+    />
+  )
+}
 
 export default function KnapPage() {
   return (
@@ -82,174 +135,125 @@ export default function KnapPage() {
           path: "/knap",
         })}
       />
-      <section>
-        <SiteContainer
-          borderTop={false}
-          className="flex flex-col gap-8 py-8 sm:py-16"
-        >
-          <div className="flex flex-col gap-4">
-            <p className="font-mono tracking-wide text-graph-muted uppercase">
-              Knap · data → .md
-            </p>
-            <h1 className="max-w-[18ch] text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-              Graphs from a Knap template
-            </h1>
-            <ProseLead>
-              Pipe a props object through a <InlineCode>graph_*</InlineCode>{" "}
-              filter; <TextLink href={KNAP_URL}>Knap</TextLink> renders Markdown
-              and these filters draw the official fence. No SVG. The Knap CLI
-              does not load custom filters. Wire them in your app.
-            </ProseLead>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Button nativeButton={false} render={<Link href="/docs/knap" />}>
-              Read the wiring
-            </Button>
-            <Button
-              nativeButton={false}
-              render={<a href={KNAP_URL} rel="noreferrer" target="_blank" />}
-              variant="outline"
-            >
-              knap.md
-            </Button>
-          </div>
-        </SiteContainer>
-      </section>
+      <LandingHero
+        actions={[
+          { href: "/docs/knap", label: "read the wiring" },
+          { href: KNAP_URL, label: "knap.md" },
+        ]}
+        figure={<KnapPipeline />}
+        item="graph-knap"
+        lead={
+          <>
+            pipe a props object through a <InlineCode>graph_*</InlineCode>{" "}
+            filter. <TextLink href={KNAP_URL}>knap</TextLink> renders markdown
+            and these filters draw the official fence. no svg. the knap cli does
+            not load custom filters — wire them in your app.
+          </>
+        }
+        title="graphs from a knap template"
+      />
 
-      <section>
-        <SiteContainer className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="max-w-[28ch] text-2xl font-semibold tracking-tight text-balance">
-              Template and the frames it produces
-            </h2>
-            <ProseP>
-              Same incident as the Comark landing. Here the source is a{" "}
-              <TextLink href={KNAP_URL}>Knap</TextLink> template; the rendered
-              side is the React graphs. Toggle to read the template that emitted
-              the fences.
-            </ProseP>
-          </div>
-          <SourcePreview source={KNAP_DEMO_TEMPLATE}>
-            <ProseMuted>
-              p95 crossed 800ms at {KNAP_DEMO_DATA.start}. Rollback at{" "}
-              {KNAP_DEMO_DATA.rollback}.
-            </ProseMuted>
-            <GraphTimeline events={[...KNAP_DEMO_DATA.events]} title="NIGHT" />
-            <ProseMuted>
-              Same night, and the two days users felt it.
-            </ProseMuted>
-            <GraphUptime
-              days={[...KNAP_DEMO_DATA.uptime.days]}
-              from={KNAP_DEMO_DATA.uptime.from}
-              title={KNAP_DEMO_DATA.uptime.title}
-              to={KNAP_DEMO_DATA.uptime.to}
-            />
-          </SourcePreview>
-        </SiteContainer>
-      </section>
-
-      <section>
-        <SiteContainer className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
-              How the pieces fit
-            </h2>
-            <ProseP>
-              You own three files: templating stays in{" "}
-              <TextLink href={KNAP_URL}>Knap</TextLink>, the graphs stay copied
-              via shadcn if you also render React, and the filters are the only
-              new piece.
-            </ProseP>
-          </div>
-          <dl className="grid gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
-            {steps.map((entry) => (
-              <div className="flex flex-col gap-2" key={entry.name}>
-                <dt className="font-medium">{entry.name}</dt>
-                <dd className={cn(proseMutedClass, "max-w-[40ch]")}>
-                  {entry.detail}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </SiteContainer>
-      </section>
-
-      <section>
-        <SiteContainer className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
-              Where each format belongs
-            </h2>
-            <ProseP>
-              Knap is a generator. It writes the fence a README can paste, or
-              the <InlineCode>::graph-*</InlineCode> block a{" "}
-              <TextLink href="/comark">Comark</TextLink> app can render. It does
-              not draw the React frame itself.
-            </ProseP>
-          </div>
-          <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
-            <GraphCompare
-              columns={["JSX", "ASCII", "Comark", "Knap"]}
-              rows={[
-                { label: "MDX / React", values: [true, false, true, false] },
-                { label: "App .md file", values: [false, false, true, true] },
-                {
-                  label: "README / GitHub",
-                  values: [false, true, false, true],
-                },
-                {
-                  label: "Data in, Markdown out",
-                  values: [false, false, false, true],
-                },
-              ]}
-              title="HOST"
-            />
-            <GraphCheck
-              items={[
-                { label: "same props as React", done: true },
-                { label: "official fence, not homemade", done: true },
-                { label: "comark param → ::graph-*", done: true },
-                {
-                  label: "CLI loads graph filters",
-                  note: "wire createEngine",
-                },
-              ]}
-              title="FILTER"
-            />
-          </div>
-        </SiteContainer>
-      </section>
-
-      <section>
-        <SiteContainer className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
-              Install the filters
-            </h2>
-            <ProseP>
-              <InlineCode>all.json</InlineCode> already includes them; if the
-              graphs are already in the repo, add{" "}
-              <InlineCode>graph-knap</InlineCode> alone. Install{" "}
-              <InlineCode>knap</InlineCode> yourself, then spread{" "}
-              <InlineCode>graphFilters</InlineCode> into{" "}
-              <InlineCode>createEngine</InlineCode>. Full wiring lives on the{" "}
-              <TextLink href="/docs/knap">docs page</TextLink>.
-            </ProseP>
-          </div>
-          <Command
-            label="Adapter"
-            value={scopedRegistryInstall("graph-knap")}
+      <LandingSection
+        lead={
+          <ProseP>
+            same incident as the comark landing. here the source is a{" "}
+            <TextLink href={KNAP_URL}>knap</TextLink> template; the rendered
+            side is the react graphs. toggle to read the template that emitted
+            the fences.
+          </ProseP>
+        }
+        title="template and the frames it produces"
+      >
+        <SourcePreview source={KNAP_DEMO_TEMPLATE}>
+          <ProseMuted>
+            p95 crossed 800ms at {KNAP_DEMO_DATA.start}. rollback at{" "}
+            {KNAP_DEMO_DATA.rollback}.
+          </ProseMuted>
+          <GraphTimeline events={[...KNAP_DEMO_DATA.events]} title="NIGHT" />
+          <ProseMuted>same night, and the two days users felt it.</ProseMuted>
+          <GraphUptime
+            days={[...KNAP_DEMO_DATA.uptime.days]}
+            from={KNAP_DEMO_DATA.uptime.from}
+            title={KNAP_DEMO_DATA.uptime.title}
+            to={KNAP_DEMO_DATA.uptime.to}
           />
-          <Command label="Knap" value="pnpm add knap" />
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <TextLink href="/docs/knap">Wiring</TextLink>
-            <TextLink href="/docs/skill">Skill</TextLink>
-            <TextLink href={KNAP_URL}>knap.md</TextLink>
-            <TextLink href={KNAP_API_URL}>API</TextLink>
-            <TextLink href={KNAP_REPO}>obsidianmd/knap</TextLink>
-          </div>
-        </SiteContainer>
-      </section>
+        </SourcePreview>
+      </LandingSection>
+
+      <LandingSection
+        lead={
+          <ProseP>
+            you own three files: templating stays in{" "}
+            <TextLink href={KNAP_URL}>knap</TextLink>, the graphs stay copied
+            via shadcn if you also render react, and the filters are the only
+            new piece.
+          </ProseP>
+        }
+        title="how the pieces fit"
+      >
+        <dl className="grid gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
+          {steps.map((entry) => (
+            <div className="flex flex-col gap-2" key={entry.name}>
+              <dt className="font-medium">{entry.name}</dt>
+              <dd className={cn(proseMutedClass, "max-w-[40ch]")}>
+                {entry.detail}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </LandingSection>
+
+      <LandingSection
+        lead={
+          <ProseP>
+            knap is a generator. it writes the fence a readme can paste, or the{" "}
+            <InlineCode>::graph-*</InlineCode> block a{" "}
+            <TextLink href="/comark">comark</TextLink> app can render. it does
+            not draw the react frame itself.
+          </ProseP>
+        }
+        title="where each format belongs"
+      >
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+          <GraphCompare
+            columns={["JSX", "ASCII", "Comark", "Knap"]}
+            rows={[
+              { label: "MDX / React", values: [true, false, true, false] },
+              { label: "App .md file", values: [false, false, true, true] },
+              {
+                label: "README / GitHub",
+                values: [false, true, false, true],
+              },
+              {
+                label: "Data in, Markdown out",
+                values: [false, false, false, true],
+              },
+            ]}
+            title="HOST"
+          />
+          <GraphCheck
+            items={[
+              { label: "same props as react", done: true },
+              { label: "official fence, not homemade", done: true },
+              { label: "comark param → ::graph-*", done: true },
+              {
+                label: "cli loads graph filters",
+                note: "wire createEngine",
+              },
+            ]}
+            title="FILTER"
+          />
+        </div>
+        <LandingLinks
+          items={[
+            { href: "/docs/knap", label: "wiring" },
+            { href: "/docs/skill", label: "skill" },
+            { href: KNAP_URL, label: "knap.md" },
+            { href: KNAP_API_URL, label: "api" },
+            { href: KNAP_REPO, label: "obsidianmd/knap" },
+          ]}
+        />
+      </LandingSection>
     </main>
   )
 }

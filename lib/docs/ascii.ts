@@ -252,7 +252,7 @@ const examples: Record<MdxSlug, string> = {
   "graph-invoice": asciiInvoice({
     title: "INVOICE 0041",
     from: {
-      name: "markdown graphs",
+      name: "mdxcn",
       lines: ["kshv.me", "GSTIN 29AXXXXX1234Z5"],
     },
     to: {

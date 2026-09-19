@@ -1,8 +1,19 @@
 "use client"
 
+import { Children, isValidElement, type ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  defineItem,
+  Graph,
+  GraphBody,
+  isHost,
+  itemText,
+  listItems,
+  splitDash,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
   staggerList,
@@ -12,22 +23,58 @@ import {
 import { cn } from "@/lib/utils"
 
 type CheckItem = {
-  label: string
+  /** Falls back to the child text: `<Task done>freeze tokens</Task>`. */
+  label?: string
   done?: boolean
   note?: string
 }
 
 type GraphCheckProps = {
   title: string
-  items: CheckItem[]
+  /** Data form. Or write `<Task />` children. */
+  items?: CheckItem[]
+  children?: ReactNode
   palette?: GraphPalette
   corner?: string
   className?: string
 }
 
+/** `<Task done>ship registry json</Task>` inside `<GraphCheck>`. */
+const Task = defineItem<CheckItem>("Task")
+
+function checksOf(children: ReactNode): CheckItem[] {
+  const listed = listItems(children).map((item) => {
+    const content = (item.props as { children?: ReactNode }).children
+    const box = Children.toArray(content).find(
+      (child) =>
+        isValidElement(child) &&
+        isHost(child, "input") &&
+        (child.props as { type?: string }).type === "checkbox"
+    )
+    const text = itemText(item)
+    const marked = /^\s*\[x\]/i.test(text)
+    const done =
+      marked ||
+      (isValidElement(box) &&
+        Boolean((box.props as { checked?: boolean }).checked))
+    const label = text.replace(/^\s*\[[xX ]\]\s*/, "")
+    const { label: name, rest } = splitDash(label)
+    return { label: name, done, note: rest || undefined }
+  })
+  if (listed.length > 0) {
+    return listed
+  }
+
+  return childItems(children, Task).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+}
+
 function GraphCheck({
   title,
-  items,
+  items: itemsProp,
+  children,
   palette,
   corner,
   className,
@@ -35,6 +82,10 @@ function GraphCheck({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
+  const items = (itemsProp ?? checksOf(children)).map((entry) => ({
+    ...entry,
+    label: entry.label ?? "",
+  }))
 
   return (
     <Graph title={title} className={className} corner={corner}>
@@ -88,5 +139,5 @@ function GraphCheck({
   )
 }
 
-export { GraphCheck }
+export { GraphCheck, Task }
 export type { CheckItem, GraphCheckProps }

@@ -101,7 +101,7 @@
   --graph-accent-2: oklch(0.48 0.18 259);
   --graph-accent-3: oklch(0.5 0.14 248);
   --graph-frame: oklch(0.72 0 0);
-  --site-rail: oklch(0.64 0 0);
+  --site-rail: oklch(0.38 0 0);
   --graph-muted: oklch(0.62 0 0);
   --graph-faint: oklch(0.82 0 0);
   --contrast-14: oklch(0.88 0 0);
@@ -147,7 +147,7 @@
   --graph-accent-2: oklch(0.68 0.18 259);
   --graph-accent-3: oklch(0.72 0.15 248);
   --graph-frame: oklch(0.48 0 0);
-  --site-rail: oklch(0.28 0 0);
+  --site-rail: oklch(0.22 0 0);
   --graph-muted: oklch(0.52 0 0);
   --graph-faint: oklch(0.28 0 0);
   --contrast-14: oklch(0.22 0 0);
@@ -315,23 +315,23 @@ html.dark[data-accent="prism"] {
   background-image:
     repeating-linear-gradient(
       to right,
-      var(--site-rail) 0 2px,
-      transparent 2px 7px
+      var(--site-rail) 0 1px,
+      transparent 1px 4px
     ),
     repeating-linear-gradient(
       to bottom,
-      var(--site-rail) 0 2px,
-      transparent 2px 7px
+      var(--site-rail) 0 1px,
+      transparent 1px 4px
     ),
     repeating-linear-gradient(
       to right,
-      var(--site-rail) 0 2px,
-      transparent 2px 7px
+      var(--site-rail) 0 1px,
+      transparent 1px 4px
     ),
     repeating-linear-gradient(
       to bottom,
-      var(--site-rail) 0 2px,
-      transparent 2px 7px
+      var(--site-rail) 0 1px,
+      transparent 1px 4px
     );
   background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
   background-position:
@@ -399,6 +399,21 @@ html.dark[data-accent="prism"] {
   );
 }
 
+@utility graph-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--graph-frame) 22%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--graph-frame) 22%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 1.25rem 1.25rem;
+}
+
 @utility scrollbar-none {
   scrollbar-width: none;
 
@@ -445,8 +460,8 @@ html.dark[data-accent="prism"] {
   height: 1px;
   background-image: repeating-linear-gradient(
     to right,
-    var(--site-rail) 0 2px,
-    transparent 2px 7px
+    var(--site-rail) 0 1px,
+    transparent 1px 4px
   );
 }
 
@@ -454,8 +469,8 @@ html.dark[data-accent="prism"] {
   width: 1px;
   background-image: repeating-linear-gradient(
     to bottom,
-    var(--site-rail) 0 2px,
-    transparent 2px 7px
+    var(--site-rail) 0 1px,
+    transparent 1px 4px
   );
 }
 

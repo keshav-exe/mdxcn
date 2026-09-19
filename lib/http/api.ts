@@ -6,6 +6,7 @@ import {
   type Problem,
 } from "@/lib/http/problem"
 import { rateLimitHeaders } from "@/lib/http/rate-limit"
+import { SITE_URL } from "@/lib/site"
 
 type JsonInit = ResponseInit & {
   rateRemaining?: number
@@ -59,7 +60,7 @@ export function rateLimited(instance: string, retryAfter = 60) {
       instance,
       code: "rate_limited",
       hrefs: {
-        policy: "https://mdx-graphs.kshv.me/developers/deprecation",
+        policy: `${SITE_URL}/developers/deprecation`,
       },
     }),
     {

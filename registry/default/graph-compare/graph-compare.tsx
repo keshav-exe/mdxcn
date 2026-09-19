@@ -1,8 +1,18 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  childItems,
+  defineItem,
+  Graph,
+  GraphBody,
+  labeledTable,
+  Row,
+  textOf,
+  words,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   DIM_OPACITY,
   fadeUp,
@@ -20,14 +30,52 @@ type CompareRow = {
   values: CompareCell[]
 }
 
+/** `<Col>Studio</Col>` — an option across the top. */
+const Col = defineItem("Col")
+
 type GraphCompareProps = {
   title: string
-  columns: string[]
-  rows: CompareRow[]
+  /** Data form. Or write `<Col>` children / `"Solo Studio"`. */
+  columns?: string[] | string
+  /** Data form. Or write `<Row label="Registry">true true</Row>`. */
+  rows?: CompareRow[]
+  children?: ReactNode
   accent?: string
   palette?: GraphPalette
   corner?: string
   className?: string
+}
+
+function compareCell(token: string): CompareCell {
+  const value = token.trim()
+  const key = value.toLowerCase()
+  if (key === "true" || key === "yes" || value === "✓" || key === "x") {
+    return true
+  }
+  if (
+    key === "false" ||
+    key === "no" ||
+    value === "–" ||
+    value === "-" ||
+    value === "—"
+  ) {
+    return false
+  }
+  return value
+}
+
+function compareValues(
+  values?: CompareCell[] | string,
+  children?: ReactNode
+): CompareCell[] {
+  if (Array.isArray(values)) {
+    return values
+  }
+
+  return (values ?? textOf(children))
+    .split(/[\s,]+/)
+    .filter(Boolean)
+    .map(compareCell)
 }
 
 function cellText(value: CompareCell) {
@@ -40,13 +88,37 @@ function cellText(value: CompareCell) {
 
 function GraphCompare({
   title,
-  columns,
-  rows,
+  columns: columnsProp,
+  rows: rowsProp,
+  children,
   accent,
   palette,
   corner,
   className,
 }: GraphCompareProps) {
+  const markdown = labeledTable(children)
+  const columns =
+    columnsProp == null
+      ? (() => {
+          const cols = childItems(children, Col).map((col) =>
+            textOf(col.children)
+          )
+          return cols.length > 0 ? cols : (markdown?.columns ?? [])
+        })()
+      : words(columnsProp)
+  const taggedRows = childItems(children, Row).map((row) => ({
+    label: row.label ?? "",
+    values: compareValues(undefined, row.children),
+  }))
+  const rows = (
+    rowsProp ??
+    (taggedRows.length > 0
+      ? taggedRows
+      : (markdown?.rows.map((row) => ({
+          label: row.label,
+          values: row.values.map((value) => compareCell(value)),
+        })) ?? []))
+  ).map((row) => ({ ...row, label: row.label ?? "" }))
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
@@ -140,5 +212,5 @@ function GraphCompare({
   )
 }
 
-export { GraphCompare }
+export { Col, GraphCompare, Row }
 export type { CompareCell, CompareRow, GraphCompareProps }

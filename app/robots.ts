@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 
-import { SITE_URL } from "@/lib/site"
+import { SITE_HOST, SITE_URL } from "@/lib/site"
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -18,6 +18,6 @@ export default function robots(): MetadataRoute.Robots {
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: "mdx-graphs.kshv.me",
+    host: SITE_HOST,
   }
 }

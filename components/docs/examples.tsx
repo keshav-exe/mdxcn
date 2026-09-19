@@ -2,6 +2,8 @@ import type { ReactNode } from "react"
 
 import { ComponentPreview } from "@/components/docs/preview"
 import {
+  Callout,
+  Changelog,
   Graph,
   GraphActivity,
   GraphBars,
@@ -37,12 +39,16 @@ import {
   GraphUptime,
   GraphWaffle,
   GraphWaterfall,
+  Quote,
+  Steps,
+  Terminal,
 } from "@/components/graphs"
 
 type Example = {
   title: string
   description?: string
   code: string
+  react?: string
   preview: ReactNode
 }
 
@@ -54,6 +60,7 @@ function Examples({ items }: { items: Example[] }) {
           code={item.code}
           description={item.description}
           key={item.title}
+          react={item.react}
           title={item.title}
         >
           {item.preview}
@@ -63,67 +70,194 @@ function Examples({ items }: { items: Example[] }) {
   )
 }
 
+function tsx(slug: string, names: string, body: string) {
+  return `import { ${names} } from "@/registry/default/${slug}/${slug}"
+
+${body.trim()}`
+}
+
 const tableExamples: Example[] = [
   {
     title: "Research cost",
-    description: "Numeric columns, right-aligned, with a footer total.",
-    code: `import { GraphTable } from "@/registry/default/graph-table/graph-table"
+    code: `<GraphTable title="WHAT THE RESEARCH COST">
 
-<GraphTable
-  title="WHAT THE RESEARCH COST"
-  headers={["Agent", "Tokens", "Tool calls", "Time"]}
-  align={["left", "right", "right", "right"]}
-  rows={[
-    ["Inks and paper", "115,207", "120", "16m"],
-    ["Overprint and drift", "135,218", "164", "16m"],
-    ["Naming the patterns", "186,716", "112", "18m"],
-  ]}
-  footer={["Total", "437,141", "396", "~50m"]}
-/>`,
+| Agent | Tokens | Tool calls | Time |
+| --- | ---: | ---: | ---: |
+| Inks and paper | 115,207 | 120 | 16m |
+| Overprint and drift | 135,218 | 164 | 16m |
+| Naming the patterns | 186,716 | 112 | 18m |
+| Total | 437,141 | 396 | ~50m |
+
+</GraphTable>`,
+    react: tsx(
+      "graph-table",
+      "GraphTable",
+      `<GraphTable title="WHAT THE RESEARCH COST">
+  <table>
+    <thead>
+      <tr>
+        <th>Agent</th>
+        <th>Tokens</th>
+        <th>Tool calls</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Inks and paper</td>
+        <td>115,207</td>
+        <td>120</td>
+        <td>16m</td>
+      </tr>
+      <tr>
+        <td>Overprint and drift</td>
+        <td>135,218</td>
+        <td>164</td>
+        <td>16m</td>
+      </tr>
+      <tr>
+        <td>Naming the patterns</td>
+        <td>186,716</td>
+        <td>112</td>
+        <td>18m</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td>437,141</td>
+        <td>396</td>
+        <td>~50m</td>
+      </tr>
+    </tfoot>
+  </table>
+</GraphTable>`
+    ),
     preview: (
-      <GraphTable
-        align={["left", "right", "right", "right"]}
-        footer={["Total", "437,141", "396", "~50m"]}
-        headers={["Agent", "Tokens", "Tool calls", "Time"]}
-        rows={[
-          ["Inks and paper", "115,207", "120", "16m"],
-          ["Overprint and drift", "135,218", "164", "16m"],
-          ["Naming the patterns", "186,716", "112", "18m"],
-        ]}
-        title="WHAT THE RESEARCH COST"
-      />
+      <GraphTable title="WHAT THE RESEARCH COST">
+        <table>
+          <thead>
+            <tr>
+              <th>Agent</th>
+              <th>Tokens</th>
+              <th>Tool calls</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Inks and paper</td>
+              <td>115,207</td>
+              <td>120</td>
+              <td>16m</td>
+            </tr>
+            <tr>
+              <td>Overprint and drift</td>
+              <td>135,218</td>
+              <td>164</td>
+              <td>16m</td>
+            </tr>
+            <tr>
+              <td>Naming the patterns</td>
+              <td>186,716</td>
+              <td>112</td>
+              <td>18m</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Total</td>
+              <td>437,141</td>
+              <td>396</td>
+              <td>~50m</td>
+            </tr>
+          </tfoot>
+        </table>
+      </GraphTable>
     ),
   },
   {
     title: "Taste, explained",
-    description: "Two copy columns. No footer.",
-    code: `import { GraphTable } from "@/registry/default/graph-table/graph-table"
+    code: `<GraphTable title="TASTE, EXPLAINED">
 
-<GraphTable
-  title="TASTE, EXPLAINED"
-  headers={["Decision", "Reason"]}
-  align={["left", "left"]}
-  rows={[
-    ["ease-out on enter", "feels snappier"],
-    ["180ms, not 400ms", "feels faster, more responsive"],
-    ["springs for gestures", "they carry your momentum"],
-    ["scale 0.97 on press", "it makes the UI feel alive"],
-    ["no animation at all", "you open it hundreds of times"],
-  ]}
-/>`,
+| Decision | Reason |
+| --- | --- |
+| ease-out on enter | feels snappier |
+| 180ms, not 400ms | feels faster, more responsive |
+| springs for gestures | they carry your momentum |
+| scale 0.97 on press | it makes the UI feel alive |
+| no animation at all | you open it hundreds of times |
+
+</GraphTable>`,
+    react: tsx(
+      "graph-table",
+      "GraphTable",
+      `<GraphTable title="TASTE, EXPLAINED">
+  <table>
+    <thead>
+      <tr>
+        <th>Decision</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ease-out on enter</td>
+        <td>feels snappier</td>
+      </tr>
+      <tr>
+        <td>180ms, not 400ms</td>
+        <td>feels faster, more responsive</td>
+      </tr>
+      <tr>
+        <td>springs for gestures</td>
+        <td>they carry your momentum</td>
+      </tr>
+      <tr>
+        <td>scale 0.97 on press</td>
+        <td>it makes the UI feel alive</td>
+      </tr>
+      <tr>
+        <td>no animation at all</td>
+        <td>you open it hundreds of times</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphTable>`
+    ),
     preview: (
-      <GraphTable
-        align={["left", "left"]}
-        headers={["Decision", "Reason"]}
-        rows={[
-          ["ease-out on enter", "feels snappier"],
-          ["180ms, not 400ms", "feels faster, more responsive"],
-          ["springs for gestures", "they carry your momentum"],
-          ["scale 0.97 on press", "it makes the UI feel alive"],
-          ["no animation at all", "you open it hundreds of times"],
-        ]}
-        title="TASTE, EXPLAINED"
-      />
+      <GraphTable title="TASTE, EXPLAINED">
+        <table>
+          <thead>
+            <tr>
+              <th>Decision</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ease-out on enter</td>
+              <td>feels snappier</td>
+            </tr>
+            <tr>
+              <td>180ms, not 400ms</td>
+              <td>feels faster, more responsive</td>
+            </tr>
+            <tr>
+              <td>springs for gestures</td>
+              <td>they carry your momentum</td>
+            </tr>
+            <tr>
+              <td>scale 0.97 on press</td>
+              <td>it makes the UI feel alive</td>
+            </tr>
+            <tr>
+              <td>no animation at all</td>
+              <td>you open it hundreds of times</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphTable>
     ),
   },
 ]
@@ -131,103 +265,238 @@ const tableExamples: Example[] = [
 const sheetExamples: Example[] = [
   {
     title: "RFC",
-    description:
-      "Section titles sit above their rows. Same columns throughout.",
-    code: `import { GraphSheet } from "@/registry/default/graph-sheet/graph-sheet"
+    code: `<GraphSheet title="RFC">
 
-<GraphSheet
-  title="RFC"
-  headers={["Item", "Owner", "Status"]}
-  align={["left", "left", "left"]}
-  sections={[
-    {
-      title: "Scope",
-      rows: [
-        ["CLI copies files", "priya", "done"],
-        ["Docs previews", "jon", "now"],
-      ],
-    },
-    {
-      title: "Out of scope",
-      rows: [
-        ["npm package", "—", "later"],
-        ["Figma kit", "—", "later"],
-      ],
-    },
-  ]}
-/>`,
+### Scope
+
+| Item | Owner | Status |
+| --- | --- | --- |
+| CLI copies files | priya | done |
+| Docs previews | jon | now |
+
+### Out of scope
+
+| Item | Owner | Status |
+| --- | --- | --- |
+| npm package | — | later |
+| Figma kit | — | later |
+
+</GraphSheet>`,
+    react: tsx(
+      "graph-sheet",
+      "GraphSheet",
+      `<GraphSheet title="RFC">
+  <h3>Scope</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Owner</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CLI copies files</td>
+        <td>priya</td>
+        <td>done</td>
+      </tr>
+      <tr>
+        <td>Docs previews</td>
+        <td>jon</td>
+        <td>now</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Out of scope</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Owner</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>npm package</td>
+        <td>—</td>
+        <td>later</td>
+      </tr>
+      <tr>
+        <td>Figma kit</td>
+        <td>—</td>
+        <td>later</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphSheet>`
+    ),
     preview: (
-      <GraphSheet
-        align={["left", "left", "left"]}
-        headers={["Item", "Owner", "Status"]}
-        sections={[
-          {
-            title: "Scope",
-            rows: [
-              ["CLI copies files", "priya", "done"],
-              ["Docs previews", "jon", "now"],
-            ],
-          },
-          {
-            title: "Out of scope",
-            rows: [
-              ["npm package", "—", "later"],
-              ["Figma kit", "—", "later"],
-            ],
-          },
-        ]}
-        title="RFC"
-      />
+      <GraphSheet title="RFC">
+        <h3>Scope</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Owner</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CLI copies files</td>
+              <td>priya</td>
+              <td>done</td>
+            </tr>
+            <tr>
+              <td>Docs previews</td>
+              <td>jon</td>
+              <td>now</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Out of scope</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Owner</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>npm package</td>
+              <td>—</td>
+              <td>later</td>
+            </tr>
+            <tr>
+              <td>Figma kit</td>
+              <td>—</td>
+              <td>later</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphSheet>
     ),
   },
   {
     title: "Surface",
-    description: "Grouped API table. Footer is optional.",
-    code: `import { GraphSheet } from "@/registry/default/graph-sheet/graph-sheet"
+    code: `<GraphSheet title="SURFACE">
 
-<GraphSheet
-  title="SURFACE"
-  headers={["Name", "Kind", "Stable"]}
-  align={["left", "left", "left"]}
-  sections={[
-    {
-      title: "Frame",
-      rows: [
-        ["Graph", "primitive", "yes"],
-        ["GraphBody", "primitive", "yes"],
-      ],
-    },
-    {
-      title: "Charts",
-      rows: [
-        ["GraphTable", "component", "yes"],
-        ["GraphSheet", "component", "new"],
-      ],
-    },
-  ]}
-/>`,
+### Frame
+
+| Name | Kind | Stable |
+| --- | --- | --- |
+| Graph | primitive | yes |
+| GraphBody | primitive | yes |
+
+### Charts
+
+| Name | Kind | Stable |
+| --- | --- | --- |
+| GraphTable | component | yes |
+| GraphSheet | component | new |
+
+</GraphSheet>`,
+    react: tsx(
+      "graph-sheet",
+      "GraphSheet",
+      `<GraphSheet title="SURFACE">
+  <h3>Frame</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Kind</th>
+        <th>Stable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Graph</td>
+        <td>primitive</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td>GraphBody</td>
+        <td>primitive</td>
+        <td>yes</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Charts</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Kind</th>
+        <th>Stable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>GraphTable</td>
+        <td>component</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td>GraphSheet</td>
+        <td>component</td>
+        <td>new</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphSheet>`
+    ),
     preview: (
-      <GraphSheet
-        align={["left", "left", "left"]}
-        headers={["Name", "Kind", "Stable"]}
-        sections={[
-          {
-            title: "Frame",
-            rows: [
-              ["Graph", "primitive", "yes"],
-              ["GraphBody", "primitive", "yes"],
-            ],
-          },
-          {
-            title: "Charts",
-            rows: [
-              ["GraphTable", "component", "yes"],
-              ["GraphSheet", "component", "new"],
-            ],
-          },
-        ]}
-        title="SURFACE"
-      />
+      <GraphSheet title="SURFACE">
+        <h3>Frame</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Kind</th>
+              <th>Stable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Graph</td>
+              <td>primitive</td>
+              <td>yes</td>
+            </tr>
+            <tr>
+              <td>GraphBody</td>
+              <td>primitive</td>
+              <td>yes</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Charts</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Kind</th>
+              <th>Stable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GraphTable</td>
+              <td>component</td>
+              <td>yes</td>
+            </tr>
+            <tr>
+              <td>GraphSheet</td>
+              <td>component</td>
+              <td>new</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphSheet>
     ),
   },
 ]
@@ -235,73 +504,50 @@ const sheetExamples: Example[] = [
 const flowExamples: Example[] = [
   {
     title: "Optimistic UI",
-    description:
-      "Highlight the node that updates on tap. Mute the server sync step.",
-    code: `import { GraphFlow } from "@/registry/default/graph-flow/graph-flow"
+    code: `<GraphFlow title="OPTIMISTIC UI">
 
-<GraphFlow
-  title="OPTIMISTIC UI"
-  rows={[
-    {
-      nodes: [
-        { label: "tap" },
-        { label: "server" },
-        { label: "update" },
-      ],
-    },
-    {
-      nodes: [
-        { label: "tap" },
-        { label: "update", tone: "accent" },
-        { label: "server syncs", stretch: true, tone: "muted" },
-      ],
-    },
-  ]}
-/>`,
+tap → server → update
+
+tap → **update** → *server syncs*
+
+</GraphFlow>`,
+    react: tsx(
+      "graph-flow",
+      "GraphFlow",
+      `<GraphFlow title="OPTIMISTIC UI">
+  <p>tap → server → update</p>
+  <p>
+    tap → <strong>update</strong> → <em>server syncs</em>
+  </p>
+</GraphFlow>`
+    ),
     preview: (
-      <GraphFlow
-        rows={[
-          {
-            nodes: [{ label: "tap" }, { label: "server" }, { label: "update" }],
-          },
-          {
-            nodes: [
-              { label: "tap" },
-              { label: "update", tone: "accent" },
-              { label: "server syncs", stretch: true, tone: "muted" },
-            ],
-          },
-        ]}
-        title="OPTIMISTIC UI"
-      />
+      <GraphFlow title="OPTIMISTIC UI">
+        <p>tap → server → update</p>
+        <p>
+          tap → <strong>update</strong> → <em>server syncs</em>
+        </p>
+      </GraphFlow>
     ),
   },
   {
     title: "Publish path",
-    description: "A linear pipeline. Every node is default tone.",
-    code: `import { GraphFlow } from "@/registry/default/graph-flow/graph-flow"
+    code: `<GraphFlow title="PUBLISH PATH">
 
-<GraphFlow
-  title="PUBLISH PATH"
-  rows={[
-    {
-      nodes: [
-        { label: "write" },
-        { label: "review" },
-        { label: "ship" },
-      ],
-    },
-  ]}
-/>`,
+write → review → ship
+
+</GraphFlow>`,
+    react: tsx(
+      "graph-flow",
+      "GraphFlow",
+      `<GraphFlow title="PUBLISH PATH">
+  <p>write → review → ship</p>
+</GraphFlow>`
+    ),
     preview: (
-      <GraphFlow
-        rows={[
-          {
-            nodes: [{ label: "write" }, { label: "review" }, { label: "ship" }],
-          },
-        ]}
-        title="PUBLISH PATH"
-      />
+      <GraphFlow title="PUBLISH PATH">
+        <p>write → review → ship</p>
+      </GraphFlow>
     ),
   },
 ]
@@ -309,43 +555,64 @@ const flowExamples: Example[] = [
 const barsExamples: Example[] = [
   {
     title: "Before / after",
-    description:
-      "Same shape on both sides. After uses the accent. Before uses the second hue.",
-    code: `import { GraphBars } from "@/registry/default/graph-bars/graph-bars"
+    code: `<GraphBars title="THROUGHPUT" palette="duo">
 
-<GraphBars
-  title="THROUGHPUT"
-  palette="duo"
-  from={{ label: "before", values: [2, 4, 3, 5, 2] }}
-  to={{ label: "after", size: "lg", values: [2, 4, 3, 5, 2] }}
-/>`,
+- before: 2 4 3 5 2
+- **after**: 2 4 3 5 2
+
+</GraphBars>`,
+    react: tsx(
+      "graph-bars",
+      "GraphBars",
+      `<GraphBars title="THROUGHPUT" palette="duo">
+  <ul>
+    <li>before: 2 4 3 5 2</li>
+    <li>
+      <strong>after</strong>: 2 4 3 5 2
+    </li>
+  </ul>
+</GraphBars>`
+    ),
     preview: (
-      <GraphBars
-        from={{ label: "before", values: [2, 4, 3, 5, 2] }}
-        palette="duo"
-        title="THROUGHPUT"
-        to={{ label: "after", size: "lg", values: [2, 4, 3, 5, 2] }}
-      />
+      <GraphBars palette="duo" title="THROUGHPUT">
+        <ul>
+          <li>before: 2 4 3 5 2</li>
+          <li>
+            <strong>after</strong>: 2 4 3 5 2
+          </li>
+        </ul>
+      </GraphBars>
     ),
   },
   {
     title: "Draft to shipped",
-    description: "Different values. Processor label is custom.",
-    code: `import { GraphBars } from "@/registry/default/graph-bars/graph-bars"
+    code: `<GraphBars title="DRAFT TO SHIPPED" processor="edit">
 
-<GraphBars
-  title="DRAFT TO SHIPPED"
-  processor="edit"
-  from={{ label: "draft", values: [1, 2, 2, 3, 1] }}
-  to={{ label: "shipped", size: "lg", values: [3, 5, 4, 6, 5] }}
-/>`,
+- draft: 1 2 2 3 1
+- **shipped**: 3 5 4 6 5
+
+</GraphBars>`,
+    react: tsx(
+      "graph-bars",
+      "GraphBars",
+      `<GraphBars title="DRAFT TO SHIPPED" processor="edit">
+  <ul>
+    <li>draft: 1 2 2 3 1</li>
+    <li>
+      <strong>shipped</strong>: 3 5 4 6 5
+    </li>
+  </ul>
+</GraphBars>`
+    ),
     preview: (
-      <GraphBars
-        from={{ label: "draft", values: [1, 2, 2, 3, 1] }}
-        processor="edit"
-        title="DRAFT TO SHIPPED"
-        to={{ label: "shipped", size: "lg", values: [3, 5, 4, 6, 5] }}
-      />
+      <GraphBars processor="edit" title="DRAFT TO SHIPPED">
+        <ul>
+          <li>draft: 1 2 2 3 1</li>
+          <li>
+            <strong>shipped</strong>: 3 5 4 6 5
+          </li>
+        </ul>
+      </GraphBars>
     ),
   },
 ]
@@ -353,54 +620,65 @@ const barsExamples: Example[] = [
 const rankExamples: Example[] = [
   {
     title: "Routes",
-    description: "Pages ordered by visits. The longest bar is the busiest.",
-    code: `import { GraphRank } from "@/registry/default/graph-rank/graph-rank"
+    code: `<GraphRank title="ROUTES">
 
-<GraphRank
-  title="ROUTES"
-  items={[
-    { label: "/docs", value: 12400 },
-    { label: "/install", value: 4100 },
-    { label: "/plot", value: 860 },
-    { label: "/rank", value: 420 },
-  ]}
-/>`,
+- 12,400 /docs
+- 4,100 /install
+- 860 /plot
+- 420 /rank
+
+</GraphRank>`,
+    react: tsx(
+      "graph-rank",
+      "GraphRank",
+      `<GraphRank title="ROUTES">
+  <ul>
+    <li>12,400 /docs</li>
+    <li>4,100 /install</li>
+    <li>860 /plot</li>
+    <li>420 /rank</li>
+  </ul>
+</GraphRank>`
+    ),
     preview: (
-      <GraphRank
-        items={[
-          { label: "/docs", value: 12400 },
-          { label: "/install", value: 4100 },
-          { label: "/plot", value: 860 },
-          { label: "/rank", value: 420 },
-        ]}
-        title="ROUTES"
-      />
+      <GraphRank title="ROUTES">
+        <ul>
+          <li>12,400 /docs</li>
+          <li>4,100 /install</li>
+          <li>860 /plot</li>
+          <li>420 /rank</li>
+        </ul>
+      </GraphRank>
     ),
   },
   {
     title: "Coverage",
-    description: "Every bar uses the same scale, so the percents line up.",
-    code: `import { GraphRank } from "@/registry/default/graph-rank/graph-rank"
+    code: `<GraphRank title="COVERAGE" max={100}>
 
-<GraphRank
-  title="COVERAGE"
-  max={100}
-  items={[
-    { label: "frame", value: 100, display: "100%" },
-    { label: "plot", value: 82, display: "82%" },
-    { label: "invoice", value: 41, display: "41%" },
-  ]}
-/>`,
+- 100% frame
+- 82% plot
+- 41% invoice
+
+</GraphRank>`,
+    react: tsx(
+      "graph-rank",
+      "GraphRank",
+      `<GraphRank title="COVERAGE" max={100}>
+  <ul>
+    <li>100% frame</li>
+    <li>82% plot</li>
+    <li>41% invoice</li>
+  </ul>
+</GraphRank>`
+    ),
     preview: (
-      <GraphRank
-        items={[
-          { label: "frame", value: 100, display: "100%" },
-          { label: "plot", value: 82, display: "82%" },
-          { label: "invoice", value: 41, display: "41%" },
-        ]}
-        max={100}
-        title="COVERAGE"
-      />
+      <GraphRank max={100} title="COVERAGE">
+        <ul>
+          <li>100% frame</li>
+          <li>82% plot</li>
+          <li>41% invoice</li>
+        </ul>
+      </GraphRank>
     ),
   },
 ]
@@ -408,86 +686,53 @@ const rankExamples: Example[] = [
 const cellsExamples: Example[] = [
   {
     title: "Two ways to learn",
-    description: "Sparse fragments versus a filled grid.",
-    code: `import { GraphCells } from "@/registry/default/graph-cells/graph-cells"
+    code: `<GraphCells title="TWO WAYS TO LEARN">
 
-<GraphCells
-  title="TWO WAYS TO LEARN"
-  items={[
-    {
-      label: "fragments",
-      cells: [
-        [1, 0, 1, 0, 0],
-        [0, 1, 0, 1, 0],
-        [1, 0, 0, 0, 1],
-      ],
-    },
-    {
-      label: "a system",
-      cells: [
-        [1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1],
-      ],
-    },
-  ]}
-/>`,
+- fragments: 1 0 1 0 0 / 0 1 0 1 0 / 1 0 0 0 1
+- a system: 1 1 1 1 1 / 1 1 1 1 1 / 1 1 1 1 1
+
+</GraphCells>`,
+    react: tsx(
+      "graph-cells",
+      "GraphCells",
+      `<GraphCells title="TWO WAYS TO LEARN">
+  <ul>
+    <li>fragments: 1 0 1 0 0 / 0 1 0 1 0 / 1 0 0 0 1</li>
+    <li>a system: 1 1 1 1 1 / 1 1 1 1 1 / 1 1 1 1 1</li>
+  </ul>
+</GraphCells>`
+    ),
     preview: (
-      <GraphCells
-        items={[
-          {
-            label: "fragments",
-            cells: [
-              [1, 0, 1, 0, 0],
-              [0, 1, 0, 1, 0],
-              [1, 0, 0, 0, 1],
-            ],
-          },
-          {
-            label: "a system",
-            cells: [
-              [1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1],
-            ],
-          },
-        ]}
-        title="TWO WAYS TO LEARN"
-      />
+      <GraphCells title="TWO WAYS TO LEARN">
+        <ul>
+          <li>fragments: 1 0 1 0 0 / 0 1 0 1 0 / 1 0 0 0 1</li>
+          <li>a system: 1 1 1 1 1 / 1 1 1 1 1 / 1 1 1 1 1</li>
+        </ul>
+      </GraphCells>
     ),
   },
   {
     title: "Coverage",
-    description: "A single grid. Empty cells stay as the quiet glyph.",
-    code: `import { GraphCells } from "@/registry/default/graph-cells/graph-cells"
+    code: `<GraphCells title="COVERAGE">
 
-<GraphCells
-  title="COVERAGE"
-  items={[
-    {
-      label: "this week",
-      cells: [
-        [1, 1, 1, 1, 0],
-        [1, 1, 0, 1, 1],
-        [1, 0, 1, 1, 1],
-      ],
-    },
-  ]}
-/>`,
+- this week: 1 1 1 1 0 / 1 1 0 1 1 / 1 0 1 1 1
+
+</GraphCells>`,
+    react: tsx(
+      "graph-cells",
+      "GraphCells",
+      `<GraphCells title="COVERAGE">
+  <ul>
+    <li>this week: 1 1 1 1 0 / 1 1 0 1 1 / 1 0 1 1 1</li>
+  </ul>
+</GraphCells>`
+    ),
     preview: (
-      <GraphCells
-        items={[
-          {
-            label: "this week",
-            cells: [
-              [1, 1, 1, 1, 0],
-              [1, 1, 0, 1, 1],
-              [1, 0, 1, 1, 1],
-            ],
-          },
-        ]}
-        title="COVERAGE"
-      />
+      <GraphCells title="COVERAGE">
+        <ul>
+          <li>this week: 1 1 1 1 0 / 1 1 0 1 1 / 1 0 1 1 1</li>
+        </ul>
+      </GraphCells>
     ),
   },
 ]
@@ -498,16 +743,12 @@ const meterExamples: Example[] = [
     description: "Dashes stay empty until the fill animates in.",
     code: `import { GraphMeter } from "@/registry/default/graph-meter/graph-meter"
 
-<GraphMeter
-  title="SHIPPED"
-  value={0.67}
-  caption="characters, not a progress bar"
-/>`,
+<GraphMeter title="SHIPPED" value="67%" caption="characters, not a progress bar" />`,
     preview: (
       <GraphMeter
         caption="characters, not a progress bar"
         title="SHIPPED"
-        value={0.67}
+        value="67%"
       />
     ),
   },
@@ -531,18 +772,15 @@ const meterExamples: Example[] = [
 const sparkExamples: Example[] = [
   {
     title: "Latency",
-    description: "Highlight the latest value. Earlier points are muted.",
+    description:
+      "data can be a string of numbers. The last point is the accent.",
     code: `import { GraphSpark } from "@/registry/default/graph-spark/graph-spark"
 
-<GraphSpark
-  title="LATENCY"
-  data={[2, 3, 4, 3, 6, 5, 8, 7, 9, 6, 10, 8]}
-  caption="last point is the accent"
-/>`,
+<GraphSpark title="LATENCY" data="2 3 4 3 6 5 8 7 9 6 10 8" caption="last point is the accent" />`,
     preview: (
       <GraphSpark
         caption="last point is the accent"
-        data={[2, 3, 4, 3, 6, 5, 8, 7, 9, 6, 10, 8]}
+        data="2 3 4 3 6 5 8 7 9 6 10 8"
         title="LATENCY"
       />
     ),
@@ -570,90 +808,114 @@ const sparkExamples: Example[] = [
 const treeExamples: Example[] = [
   {
     title: "Registry",
-    description: "Nested nodes. Accent the file you care about.",
-    code: `import { GraphTree } from "@/registry/default/graph-tree/graph-tree"
+    code: `<GraphTree title="REGISTRY">
 
-<GraphTree
-  title="REGISTRY"
-  nodes={[
-    {
-      label: "registry/default",
-      children: [
-        {
-          label: "graph-frame",
-          children: [
-            { label: "graph-frame.tsx", meta: "ui" },
-            { label: "graph-motion.ts", meta: "lib" },
-          ],
-        },
-        {
-          label: "graph-tree",
-          children: [
-            { label: "graph-tree.tsx", meta: "ui", accent: true },
-          ],
-        },
-      ],
-    },
-  ]}
-/>`,
+- registry/default
+  - graph-frame
+    - graph-frame.tsx — ui
+    - graph-motion.ts — lib
+  - graph-tree
+    - **graph-tree.tsx** — ui
+
+</GraphTree>`,
+    react: tsx(
+      "graph-tree",
+      "GraphTree",
+      `<GraphTree title="REGISTRY">
+  <ul>
+    <li>
+      registry/default
+      <ul>
+        <li>
+          graph-frame
+          <ul>
+            <li>graph-frame.tsx — ui</li>
+            <li>graph-motion.ts — lib</li>
+          </ul>
+        </li>
+        <li>
+          graph-tree
+          <ul>
+            <li>
+              <strong>graph-tree.tsx</strong> — ui
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</GraphTree>`
+    ),
     preview: (
-      <GraphTree
-        nodes={[
-          {
-            label: "registry/default",
-            children: [
-              {
-                label: "graph-frame",
-                children: [
-                  { label: "graph-frame.tsx", meta: "ui" },
-                  { label: "graph-motion.ts", meta: "lib" },
-                ],
-              },
-              {
-                label: "graph-tree",
-                children: [
-                  { label: "graph-tree.tsx", meta: "ui", accent: true },
-                ],
-              },
-            ],
-          },
-        ]}
-        title="REGISTRY"
-      />
+      <GraphTree title="REGISTRY">
+        <ul>
+          <li>
+            registry/default
+            <ul>
+              <li>
+                graph-frame
+                <ul>
+                  <li>graph-frame.tsx — ui</li>
+                  <li>graph-motion.ts — lib</li>
+                </ul>
+              </li>
+              <li>
+                graph-tree
+                <ul>
+                  <li>
+                    <strong>graph-tree.tsx</strong> — ui
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </GraphTree>
     ),
   },
   {
     title: "Team",
-    description: "Same component. Org chart, not a filesystem.",
-    code: `import { GraphTree } from "@/registry/default/graph-tree/graph-tree"
+    code: `<GraphTree title="ON CALL">
 
-<GraphTree
-  title="ON CALL"
-  nodes={[
-    {
-      label: "platform",
-      children: [
-        { label: "api", meta: "priya" },
-        { label: "workers", meta: "jon", accent: true },
-        { label: "edge", meta: "mina" },
-      ],
-    },
-  ]}
-/>`,
+- platform
+  - api — priya
+  - **workers** — jon
+  - edge — mina
+
+</GraphTree>`,
+    react: tsx(
+      "graph-tree",
+      "GraphTree",
+      `<GraphTree title="ON CALL">
+  <ul>
+    <li>
+      platform
+      <ul>
+        <li>api — priya</li>
+        <li>
+          <strong>workers</strong> — jon
+        </li>
+        <li>edge — mina</li>
+      </ul>
+    </li>
+  </ul>
+</GraphTree>`
+    ),
     preview: (
-      <GraphTree
-        nodes={[
-          {
-            label: "platform",
-            children: [
-              { label: "api", meta: "priya" },
-              { label: "workers", meta: "jon", accent: true },
-              { label: "edge", meta: "mina" },
-            ],
-          },
-        ]}
-        title="ON CALL"
-      />
+      <GraphTree title="ON CALL">
+        <ul>
+          <li>
+            platform
+            <ul>
+              <li>api — priya</li>
+              <li>
+                <strong>workers</strong> — jon
+              </li>
+              <li>edge — mina</li>
+            </ul>
+          </li>
+        </ul>
+      </GraphTree>
     ),
   },
 ]
@@ -661,55 +923,78 @@ const treeExamples: Example[] = [
 const timelineExamples: Example[] = [
   {
     title: "Shipped",
-    description:
-      "The current row uses the accent. Upcoming rows stay outline-only.",
-    code: `import { GraphTimeline } from "@/registry/default/graph-timeline/graph-timeline"
+    code: `<GraphTimeline title="SHIPPED">
 
-<GraphTimeline
-  title="SHIPPED"
-  events={[
-    { date: "Mar 12", label: "CLI copies the files" },
-    { date: "Mar 18", label: "Docs, live previews", state: "now" },
-    { date: "Apr 02", label: "Registry listed", state: "next" },
-  ]}
-/>`,
+- Mar 12: CLI copies the files
+- **Mar 18: Docs, live previews**
+- *Apr 02: Registry listed*
+
+</GraphTimeline>`,
+    react: tsx(
+      "graph-timeline",
+      "GraphTimeline",
+      `<GraphTimeline title="SHIPPED">
+  <ul>
+    <li>Mar 12: CLI copies the files</li>
+    <li>
+      <strong>Mar 18: Docs, live previews</strong>
+    </li>
+    <li>
+      <em>Apr 02: Registry listed</em>
+    </li>
+  </ul>
+</GraphTimeline>`
+    ),
     preview: (
-      <GraphTimeline
-        events={[
-          { date: "Mar 12", label: "CLI copies the files" },
-          { date: "Mar 18", label: "Docs, live previews", state: "now" },
-          { date: "Apr 02", label: "Registry listed", state: "next" },
-        ]}
-        title="SHIPPED"
-      />
+      <GraphTimeline title="SHIPPED">
+        <ul>
+          <li>Mar 12: CLI copies the files</li>
+          <li>
+            <strong>Mar 18: Docs, live previews</strong>
+          </li>
+          <li>
+            <em>Apr 02: Registry listed</em>
+          </li>
+        </ul>
+      </GraphTimeline>
     ),
   },
   {
     title: "Incident",
-    description: "Three events with the rollback marked as current.",
-    code: `import { GraphTimeline } from "@/registry/default/graph-timeline/graph-timeline"
+    code: `<GraphTimeline title="INCIDENT">
 
-<GraphTimeline
-  title="INCIDENT"
-  events={[
-    { date: "14:02", label: "p95 crossed 800ms" },
-    { date: "14:11", label: "rolled back the cache flag", state: "now" },
-    { date: "14:40", label: "write the postmortem", state: "next" },
-  ]}
-/>`,
+- 14:02: p95 crossed 800ms
+- **14:11: rolled back the cache flag**
+- *14:40: write the postmortem*
+
+</GraphTimeline>`,
+    react: tsx(
+      "graph-timeline",
+      "GraphTimeline",
+      `<GraphTimeline title="INCIDENT">
+  <ul>
+    <li>14:02: p95 crossed 800ms</li>
+    <li>
+      <strong>14:11: rolled back the cache flag</strong>
+    </li>
+    <li>
+      <em>14:40: write the postmortem</em>
+    </li>
+  </ul>
+</GraphTimeline>`
+    ),
     preview: (
-      <GraphTimeline
-        events={[
-          { date: "14:02", label: "p95 crossed 800ms" },
-          {
-            date: "14:11",
-            label: "rolled back the cache flag",
-            state: "now",
-          },
-          { date: "14:40", label: "write the postmortem", state: "next" },
-        ]}
-        title="INCIDENT"
-      />
+      <GraphTimeline title="INCIDENT">
+        <ul>
+          <li>14:02: p95 crossed 800ms</li>
+          <li>
+            <strong>14:11: rolled back the cache flag</strong>
+          </li>
+          <li>
+            <em>14:40: write the postmortem</em>
+          </li>
+        </ul>
+      </GraphTimeline>
     ),
   },
 ]
@@ -717,50 +1002,62 @@ const timelineExamples: Example[] = [
 const checkExamples: Example[] = [
   {
     title: "Launch",
-    description: "Done rows mark [x]. A note sits under the open item.",
-    code: `import { GraphCheck } from "@/registry/default/graph-check/graph-check"
+    code: `<GraphCheck title="LAUNCH">
 
-<GraphCheck
-  title="LAUNCH"
-  items={[
-    { label: "freeze tokens", done: true },
-    { label: "ship registry json", done: true },
-    { label: "write the postmortem", note: "still open" },
-  ]}
-/>`,
+- [x] freeze tokens
+- [x] ship registry json
+- [ ] write the postmortem — still open
+
+</GraphCheck>`,
+    react: tsx(
+      "graph-check",
+      "GraphCheck",
+      `<GraphCheck title="LAUNCH">
+  <ul>
+    <li>[x] freeze tokens</li>
+    <li>[x] ship registry json</li>
+    <li>[ ] write the postmortem — still open</li>
+  </ul>
+</GraphCheck>`
+    ),
     preview: (
-      <GraphCheck
-        items={[
-          { label: "freeze tokens", done: true },
-          { label: "ship registry json", done: true },
-          { label: "write the postmortem", note: "still open" },
-        ]}
-        title="LAUNCH"
-      />
+      <GraphCheck title="LAUNCH">
+        <ul>
+          <li>[x] freeze tokens</li>
+          <li>[x] ship registry json</li>
+          <li>[ ] write the postmortem — still open</li>
+        </ul>
+      </GraphCheck>
     ),
   },
   {
     title: "Review",
-    description: "A punch list with a note on the last row.",
-    code: `import { GraphCheck } from "@/registry/default/graph-check/graph-check"
+    code: `<GraphCheck title="REVIEW">
 
-<GraphCheck
-  title="REVIEW"
-  items={[
-    { label: "title is a sentence", done: true },
-    { label: "numbers are tabular", done: true },
-    { label: "motion respects reduced", note: "check the timer" },
-  ]}
-/>`,
+- [x] title is a sentence
+- [x] numbers are tabular
+- [ ] motion respects reduced — check the timer
+
+</GraphCheck>`,
+    react: tsx(
+      "graph-check",
+      "GraphCheck",
+      `<GraphCheck title="REVIEW">
+  <ul>
+    <li>[x] title is a sentence</li>
+    <li>[x] numbers are tabular</li>
+    <li>[ ] motion respects reduced — check the timer</li>
+  </ul>
+</GraphCheck>`
+    ),
     preview: (
-      <GraphCheck
-        items={[
-          { label: "title is a sentence", done: true },
-          { label: "numbers are tabular", done: true },
-          { label: "motion respects reduced", note: "check the timer" },
-        ]}
-        title="REVIEW"
-      />
+      <GraphCheck title="REVIEW">
+        <ul>
+          <li>[x] title is a sentence</li>
+          <li>[x] numbers are tabular</li>
+          <li>[ ] motion respects reduced — check the timer</li>
+        </ul>
+      </GraphCheck>
     ),
   },
 ]
@@ -768,91 +1065,53 @@ const checkExamples: Example[] = [
 const stackExamples: Example[] = [
   {
     title: "Bundle",
-    description:
-      "palette multi paints each segment. js, css, and images each get a hue.",
-    code: `import { GraphStack } from "@/registry/default/graph-stack/graph-stack"
+    code: `<GraphStack title="BUNDLE" palette="multi">
 
-<GraphStack
-  title="BUNDLE"
-  palette="multi"
-  rows={[
-    {
-      label: "marketing",
-      segments: [
-        { label: "js", value: 48 },
-        { label: "css", value: 22 },
-        { label: "images", value: 30 },
-      ],
-    },
-    {
-      label: "docs",
-      segments: [
-        { label: "js", value: 28 },
-        { label: "css", value: 18 },
-        { label: "images", value: 54 },
-      ],
-    },
-  ]}
-/>`,
+- marketing: 48 js, 22 css, 30 images
+- docs: 28 js, 18 css, 54 images
+
+</GraphStack>`,
+    react: tsx(
+      "graph-stack",
+      "GraphStack",
+      `<GraphStack title="BUNDLE" palette="multi">
+  <ul>
+    <li>marketing: 48 js, 22 css, 30 images</li>
+    <li>docs: 28 js, 18 css, 54 images</li>
+  </ul>
+</GraphStack>`
+    ),
     preview: (
-      <GraphStack
-        palette="multi"
-        rows={[
-          {
-            label: "marketing",
-            segments: [
-              { label: "js", value: 48 },
-              { label: "css", value: 22 },
-              { label: "images", value: 30 },
-            ],
-          },
-          {
-            label: "docs",
-            segments: [
-              { label: "js", value: 28 },
-              { label: "css", value: 18 },
-              { label: "images", value: 54 },
-            ],
-          },
-        ]}
-        title="BUNDLE"
-      />
+      <GraphStack palette="multi" title="BUNDLE">
+        <ul>
+          <li>marketing: 48 js, 22 css, 30 images</li>
+          <li>docs: 28 js, 18 css, 54 images</li>
+        </ul>
+      </GraphStack>
     ),
   },
   {
     title: "Tokens",
-    description: "Single row showing how token usage splits.",
-    code: `import { GraphStack } from "@/registry/default/graph-stack/graph-stack"
+    code: `<GraphStack title="TOKENS" ticks={28}>
 
-<GraphStack
-  title="TOKENS"
-  ticks={28}
-  rows={[
-    {
-      label: "week",
-      segments: [
-        { label: "prompt", value: 61 },
-        { label: "completion", value: 27 },
-        { label: "cached", value: 12 },
-      ],
-    },
-  ]}
-/>`,
+- week: 61 prompt, 27 completion, 12 cached
+
+</GraphStack>`,
+    react: tsx(
+      "graph-stack",
+      "GraphStack",
+      `<GraphStack title="TOKENS" ticks={28}>
+  <ul>
+    <li>week: 61 prompt, 27 completion, 12 cached</li>
+  </ul>
+</GraphStack>`
+    ),
     preview: (
-      <GraphStack
-        rows={[
-          {
-            label: "week",
-            segments: [
-              { label: "prompt", value: 61 },
-              { label: "completion", value: 27 },
-              { label: "cached", value: 12 },
-            ],
-          },
-        ]}
-        ticks={28}
-        title="TOKENS"
-      />
+      <GraphStack ticks={28} title="TOKENS">
+        <ul>
+          <li>week: 61 prompt, 27 completion, 12 cached</li>
+        </ul>
+      </GraphStack>
     ),
   },
 ]
@@ -860,57 +1119,65 @@ const stackExamples: Example[] = [
 const funnelExamples: Example[] = [
   {
     title: "Install",
-    description:
-      "Percentages compare to the first step. stage dims the other rows.",
-    code: `import { GraphFunnel } from "@/registry/default/graph-funnel/graph-funnel"
+    code: `<GraphFunnel title="INSTALL" stage="ship">
 
-<GraphFunnel
-  title="INSTALL"
-  stage="ship"
-  steps={[
-    { label: "docs", value: 12400, display: "12,400" },
-    { label: "copy", value: 4100, display: "4,100" },
-    { label: "ship", value: 860, display: "860" },
-  ]}
-/>`,
+- 12,400 docs
+- 4,100 copy
+- 860 ship
+
+</GraphFunnel>`,
+    react: tsx(
+      "graph-funnel",
+      "GraphFunnel",
+      `<GraphFunnel title="INSTALL" stage="ship">
+  <ul>
+    <li>12,400 docs</li>
+    <li>4,100 copy</li>
+    <li>860 ship</li>
+  </ul>
+</GraphFunnel>`
+    ),
     preview: (
-      <GraphFunnel
-        stage="ship"
-        steps={[
-          { label: "docs", value: 12400, display: "12,400" },
-          { label: "copy", value: 4100, display: "4,100" },
-          { label: "ship", value: 860, display: "860" },
-        ]}
-        title="INSTALL"
-      />
+      <GraphFunnel stage="ship" title="INSTALL">
+        <ul>
+          <li>12,400 docs</li>
+          <li>4,100 copy</li>
+          <li>860 ship</li>
+        </ul>
+      </GraphFunnel>
     ),
   },
   {
     title: "Signup",
-    description: "Shorter bar width. Same percentage logic.",
-    code: `import { GraphFunnel } from "@/registry/default/graph-funnel/graph-funnel"
+    code: `<GraphFunnel title="SIGNUP" ticks={16}>
 
-<GraphFunnel
-  title="SIGNUP"
-  ticks={16}
-  steps={[
-    { label: "visit", value: 8000, display: "8,000" },
-    { label: "start", value: 2400, display: "2,400" },
-    { label: "verify", value: 960, display: "960" },
-    { label: "paid", value: 180, display: "180" },
-  ]}
-/>`,
+- 8,000 visit
+- 2,400 start
+- 960 verify
+- 180 paid
+
+</GraphFunnel>`,
+    react: tsx(
+      "graph-funnel",
+      "GraphFunnel",
+      `<GraphFunnel title="SIGNUP" ticks={16}>
+  <ul>
+    <li>8,000 visit</li>
+    <li>2,400 start</li>
+    <li>960 verify</li>
+    <li>180 paid</li>
+  </ul>
+</GraphFunnel>`
+    ),
     preview: (
-      <GraphFunnel
-        steps={[
-          { label: "visit", value: 8000, display: "8,000" },
-          { label: "start", value: 2400, display: "2,400" },
-          { label: "verify", value: 960, display: "960" },
-          { label: "paid", value: 180, display: "180" },
-        ]}
-        ticks={16}
-        title="SIGNUP"
-      />
+      <GraphFunnel ticks={16} title="SIGNUP">
+        <ul>
+          <li>8,000 visit</li>
+          <li>2,400 start</li>
+          <li>960 verify</li>
+          <li>180 paid</li>
+        </ul>
+      </GraphFunnel>
     ),
   },
 ]
@@ -918,63 +1185,78 @@ const funnelExamples: Example[] = [
 const ganttExamples: Example[] = [
   {
     title: "Launch",
-    description:
-      "complete sets bar fill. progress marks the current date on the track.",
-    code: `import { GraphGantt } from "@/registry/default/graph-gantt/graph-gantt"
+    code: `<GraphGantt title="LAUNCH" stage="build" progress={0.58} ticks={["q1", "q2", "q3", "q4"]}>
 
-<GraphGantt
-  title="LAUNCH"
-  stage="build"
-  progress={0.58}
-  ticks={["q1", "q2", "q3", "q4"]}
-  items={[
-    { label: "design", start: 0, end: 0.35, complete: 1 },
-    { label: "build", start: 0.2, end: 0.75, complete: 0.55 },
-    { label: "docs", start: 0.55, end: 0.9, complete: 0.2 },
-    { label: "ship", start: 0.85, end: 1, complete: 0 },
-  ]}
-/>`,
+- design: 0 0.35 1
+- **build**: 0.2 0.75 0.55
+- docs: 0.55 0.9 0.2
+- ship: 0.85 1
+
+</GraphGantt>`,
+    react: tsx(
+      "graph-gantt",
+      "GraphGantt",
+      `<GraphGantt title="LAUNCH" stage="build" progress={0.58} ticks={["q1", "q2", "q3", "q4"]}>
+  <ul>
+    <li>design: 0 0.35 1</li>
+    <li>
+      <strong>build</strong>: 0.2 0.75 0.55
+    </li>
+    <li>docs: 0.55 0.9 0.2</li>
+    <li>ship: 0.85 1</li>
+  </ul>
+</GraphGantt>`
+    ),
     preview: (
       <GraphGantt
-        items={[
-          { label: "design", start: 0, end: 0.35, complete: 1 },
-          { label: "build", start: 0.2, end: 0.75, complete: 0.55 },
-          { label: "docs", start: 0.55, end: 0.9, complete: 0.2 },
-          { label: "ship", start: 0.85, end: 1, complete: 0 },
-        ]}
         progress={0.58}
         stage="build"
         ticks={["q1", "q2", "q3", "q4"]}
         title="LAUNCH"
-      />
+      >
+        <ul>
+          <li>design: 0 0.35 1</li>
+          <li>
+            <strong>build</strong>: 0.2 0.75 0.55
+          </li>
+          <li>docs: 0.55 0.9 0.2</li>
+          <li>ship: 0.85 1</li>
+        </ul>
+      </GraphGantt>
     ),
   },
   {
     title: "Week",
-    description: "A denser track. Same API.",
-    code: `import { GraphGantt } from "@/registry/default/graph-gantt/graph-gantt"
+    code: `<GraphGantt title="THIS WEEK" columns={20} ticks={["mon", "wed", "fri"]}>
 
-<GraphGantt
-  title="THIS WEEK"
-  columns={20}
-  ticks={["mon", "wed", "fri"]}
-  items={[
-    { label: "rfc", start: 0, end: 0.4, accent: true },
-    { label: "patch", start: 0.35, end: 0.8 },
-    { label: "review", start: 0.7, end: 1 },
-  ]}
-/>`,
+- **rfc**: 0 0.4
+- patch: 0.35 0.8
+- review: 0.7 1
+
+</GraphGantt>`,
+    react: tsx(
+      "graph-gantt",
+      "GraphGantt",
+      `<GraphGantt title="THIS WEEK" columns={20} ticks={["mon", "wed", "fri"]}>
+  <ul>
+    <li>
+      <strong>rfc</strong>: 0 0.4
+    </li>
+    <li>patch: 0.35 0.8</li>
+    <li>review: 0.7 1</li>
+  </ul>
+</GraphGantt>`
+    ),
     preview: (
-      <GraphGantt
-        columns={20}
-        items={[
-          { label: "rfc", start: 0, end: 0.4, accent: true },
-          { label: "patch", start: 0.35, end: 0.8 },
-          { label: "review", start: 0.7, end: 1 },
-        ]}
-        ticks={["mon", "wed", "fri"]}
-        title="THIS WEEK"
-      />
+      <GraphGantt columns={20} ticks={["mon", "wed", "fri"]} title="THIS WEEK">
+        <ul>
+          <li>
+            <strong>rfc</strong>: 0 0.4
+          </li>
+          <li>patch: 0.35 0.8</li>
+          <li>review: 0.7 1</li>
+        </ul>
+      </GraphGantt>
     ),
   },
 ]
@@ -985,14 +1267,10 @@ const plotExamples: Example[] = [
     description: "Last cap is the live point.",
     code: `import { GraphPlot } from "@/registry/default/graph-plot/graph-plot"
 
-<GraphPlot
-  title="P95"
-  data={[2, 3, 3, 5, 4, 7, 6, 8, 5, 9, 7, 6]}
-  labels={["jan", "dec"]}
-/>`,
+<GraphPlot title="P95" data="2 3 3 5 4 7 6 8 5 9 7 6" labels={["jan", "dec"]} />`,
     preview: (
       <GraphPlot
-        data={[2, 3, 3, 5, 4, 7, 6, 8, 5, 9, 7, 6]}
+        data="2 3 3 5 4 7 6 8 5 9 7 6"
         labels={["jan", "dec"]}
         title="P95"
       />
@@ -1030,16 +1308,12 @@ const waffleExamples: Example[] = [
     description: "One hundred cells. Value is how many are lit.",
     code: `import { GraphWaffle } from "@/registry/default/graph-waffle/graph-waffle"
 
-<GraphWaffle
-  title="COVERAGE"
-  value={0.73}
-  caption="73 of 100 tests green"
-/>`,
+<GraphWaffle title="COVERAGE" value="73%" caption="73 of 100 tests green" />`,
     preview: (
       <GraphWaffle
         caption="73 of 100 tests green"
         title="COVERAGE"
-        value={0.73}
+        value="73%"
       />
     ),
   },
@@ -1070,57 +1344,76 @@ const waffleExamples: Example[] = [
 const diffExamples: Example[] = [
   {
     title: "Bundle",
-    description:
-      "Adds use the accent. Removes use the second hue. Footer is the total.",
-    code: `import { GraphDiff } from "@/registry/default/graph-diff/graph-diff"
+    code: `<GraphDiff title="BUNDLE" palette="duo">
 
-<GraphDiff
-  title="BUNDLE"
-  palette="duo"
-  rows={[
-    { label: "vendor", value: "84 kb" },
-    { label: "app", value: "31 kb", sign: "add" },
-    { label: "sourcemaps", value: "12 kb", sign: "remove" },
-  ]}
-  footer={{ label: "shipped", value: "103 kb" }}
-/>`,
+- vendor: 84 kb
+- app: +31 kb
+- sourcemaps: -12 kb
+- **shipped: 103 kb**
+
+</GraphDiff>`,
+    react: tsx(
+      "graph-diff",
+      "GraphDiff",
+      `<GraphDiff title="BUNDLE" palette="duo">
+  <ul>
+    <li>vendor: 84 kb</li>
+    <li>app: +31 kb</li>
+    <li>sourcemaps: -12 kb</li>
+    <li>
+      <strong>shipped: 103 kb</strong>
+    </li>
+  </ul>
+</GraphDiff>`
+    ),
     preview: (
-      <GraphDiff
-        footer={{ label: "shipped", value: "103 kb" }}
-        palette="duo"
-        rows={[
-          { label: "vendor", value: "84 kb" },
-          { label: "app", value: "31 kb", sign: "add" },
-          { label: "sourcemaps", value: "12 kb", sign: "remove" },
-        ]}
-        title="BUNDLE"
-      />
+      <GraphDiff palette="duo" title="BUNDLE">
+        <ul>
+          <li>vendor: 84 kb</li>
+          <li>app: +31 kb</li>
+          <li>sourcemaps: -12 kb</li>
+          <li>
+            <strong>shipped: 103 kb</strong>
+          </li>
+        </ul>
+      </GraphDiff>
     ),
   },
   {
     title: "Headcount",
-    description: "Running total with hire and leave rows.",
-    code: `import { GraphDiff } from "@/registry/default/graph-diff/graph-diff"
+    code: `<GraphDiff title="HEADCOUNT">
 
-<GraphDiff
-  title="HEADCOUNT"
-  rows={[
-    { label: "start", value: "12" },
-    { label: "hired", value: "3", sign: "add" },
-    { label: "left", value: "1", sign: "remove" },
-  ]}
-  footer={{ label: "now", value: "14" }}
-/>`,
+- start: 12
+- hired: +3
+- left: -1
+- **now: 14**
+
+</GraphDiff>`,
+    react: tsx(
+      "graph-diff",
+      "GraphDiff",
+      `<GraphDiff title="HEADCOUNT">
+  <ul>
+    <li>start: 12</li>
+    <li>hired: +3</li>
+    <li>left: -1</li>
+    <li>
+      <strong>now: 14</strong>
+    </li>
+  </ul>
+</GraphDiff>`
+    ),
     preview: (
-      <GraphDiff
-        footer={{ label: "now", value: "14" }}
-        rows={[
-          { label: "start", value: "12" },
-          { label: "hired", value: "3", sign: "add" },
-          { label: "left", value: "1", sign: "remove" },
-        ]}
-        title="HEADCOUNT"
-      />
+      <GraphDiff title="HEADCOUNT">
+        <ul>
+          <li>start: 12</li>
+          <li>hired: +3</li>
+          <li>left: -1</li>
+          <li>
+            <strong>now: 14</strong>
+          </li>
+        </ul>
+      </GraphDiff>
     ),
   },
 ]
@@ -1128,110 +1421,195 @@ const diffExamples: Example[] = [
 const invoiceExamples: Example[] = [
   {
     title: "Studio invoice",
-    description:
-      "From, bill-to, line items with qty and rate, total in accent.",
-    code: `import { GraphInvoice } from "@/registry/default/graph-invoice/graph-invoice"
-
-<GraphInvoice
+    code: `<GraphInvoice
   title="INVOICE 0041"
-  from={{
-    name: "markdown graphs",
-    lines: ["kshv.me", "GSTIN 29AXXXXX1234Z5"],
-  }}
-  to={{
-    name: "Acme Studio",
-    lines: ["14 Market Street", "San Francisco, CA"],
-  }}
-  meta={[
-    { label: "No.", value: "0041" },
-    { label: "Issued", value: "Mar 12, 2026" },
-    { label: "Due", value: "Apr 11, 2026" },
-  ]}
-  items={[
-    { description: "Design system", qty: "1", rate: "4,200", amount: "4,200" },
-    { description: "Motion pass", qty: "1", rate: "1,800", amount: "1,800" },
-    { description: "Docs rewrite", qty: "8h", rate: "180", amount: "1,440" },
-  ]}
-  totals={[
-    { label: "Subtotal", value: "7,440" },
-    { label: "Tax", value: "0" },
-    { label: "Amount due", value: "7,440", accent: true },
-  ]}
-  note="Net 30. Wire to the account on file."
-/>`,
+  from="mdxcn"
+  to="Acme Studio"
+>
+
+- No.: 0041
+- Issued: Mar 12, 2026
+- Due: Apr 11, 2026
+
+| Description | Qty | Rate | Amount |
+| --- | --- | --- | --- |
+| Design system | 1 | 4,200 | 4,200 |
+| Motion pass | 1 | 1,800 | 1,800 |
+| Docs rewrite | 8h | 180 | 1,440 |
+
+**Amount due** 7,440
+
+Net 30. Wire to the account on file.
+
+</GraphInvoice>`,
+    react: tsx(
+      "graph-invoice",
+      "GraphInvoice",
+      `<GraphInvoice
+  title="INVOICE 0041"
+  from="mdxcn"
+  to="Acme Studio"
+>
+  <ul>
+    <li>No.: 0041</li>
+    <li>Issued: Mar 12, 2026</li>
+    <li>Due: Apr 11, 2026</li>
+  </ul>
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Qty</th>
+        <th>Rate</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Design system</td>
+        <td>1</td>
+        <td>4,200</td>
+        <td>4,200</td>
+      </tr>
+      <tr>
+        <td>Motion pass</td>
+        <td>1</td>
+        <td>1,800</td>
+        <td>1,800</td>
+      </tr>
+      <tr>
+        <td>Docs rewrite</td>
+        <td>8h</td>
+        <td>180</td>
+        <td>1,440</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <strong>Amount due</strong> 7,440
+  </p>
+  <p>Net 30. Wire to the account on file.</p>
+</GraphInvoice>`
+    ),
     preview: (
       <GraphInvoice
-        from={{
-          name: "markdown graphs",
-          lines: ["kshv.me", "GSTIN 29AXXXXX1234Z5"],
-        }}
-        items={[
-          {
-            description: "Design system",
-            qty: "1",
-            rate: "4,200",
-            amount: "4,200",
-          },
-          {
-            description: "Motion pass",
-            qty: "1",
-            rate: "1,800",
-            amount: "1,800",
-          },
-          {
-            description: "Docs rewrite",
-            qty: "8h",
-            rate: "180",
-            amount: "1,440",
-          },
-        ]}
-        meta={[
-          { label: "No.", value: "0041" },
-          { label: "Issued", value: "Mar 12, 2026" },
-          { label: "Due", value: "Apr 11, 2026" },
-        ]}
-        note="Net 30. Wire to the account on file."
+        from="mdxcn"
         title="INVOICE 0041"
-        to={{
-          name: "Acme Studio",
-          lines: ["14 Market Street", "San Francisco, CA"],
-        }}
-        totals={[
-          { label: "Subtotal", value: "7,440" },
-          { label: "Tax", value: "0" },
-          { label: "Amount due", value: "7,440", accent: true },
-        ]}
-      />
+        to="Acme Studio"
+      >
+        <ul>
+          <li>No.: 0041</li>
+          <li>Issued: Mar 12, 2026</li>
+          <li>Due: Apr 11, 2026</li>
+        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Rate</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Design system</td>
+              <td>1</td>
+              <td>4,200</td>
+              <td>4,200</td>
+            </tr>
+            <tr>
+              <td>Motion pass</td>
+              <td>1</td>
+              <td>1,800</td>
+              <td>1,800</td>
+            </tr>
+            <tr>
+              <td>Docs rewrite</td>
+              <td>8h</td>
+              <td>180</td>
+              <td>1,440</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <strong>Amount due</strong> 7,440
+        </p>
+        <p>Net 30. Wire to the account on file.</p>
+      </GraphInvoice>
     ),
   },
   {
     title: "Quote",
-    description: "No qty or rate columns. Just description and amount.",
-    code: `import { GraphInvoice } from "@/registry/default/graph-invoice/graph-invoice"
+    code: `<GraphInvoice title="QUOTE" from="mdxcn" to="Northwind">
 
-<GraphInvoice
-  title="QUOTE"
-  from={{ name: "markdown graphs" }}
-  to={{ name: "Northwind" }}
-  meta={[{ label: "Valid until", value: "May 01" }]}
-  items={[
-    { description: "Registry install", amount: "0" },
-    { description: "Custom graph", amount: "2,400" },
-  ]}
-  totals={[{ label: "Estimate", value: "2,400", accent: true }]}
-/>`,
+- Valid until: May 01
+
+| Description | Amount |
+| --- | --- |
+| Registry install | 0 |
+| Custom graph | 2,400 |
+
+**Estimate** 2,400
+
+</GraphInvoice>`,
+    react: tsx(
+      "graph-invoice",
+      "GraphInvoice",
+      `<GraphInvoice title="QUOTE" from="mdxcn" to="Northwind">
+  <ul>
+    <li>Valid until: May 01</li>
+  </ul>
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Registry install</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>Custom graph</td>
+        <td>2,400</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <strong>Estimate</strong> 2,400
+  </p>
+</GraphInvoice>`
+    ),
     preview: (
-      <GraphInvoice
-        from={{ name: "markdown graphs" }}
-        items={[
-          { description: "Registry install", amount: "0" },
-          { description: "Custom graph", amount: "2,400" },
-        ]}
-        meta={[{ label: "Valid until", value: "May 01" }]}
-        title="QUOTE"
-        to={{ name: "Northwind" }}
-        totals={[{ label: "Estimate", value: "2,400", accent: true }]}
-      />
+      <GraphInvoice from="mdxcn" title="QUOTE" to="Northwind">
+        <ul>
+          <li>Valid until: May 01</li>
+        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Registry install</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Custom graph</td>
+              <td>2,400</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <strong>Estimate</strong> 2,400
+        </p>
+      </GraphInvoice>
     ),
   },
 ]
@@ -1239,61 +1617,169 @@ const invoiceExamples: Example[] = [
 const compareExamples: Example[] = [
   {
     title: "Plans",
-    description:
-      "Booleans become checkmarks. Studio is the highlighted column.",
-    code: `import { GraphCompare } from "@/registry/default/graph-compare/graph-compare"
+    code: `<GraphCompare title="PLANS" accent="Studio">
 
-<GraphCompare
-  title="PLANS"
-  columns={["Solo", "Studio"]}
-  accent="Studio"
-  rows={[
-    { label: "Registry", values: [true, true] },
-    { label: "Accent picker", values: [true, true] },
-    { label: "Private source", values: [false, true] },
-    { label: "Price", values: ["$0", "$24"] },
-  ]}
-/>`,
+| | Solo | Studio |
+| --- | --- | --- |
+| Registry | yes | yes |
+| Accent picker | yes | yes |
+| Private source | no | yes |
+| Price | $0 | $24 |
+
+</GraphCompare>`,
+    react: tsx(
+      "graph-compare",
+      "GraphCompare",
+      `<GraphCompare title="PLANS" accent="Studio">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Solo</th>
+        <th>Studio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Registry</td>
+        <td>yes</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td>Accent picker</td>
+        <td>yes</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td>Private source</td>
+        <td>no</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td>Price</td>
+        <td>$0</td>
+        <td>$24</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphCompare>`
+    ),
     preview: (
-      <GraphCompare
-        accent="Studio"
-        columns={["Solo", "Studio"]}
-        rows={[
-          { label: "Registry", values: [true, true] },
-          { label: "Accent picker", values: [true, true] },
-          { label: "Private source", values: [false, true] },
-          { label: "Price", values: ["$0", "$24"] },
-        ]}
-        title="PLANS"
-      />
+      <GraphCompare accent="Studio" title="PLANS">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Solo</th>
+              <th>Studio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Registry</td>
+              <td>yes</td>
+              <td>yes</td>
+            </tr>
+            <tr>
+              <td>Accent picker</td>
+              <td>yes</td>
+              <td>yes</td>
+            </tr>
+            <tr>
+              <td>Private source</td>
+              <td>no</td>
+              <td>yes</td>
+            </tr>
+            <tr>
+              <td>Price</td>
+              <td>$0</td>
+              <td>$24</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphCompare>
     ),
   },
   {
     title: "Before after",
-    description: "Three columns. Text cells stay as text.",
-    code: `import { GraphCompare } from "@/registry/default/graph-compare/graph-compare"
+    code: `<GraphCompare title="RENDER" accent="This">
 
-<GraphCompare
-  title="RENDER"
-  columns={["Mermaid", "SVG", "This"]}
-  accent="This"
-  rows={[
-    { label: "Source", values: [".md", ".svg", ".tsx"] },
-    { label: "In git", values: [true, false, true] },
-    { label: "Themable", values: [false, false, true] },
-  ]}
-/>`,
+| | Mermaid | SVG | This |
+| --- | --- | --- | --- |
+| Source | .md | .svg | .tsx |
+| In git | yes | no | yes |
+| Themable | no | no | yes |
+
+</GraphCompare>`,
+    react: tsx(
+      "graph-compare",
+      "GraphCompare",
+      `<GraphCompare title="RENDER" accent="This">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Mermaid</th>
+        <th>SVG</th>
+        <th>This</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Source</td>
+        <td>.md</td>
+        <td>.svg</td>
+        <td>.tsx</td>
+      </tr>
+      <tr>
+        <td>In git</td>
+        <td>yes</td>
+        <td>no</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td>Themable</td>
+        <td>no</td>
+        <td>no</td>
+        <td>yes</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphCompare>`
+    ),
     preview: (
-      <GraphCompare
-        accent="This"
-        columns={["Mermaid", "SVG", "This"]}
-        rows={[
-          { label: "Source", values: [".md", ".svg", ".tsx"] },
-          { label: "In git", values: [true, false, true] },
-          { label: "Themable", values: [false, false, true] },
-        ]}
-        title="RENDER"
-      />
+      <GraphCompare accent="This" title="RENDER">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Mermaid</th>
+              <th>SVG</th>
+              <th>This</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Source</td>
+              <td>.md</td>
+              <td>.svg</td>
+              <td>.tsx</td>
+            </tr>
+            <tr>
+              <td>In git</td>
+              <td>yes</td>
+              <td>no</td>
+              <td>yes</td>
+            </tr>
+            <tr>
+              <td>Themable</td>
+              <td>no</td>
+              <td>no</td>
+              <td>yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphCompare>
     ),
   },
 ]
@@ -1301,56 +1787,147 @@ const compareExamples: Example[] = [
 const matrixExamples: Example[] = [
   {
     title: "Detect",
-    description: "Confusion matrix. The live row uses the accent.",
-    code: `import { GraphMatrix } from "@/registry/default/graph-matrix/graph-matrix"
+    code: `<GraphMatrix title="DETECT" accent="Pos">
 
-<GraphMatrix
-  title="DETECT"
-  columns={["Pos", "Neg"]}
-  accent="Pos"
-  rows={[
-    { label: "Pos", values: [41, 3] },
-    { label: "Neg", values: [2, 54] },
-  ]}
-/>`,
+| | Pos | Neg |
+| --- | --- | --- |
+| Pos | 41 | 3 |
+| Neg | 2 | 54 |
+
+</GraphMatrix>`,
+    react: tsx(
+      "graph-matrix",
+      "GraphMatrix",
+      `<GraphMatrix title="DETECT" accent="Pos">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Pos</th>
+        <th>Neg</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pos</td>
+        <td>41</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>Neg</td>
+        <td>2</td>
+        <td>54</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphMatrix>`
+    ),
     preview: (
-      <GraphMatrix
-        accent="Pos"
-        columns={["Pos", "Neg"]}
-        rows={[
-          { label: "Pos", values: [41, 3] },
-          { label: "Neg", values: [2, 54] },
-        ]}
-        title="DETECT"
-      />
+      <GraphMatrix accent="Pos" title="DETECT">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Pos</th>
+              <th>Neg</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Pos</td>
+              <td>41</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>Neg</td>
+              <td>2</td>
+              <td>54</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphMatrix>
     ),
   },
   {
     title: "Latency",
-    description: "p95 by region. Numbers stay right-aligned.",
-    code: `import { GraphMatrix } from "@/registry/default/graph-matrix/graph-matrix"
+    code: `<GraphMatrix title="P95" accent="write">
 
-<GraphMatrix
-  title="P95"
-  columns={["iad", "sfo", "nrt"]}
-  accent="write"
-  rows={[
-    { label: "read", values: [12, 18, 41] },
-    { label: "write", values: [28, 33, 67] },
-    { label: "queue", values: [4, 6, 9] },
-  ]}
-/>`,
+| | iad | sfo | nrt |
+| --- | --- | --- | --- |
+| read | 12 | 18 | 41 |
+| write | 28 | 33 | 67 |
+| queue | 4 | 6 | 9 |
+
+</GraphMatrix>`,
+    react: tsx(
+      "graph-matrix",
+      "GraphMatrix",
+      `<GraphMatrix title="P95" accent="write">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>iad</th>
+        <th>sfo</th>
+        <th>nrt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>read</td>
+        <td>12</td>
+        <td>18</td>
+        <td>41</td>
+      </tr>
+      <tr>
+        <td>write</td>
+        <td>28</td>
+        <td>33</td>
+        <td>67</td>
+      </tr>
+      <tr>
+        <td>queue</td>
+        <td>4</td>
+        <td>6</td>
+        <td>9</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphMatrix>`
+    ),
     preview: (
-      <GraphMatrix
-        accent="write"
-        columns={["iad", "sfo", "nrt"]}
-        rows={[
-          { label: "read", values: [12, 18, 41] },
-          { label: "write", values: [28, 33, 67] },
-          { label: "queue", values: [4, 6, 9] },
-        ]}
-        title="P95"
-      />
+      <GraphMatrix accent="write" title="P95">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>iad</th>
+              <th>sfo</th>
+              <th>nrt</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>read</td>
+              <td>12</td>
+              <td>18</td>
+              <td>41</td>
+            </tr>
+            <tr>
+              <td>write</td>
+              <td>28</td>
+              <td>33</td>
+              <td>67</td>
+            </tr>
+            <tr>
+              <td>queue</td>
+              <td>4</td>
+              <td>6</td>
+              <td>9</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphMatrix>
     ),
   },
 ]
@@ -1358,48 +1935,67 @@ const matrixExamples: Example[] = [
 const statExamples: Example[] = [
   {
     title: "This week",
-    description: "Three large figures. The last number is the accent.",
-    code: `import { GraphStat } from "@/registry/default/graph-stat/graph-stat"
+    code: `<GraphStat title="THIS WEEK">
 
-<GraphStat
-  title="THIS WEEK"
-  items={[
-    { value: "12,400", label: "docs" },
-    { value: "4,100", label: "copies" },
-    { value: "860", label: "shipped", accent: true },
-  ]}
-/>`,
+- 12,400 docs
+- 4,100 copies
+- **860 shipped**
+
+</GraphStat>`,
+    react: tsx(
+      "graph-stat",
+      "GraphStat",
+      `<GraphStat title="THIS WEEK">
+  <ul>
+    <li>12,400 docs</li>
+    <li>4,100 copies</li>
+    <li>
+      <strong>860 shipped</strong>
+    </li>
+  </ul>
+</GraphStat>`
+    ),
     preview: (
-      <GraphStat
-        items={[
-          { value: "12,400", label: "docs" },
-          { value: "4,100", label: "copies" },
-          { value: "860", label: "shipped", accent: true },
-        ]}
-        title="THIS WEEK"
-      />
+      <GraphStat title="THIS WEEK">
+        <ul>
+          <li>12,400 docs</li>
+          <li>4,100 copies</li>
+          <li>
+            <strong>860 shipped</strong>
+          </li>
+        </ul>
+      </GraphStat>
     ),
   },
   {
     title: "Latency",
-    description: "Hint sits under the label in the frame color.",
-    code: `import { GraphStat } from "@/registry/default/graph-stat/graph-stat"
+    code: `<GraphStat title="P95">
 
-<GraphStat
-  title="P95"
-  items={[
-    { value: "142ms", label: "read", hint: "−18ms" },
-    { value: "410ms", label: "write", hint: "+22ms", accent: true },
-  ]}
-/>`,
+- 142ms read — −18ms
+- **410ms write — +22ms**
+
+</GraphStat>`,
+    react: tsx(
+      "graph-stat",
+      "GraphStat",
+      `<GraphStat title="P95">
+  <ul>
+    <li>142ms read — −18ms</li>
+    <li>
+      <strong>410ms write — +22ms</strong>
+    </li>
+  </ul>
+</GraphStat>`
+    ),
     preview: (
-      <GraphStat
-        items={[
-          { value: "142ms", label: "read", hint: "−18ms" },
-          { value: "410ms", label: "write", hint: "+22ms", accent: true },
-        ]}
-        title="P95"
-      />
+      <GraphStat title="P95">
+        <ul>
+          <li>142ms read — −18ms</li>
+          <li>
+            <strong>410ms write — +22ms</strong>
+          </li>
+        </ul>
+      </GraphStat>
     ),
   },
 ]
@@ -1416,11 +2012,11 @@ const kpiExamples: Example[] = [
   value="12,400"
   label="this week"
   hint="+18%"
-  data={[4, 5, 5, 6, 8, 7, 9, 8, 11, 10, 12, 14]}
+  data="4 5 5 6 8 7 9 8 11 10 12 14"
 />`,
     preview: (
       <GraphKpi
-        data={[4, 5, 5, 6, 8, 7, 9, 8, 11, 10, 12, 14]}
+        data="4 5 5 6 8 7 9 8 11 10 12 14"
         hint="+18%"
         label="this week"
         title="READS"
@@ -1455,60 +2051,79 @@ const kpiExamples: Example[] = [
 const specExamples: Example[] = [
   {
     title: "Type",
-    description: "Label column, value column. Accent the token that matters.",
-    code: `import { GraphSpec } from "@/registry/default/graph-spec/graph-spec"
+    code: `<GraphSpec title="TYPE">
 
-<GraphSpec
-  title="TYPE"
-  rows={[
-    { label: "Family", value: "Geist Mono" },
-    { label: "Size", value: "14 / 21" },
-    { label: "Tracking", value: "+0.02em" },
-    { label: "Figures", value: "tabular" },
-    { label: "Accent", value: "--graph-accent", accent: true },
-    { label: "Duo", value: "--graph-accent-2" },
-    { label: "Tri", value: "--graph-accent-3" },
-  ]}
-/>`,
+- Family: Geist Mono
+- Size: 14 / 21
+- Tracking: +0.02em
+- Figures: tabular
+- **Accent: --graph-accent**
+
+</GraphSpec>`,
+    react: tsx(
+      "graph-spec",
+      "GraphSpec",
+      `<GraphSpec title="TYPE">
+  <ul>
+    <li>Family: Geist Mono</li>
+    <li>Size: 14 / 21</li>
+    <li>Tracking: +0.02em</li>
+    <li>Figures: tabular</li>
+    <li>
+      <strong>Accent: --graph-accent</strong>
+    </li>
+  </ul>
+</GraphSpec>`
+    ),
     preview: (
-      <GraphSpec
-        rows={[
-          { label: "Family", value: "Geist Mono" },
-          { label: "Size", value: "14 / 21" },
-          { label: "Tracking", value: "+0.02em" },
-          { label: "Figures", value: "tabular" },
-          { label: "Accent", value: "--graph-accent", accent: true },
-          { label: "Duo", value: "--graph-accent-2" },
-          { label: "Tri", value: "--graph-accent-3" },
-        ]}
-        title="TYPE"
-      />
+      <GraphSpec title="TYPE">
+        <ul>
+          <li>Family: Geist Mono</li>
+          <li>Size: 14 / 21</li>
+          <li>Tracking: +0.02em</li>
+          <li>Figures: tabular</li>
+          <li>
+            <strong>Accent: --graph-accent</strong>
+          </li>
+        </ul>
+      </GraphSpec>
     ),
   },
   {
     title: "Ship to",
-    description: "Same layout as a packing slip.",
-    code: `import { GraphSpec } from "@/registry/default/graph-spec/graph-spec"
+    code: `<GraphSpec title="SHIP TO">
 
-<GraphSpec
-  title="SHIP TO"
-  rows={[
-    { label: "Name", value: "A. Rao" },
-    { label: "City", value: "Bengaluru" },
-    { label: "Carrier", value: "Delhivery" },
-    { label: "ETA", value: "Thu", accent: true },
-  ]}
-/>`,
+- Name: A. Rao
+- City: Bengaluru
+- Carrier: Delhivery
+- **ETA: Thu**
+
+</GraphSpec>`,
+    react: tsx(
+      "graph-spec",
+      "GraphSpec",
+      `<GraphSpec title="SHIP TO">
+  <ul>
+    <li>Name: A. Rao</li>
+    <li>City: Bengaluru</li>
+    <li>Carrier: Delhivery</li>
+    <li>
+      <strong>ETA: Thu</strong>
+    </li>
+  </ul>
+</GraphSpec>`
+    ),
     preview: (
-      <GraphSpec
-        rows={[
-          { label: "Name", value: "A. Rao" },
-          { label: "City", value: "Bengaluru" },
-          { label: "Carrier", value: "Delhivery" },
-          { label: "ETA", value: "Thu", accent: true },
-        ]}
-        title="SHIP TO"
-      />
+      <GraphSpec title="SHIP TO">
+        <ul>
+          <li>Name: A. Rao</li>
+          <li>City: Bengaluru</li>
+          <li>Carrier: Delhivery</li>
+          <li>
+            <strong>ETA: Thu</strong>
+          </li>
+        </ul>
+      </GraphSpec>
     ),
   },
 ]
@@ -1613,68 +2228,274 @@ function activityDays(start: string, length: number) {
 const heatmapExamples: Example[] = [
   {
     title: "Punchcard",
-    description: "Same glyphs as Activity. Low intensity uses the second hue.",
-    code: `import { GraphHeatmap } from "@/registry/default/graph-heatmap/graph-heatmap"
+    code: `<GraphHeatmap title="DEPLOYS" palette="duo">
 
-<GraphHeatmap
-  title="DEPLOYS"
-  palette="duo"
-  columns={["0", "4", "8", "12", "16", "20"]}
-  rows={[
-    { label: "Mon", values: [0, 1, 4, 8, 6, 1] },
-    { label: "Tue", values: [0, 0, 5, 9, 4, 2] },
-    { label: "Wed", values: [1, 0, 6, 12, 5, 1] },
-    { label: "Thu", values: [0, 2, 4, 7, 8, 3] },
-    { label: "Fri", values: [0, 1, 3, 5, 2, 0] },
-    { label: "Sat", values: [0, 0, 1, 0, 0, 0] },
-    { label: "Sun", values: [0, 0, 0, 1, 0, 0] },
-  ]}
-/>`,
+| | 0 | 4 | 8 | 12 | 16 | 20 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Mon | 0 | 1 | 4 | 8 | 6 | 1 |
+| Tue | 0 | 0 | 5 | 9 | 4 | 2 |
+| Wed | 1 | 0 | 6 | 12 | 5 | 1 |
+| Thu | 0 | 2 | 4 | 7 | 8 | 3 |
+| Fri | 0 | 1 | 3 | 5 | 2 | 0 |
+| Sat | 0 | 0 | 1 | 0 | 0 | 0 |
+| Sun | 0 | 0 | 0 | 1 | 0 | 0 |
+
+</GraphHeatmap>`,
+    react: tsx(
+      "graph-heatmap",
+      "GraphHeatmap",
+      `<GraphHeatmap title="DEPLOYS" palette="duo">
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>0</th>
+        <th>4</th>
+        <th>8</th>
+        <th>12</th>
+        <th>16</th>
+        <th>20</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Mon</td>
+        <td>0</td>
+        <td>1</td>
+        <td>4</td>
+        <td>8</td>
+        <td>6</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>Tue</td>
+        <td>0</td>
+        <td>0</td>
+        <td>5</td>
+        <td>9</td>
+        <td>4</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>Wed</td>
+        <td>1</td>
+        <td>0</td>
+        <td>6</td>
+        <td>12</td>
+        <td>5</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>Thu</td>
+        <td>0</td>
+        <td>2</td>
+        <td>4</td>
+        <td>7</td>
+        <td>8</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>Fri</td>
+        <td>0</td>
+        <td>1</td>
+        <td>3</td>
+        <td>5</td>
+        <td>2</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>Sat</td>
+        <td>0</td>
+        <td>0</td>
+        <td>1</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>Sun</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>1</td>
+        <td>0</td>
+        <td>0</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphHeatmap>`
+    ),
     preview: (
-      <GraphHeatmap
-        columns={["0", "4", "8", "12", "16", "20"]}
-        palette="duo"
-        rows={[
-          { label: "Mon", values: [0, 1, 4, 8, 6, 1] },
-          { label: "Tue", values: [0, 0, 5, 9, 4, 2] },
-          { label: "Wed", values: [1, 0, 6, 12, 5, 1] },
-          { label: "Thu", values: [0, 2, 4, 7, 8, 3] },
-          { label: "Fri", values: [0, 1, 3, 5, 2, 0] },
-          { label: "Sat", values: [0, 0, 1, 0, 0, 0] },
-          { label: "Sun", values: [0, 0, 0, 1, 0, 0] },
-        ]}
-        title="DEPLOYS"
-      />
+      <GraphHeatmap palette="duo" title="DEPLOYS">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>0</th>
+              <th>4</th>
+              <th>8</th>
+              <th>12</th>
+              <th>16</th>
+              <th>20</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mon</td>
+              <td>0</td>
+              <td>1</td>
+              <td>4</td>
+              <td>8</td>
+              <td>6</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>Tue</td>
+              <td>0</td>
+              <td>0</td>
+              <td>5</td>
+              <td>9</td>
+              <td>4</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>Wed</td>
+              <td>1</td>
+              <td>0</td>
+              <td>6</td>
+              <td>12</td>
+              <td>5</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>Thu</td>
+              <td>0</td>
+              <td>2</td>
+              <td>4</td>
+              <td>7</td>
+              <td>8</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>Fri</td>
+              <td>0</td>
+              <td>1</td>
+              <td>3</td>
+              <td>5</td>
+              <td>2</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Sat</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Sun</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphHeatmap>
     ),
   },
   {
     title: "Coverage",
-    description: "Lock max so two heatmaps share a scale.",
-    code: `import { GraphHeatmap } from "@/registry/default/graph-heatmap/graph-heatmap"
+    code: `<GraphHeatmap title="TESTS" max={10} legend={false}>
 
-<GraphHeatmap
-  title="TESTS"
-  max={10}
-  legend={false}
-  columns={["a", "b", "c", "d"]}
-  rows={[
-    { label: "auth", values: [10, 8, 4, 2] },
-    { label: "billing", values: [6, 10, 7, 1] },
-    { label: "docs", values: [2, 3, 9, 8] },
-  ]}
-/>`,
+| | a | b | c | d |
+| --- | --- | --- | --- | --- |
+| auth | 10 | 8 | 4 | 2 |
+| billing | 6 | 10 | 7 | 1 |
+| docs | 2 | 3 | 9 | 8 |
+
+</GraphHeatmap>`,
+    react: tsx(
+      "graph-heatmap",
+      "GraphHeatmap",
+      `<GraphHeatmap title="TESTS" max={10} legend={false}>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>a</th>
+        <th>b</th>
+        <th>c</th>
+        <th>d</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>auth</td>
+        <td>10</td>
+        <td>8</td>
+        <td>4</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>billing</td>
+        <td>6</td>
+        <td>10</td>
+        <td>7</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>docs</td>
+        <td>2</td>
+        <td>3</td>
+        <td>9</td>
+        <td>8</td>
+      </tr>
+    </tbody>
+  </table>
+</GraphHeatmap>`
+    ),
     preview: (
-      <GraphHeatmap
-        columns={["a", "b", "c", "d"]}
-        legend={false}
-        max={10}
-        rows={[
-          { label: "auth", values: [10, 8, 4, 2] },
-          { label: "billing", values: [6, 10, 7, 1] },
-          { label: "docs", values: [2, 3, 9, 8] },
-        ]}
-        title="TESTS"
-      />
+      <GraphHeatmap legend={false} max={10} title="TESTS">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>a</th>
+              <th>b</th>
+              <th>c</th>
+              <th>d</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>auth</td>
+              <td>10</td>
+              <td>8</td>
+              <td>4</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>billing</td>
+              <td>6</td>
+              <td>10</td>
+              <td>7</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>docs</td>
+              <td>2</td>
+              <td>3</td>
+              <td>9</td>
+              <td>8</td>
+            </tr>
+          </tbody>
+        </table>
+      </GraphHeatmap>
     ),
   },
 ]
@@ -1685,14 +2506,9 @@ const calendarExamples: Example[] = [
     description: "month is 1–12. today is passed in so render stays stable.",
     code: `import { GraphCalendar } from "@/registry/default/graph-calendar/graph-calendar"
 
-<GraphCalendar
-  year={2026}
-  month={8}
-  today={27}
-  marks={[12, 18, 27]}
-/>`,
+<GraphCalendar year={2026} month={8} today={27} marks="12 18 27" />`,
     preview: (
-      <GraphCalendar marks={[12, 18, 27]} month={8} today={27} year={2026} />
+      <GraphCalendar marks="12 18 27" month={8} today={27} year={2026} />
     ),
   },
   {
@@ -1722,57 +2538,68 @@ const calendarExamples: Example[] = [
 const waterfallExamples: Example[] = [
   {
     title: "Margin",
-    description:
-      "First row starts the run. Negative values use the second hue. Last row is the total.",
-    code: `import { GraphWaterfall } from "@/registry/default/graph-waterfall/graph-waterfall"
+    code: `<GraphWaterfall title="MARGIN" palette="duo">
 
-<GraphWaterfall
-  title="MARGIN"
-  palette="duo"
-  items={[
-    { label: "Revenue", value: 48 },
-    { label: "Refunds", value: -6 },
-    { label: "Hosting", value: -4 },
-    { label: "Profit", value: 38 },
-  ]}
-/>`,
+- Revenue: 48
+- Refunds: -6
+- Hosting: -4
+- Profit: 38
+
+</GraphWaterfall>`,
+    react: tsx(
+      "graph-waterfall",
+      "GraphWaterfall",
+      `<GraphWaterfall title="MARGIN" palette="duo">
+  <ul>
+    <li>Revenue: 48</li>
+    <li>Refunds: -6</li>
+    <li>Hosting: -4</li>
+    <li>Profit: 38</li>
+  </ul>
+</GraphWaterfall>`
+    ),
     preview: (
-      <GraphWaterfall
-        items={[
-          { label: "Revenue", value: 48 },
-          { label: "Refunds", value: -6 },
-          { label: "Hosting", value: -4 },
-          { label: "Profit", value: 38 },
-        ]}
-        palette="duo"
-        title="MARGIN"
-      />
+      <GraphWaterfall palette="duo" title="MARGIN">
+        <ul>
+          <li>Revenue: 48</li>
+          <li>Refunds: -6</li>
+          <li>Hosting: -4</li>
+          <li>Profit: 38</li>
+        </ul>
+      </GraphWaterfall>
     ),
   },
   {
     title: "Headcount",
-    description: "kind can be set by hand when the last row is not a total.",
-    code: `import { GraphWaterfall } from "@/registry/default/graph-waterfall/graph-waterfall"
+    code: `<GraphWaterfall title="TEAM">
 
-<GraphWaterfall
-  title="TEAM"
-  items={[
-    { label: "Start", value: 12, kind: "start" },
-    { label: "Hired", value: 4, kind: "in" },
-    { label: "Left", value: 2, kind: "out" },
-    { label: "Now", value: 14, kind: "end" },
-  ]}
-/>`,
+- Start: 12
+- Hired: 4
+- Left: -2
+- Now: 14
+
+</GraphWaterfall>`,
+    react: tsx(
+      "graph-waterfall",
+      "GraphWaterfall",
+      `<GraphWaterfall title="TEAM">
+  <ul>
+    <li>Start: 12</li>
+    <li>Hired: 4</li>
+    <li>Left: -2</li>
+    <li>Now: 14</li>
+  </ul>
+</GraphWaterfall>`
+    ),
     preview: (
-      <GraphWaterfall
-        items={[
-          { label: "Start", value: 12, kind: "start" },
-          { label: "Hired", value: 4, kind: "in" },
-          { label: "Left", value: 2, kind: "out" },
-          { label: "Now", value: 14, kind: "end" },
-        ]}
-        title="TEAM"
-      />
+      <GraphWaterfall title="TEAM">
+        <ul>
+          <li>Start: 12</li>
+          <li>Hired: 4</li>
+          <li>Left: -2</li>
+          <li>Now: 14</li>
+        </ul>
+      </GraphWaterfall>
     ),
   },
 ]
@@ -1802,35 +2629,19 @@ const uptimeExamples: Example[] = [
   },
   {
     title: "Incident window",
-    description: "empty days sit as dashes so a gap stays visible.",
+    description:
+      "days as one string. empty days sit as dashes so a gap stays visible.",
     code: `import { GraphUptime } from "@/registry/default/graph-uptime/graph-uptime"
 
 <GraphUptime
   title="WEBHOOKS"
-  days={[
-    "ok", "ok", "ok", "degraded", "ok",
-    "empty", "empty",
-    "ok", "down", "ok", "ok", "ok",
-  ]}
   from="Mon"
   to="Fri"
+  days="ok ok ok degraded ok empty empty ok down ok ok ok"
 />`,
     preview: (
       <GraphUptime
-        days={[
-          "ok",
-          "ok",
-          "ok",
-          "degraded",
-          "ok",
-          "empty",
-          "empty",
-          "ok",
-          "down",
-          "ok",
-          "ok",
-          "ok",
-        ]}
+        days="ok ok ok degraded ok empty empty ok down ok ok ok"
         from="Mon"
         title="WEBHOOKS"
         to="Fri"
@@ -1842,60 +2653,62 @@ const uptimeExamples: Example[] = [
 const slopeExamples: Example[] = [
   {
     title: "Traffic",
-    description: "Up uses the accent. Down uses the second hue.",
-    code: `import { GraphSlope } from "@/registry/default/graph-slope/graph-slope"
+    code: `<GraphSlope title="TRAFFIC" palette="duo" fromLabel="2025" toLabel="2026">
 
-<GraphSlope
-  title="TRAFFIC"
-  palette="duo"
-  fromLabel="2025"
-  toLabel="2026"
-  items={[
-    { label: "docs", from: 8200, to: 12400 },
-    { label: "copy", from: 5100, to: 4100 },
-    { label: "ship", from: 640, to: 860 },
-  ]}
-/>`,
+- docs: 8,200 → 12,400
+- copy: 5,100 → 4,100
+- ship: 640 → 860
+
+</GraphSlope>`,
+    react: tsx(
+      "graph-slope",
+      "GraphSlope",
+      `<GraphSlope title="TRAFFIC" palette="duo" fromLabel="2025" toLabel="2026">
+  <ul>
+    <li>docs: 8,200 → 12,400</li>
+    <li>copy: 5,100 → 4,100</li>
+    <li>ship: 640 → 860</li>
+  </ul>
+</GraphSlope>`
+    ),
     preview: (
-      <GraphSlope
-        fromLabel="2025"
-        items={[
-          { label: "docs", from: 8200, to: 12400 },
-          { label: "copy", from: 5100, to: 4100 },
-          { label: "ship", from: 640, to: 860 },
-        ]}
-        palette="duo"
-        title="TRAFFIC"
-        toLabel="2026"
-      />
+      <GraphSlope fromLabel="2025" palette="duo" title="TRAFFIC" toLabel="2026">
+        <ul>
+          <li>docs: 8,200 → 12,400</li>
+          <li>copy: 5,100 → 4,100</li>
+          <li>ship: 640 → 860</li>
+        </ul>
+      </GraphSlope>
     ),
   },
   {
     title: "Latency",
-    description: "Decimals stay tabular. Flat rows use a dash.",
-    code: `import { GraphSlope } from "@/registry/default/graph-slope/graph-slope"
+    code: `<GraphSlope title="P95" fromLabel="before" toLabel="after">
 
-<GraphSlope
-  title="P95"
-  fromLabel="before"
-  toLabel="after"
-  items={[
-    { label: "read", from: 160, to: 142 },
-    { label: "write", from: 388, to: 410 },
-    { label: "cache", from: 12, to: 12 },
-  ]}
-/>`,
+- read: 160 → 142
+- write: 388 → 410
+- cache: 12 → 12
+
+</GraphSlope>`,
+    react: tsx(
+      "graph-slope",
+      "GraphSlope",
+      `<GraphSlope title="P95" fromLabel="before" toLabel="after">
+  <ul>
+    <li>read: 160 → 142</li>
+    <li>write: 388 → 410</li>
+    <li>cache: 12 → 12</li>
+  </ul>
+</GraphSlope>`
+    ),
     preview: (
-      <GraphSlope
-        fromLabel="before"
-        items={[
-          { label: "read", from: 160, to: 142 },
-          { label: "write", from: 388, to: 410 },
-          { label: "cache", from: 12, to: 12 },
-        ]}
-        title="P95"
-        toLabel="after"
-      />
+      <GraphSlope fromLabel="before" title="P95" toLabel="after">
+        <ul>
+          <li>read: 160 → 142</li>
+          <li>write: 388 → 410</li>
+          <li>cache: 12 → 12</li>
+        </ul>
+      </GraphSlope>
     ),
   },
 ]
@@ -1903,50 +2716,62 @@ const slopeExamples: Example[] = [
 const bulletExamples: Example[] = [
   {
     title: "Targets",
-    description: "Fill is the actual. The marker is the target.",
-    code: `import { GraphBullet } from "@/registry/default/graph-bullet/graph-bullet"
+    code: `<GraphBullet title="BUDGET">
 
-<GraphBullet
-  title="BUDGET"
-  items={[
-    { label: "Design", value: 42, target: 40 },
-    { label: "Motion", value: 18, target: 24 },
-    { label: "Docs", value: 9, target: 12 },
-  ]}
-/>`,
+- Design: 42 / 40
+- Motion: 18 / 24
+- Docs: 9 / 12
+
+</GraphBullet>`,
+    react: tsx(
+      "graph-bullet",
+      "GraphBullet",
+      `<GraphBullet title="BUDGET">
+  <ul>
+    <li>Design: 42 / 40</li>
+    <li>Motion: 18 / 24</li>
+    <li>Docs: 9 / 12</li>
+  </ul>
+</GraphBullet>`
+    ),
     preview: (
-      <GraphBullet
-        items={[
-          { label: "Design", value: 42, target: 40 },
-          { label: "Motion", value: 18, target: 24 },
-          { label: "Docs", value: 9, target: 12 },
-        ]}
-        title="BUDGET"
-      />
+      <GraphBullet title="BUDGET">
+        <ul>
+          <li>Design: 42 / 40</li>
+          <li>Motion: 18 / 24</li>
+          <li>Docs: 9 / 12</li>
+        </ul>
+      </GraphBullet>
     ),
   },
   {
     title: "Capacity",
-    description: "max locks the track when values share a scale.",
-    code: `import { GraphBullet } from "@/registry/default/graph-bullet/graph-bullet"
+    code: `<GraphBullet title="LOAD">
 
-<GraphBullet
-  title="LOAD"
-  items={[
-    { label: "CPU", value: 72, target: 80, max: 100 },
-    { label: "RAM", value: 34, target: 64, max: 100 },
-    { label: "SSD", value: 91, target: 90, max: 100 },
-  ]}
-/>`,
+- CPU: 72 / 80 of 100
+- RAM: 34 / 64 of 100
+- SSD: 91 / 90 of 100
+
+</GraphBullet>`,
+    react: tsx(
+      "graph-bullet",
+      "GraphBullet",
+      `<GraphBullet title="LOAD">
+  <ul>
+    <li>CPU: 72 / 80 of 100</li>
+    <li>RAM: 34 / 64 of 100</li>
+    <li>SSD: 91 / 90 of 100</li>
+  </ul>
+</GraphBullet>`
+    ),
     preview: (
-      <GraphBullet
-        items={[
-          { label: "CPU", value: 72, target: 80, max: 100 },
-          { label: "RAM", value: 34, target: 64, max: 100 },
-          { label: "SSD", value: 91, target: 90, max: 100 },
-        ]}
-        title="LOAD"
-      />
+      <GraphBullet title="LOAD">
+        <ul>
+          <li>CPU: 72 / 80 of 100</li>
+          <li>RAM: 34 / 64 of 100</li>
+          <li>SSD: 91 / 90 of 100</li>
+        </ul>
+      </GraphBullet>
     ),
   },
 ]
@@ -2092,7 +2917,301 @@ const frameExamples: Example[] = [
   },
 ]
 
+const calloutExamples: Example[] = [
+  {
+    title: "Warning",
+    description:
+      "type sets the frame title and the glyph. The body is Markdown — write it like a paragraph.",
+    code: `import { Callout } from "@/registry/default/callout/callout"
+
+<Callout type="warning">
+  The CLI copies files into registry/default. It does not add an npm
+  dependency, so there is nothing to update later — edit the source.
+</Callout>`,
+    preview: (
+      <Callout type="warning">
+        <p>
+          The CLI copies files into registry/default. It does not add an npm
+          dependency, so there is nothing to update later — edit the source.
+        </p>
+      </Callout>
+    ),
+  },
+  {
+    title: "Tip with a title",
+    description: "title overrides the type on the frame. Lists work.",
+    code: `import { Callout } from "@/registry/default/callout/callout"
+
+<Callout type="tip" title="Palette">
+  One accent is the default. Opt in when a second series needs its own hue:
+
+  - palette="duo" for two series
+  - palette="multi" for three
+</Callout>`,
+    preview: (
+      <Callout title="Palette" type="tip">
+        <p>
+          One accent is the default. Opt in when a second series needs its own
+          hue:
+        </p>
+        <ul>
+          <li>palette=&quot;duo&quot; for two series</li>
+          <li>palette=&quot;multi&quot; for three</li>
+        </ul>
+      </Callout>
+    ),
+  },
+]
+
+const quoteExamples: Example[] = [
+  {
+    title: "Attributed",
+    description: "by is the name. source is muted after it. No frame title.",
+    code: `import { Quote } from "@/registry/default/quote/quote"
+
+<Quote by="Paul Graham" source="Taste for Makers">
+  A thousand barely audible voices all singing in tune.
+</Quote>`,
+    preview: (
+      <Quote by="Paul Graham" source="Taste for Makers">
+        A thousand barely audible voices all singing in tune.
+      </Quote>
+    ),
+  },
+  {
+    title: "Titled",
+    description: "Pass title when the quote belongs to a section.",
+    code: `import { Quote } from "@/registry/default/quote/quote"
+
+<Quote title="PRINCIPLE" by="Dieter Rams">
+  Good design is as little design as possible.
+</Quote>`,
+    preview: (
+      <Quote by="Dieter Rams" title="PRINCIPLE">
+        Good design is as little design as possible.
+      </Quote>
+    ),
+  },
+]
+
+const stepsExamples: Example[] = [
+  {
+    title: "Install",
+    code: `<Steps title="INSTALL">
+
+1. Copy the source
+
+   Run the shadcn CLI. Files land under registry/default.
+
+2. **Register it**
+
+   Export the component from mdx-components.tsx.
+
+3. *Write*
+
+   Use it between paragraphs. No import line.
+
+</Steps>`,
+    react: tsx(
+      "steps",
+      "Steps",
+      `<Steps title="INSTALL">
+  <ol>
+    <li>
+      <p>Copy the source</p>
+      <p>Run the shadcn CLI. Files land under registry/default.</p>
+    </li>
+    <li>
+      <p>
+        <strong>Register it</strong>
+      </p>
+      <p>Export the component from mdx-components.tsx.</p>
+    </li>
+    <li>
+      <p>
+        <em>Write</em>
+      </p>
+      <p>Use it between paragraphs. No import line.</p>
+    </li>
+  </ol>
+</Steps>`
+    ),
+    preview: (
+      <Steps title="INSTALL">
+        <ol>
+          <li>
+            <p>Copy the source</p>
+            <p>Run the shadcn CLI. Files land under registry/default.</p>
+          </li>
+          <li>
+            <p>
+              <strong>Register it</strong>
+            </p>
+            <p>Export the component from mdx-components.tsx.</p>
+          </li>
+          <li>
+            <p>
+              <em>Write</em>
+            </p>
+            <p>Use it between paragraphs. No import line.</p>
+          </li>
+        </ol>
+      </Steps>
+    ),
+  },
+  {
+    title: "Runbook",
+    code: `<Steps title="ROLLBACK">
+
+1. Flip the flag — cache.v2 to off in the dashboard.
+2. Watch p95 — Two minutes. It should drop under 300ms.
+3. Write it down — Open the postmortem before you leave.
+
+</Steps>`,
+    react: tsx(
+      "steps",
+      "Steps",
+      `<Steps title="ROLLBACK">
+  <ol>
+    <li>Flip the flag — cache.v2 to off in the dashboard.</li>
+    <li>Watch p95 — Two minutes. It should drop under 300ms.</li>
+    <li>Write it down — Open the postmortem before you leave.</li>
+  </ol>
+</Steps>`
+    ),
+    preview: (
+      <Steps title="ROLLBACK">
+        <ol>
+          <li>Flip the flag — cache.v2 to off in the dashboard.</li>
+          <li>Watch p95 — Two minutes. It should drop under 300ms.</li>
+          <li>Write it down — Open the postmortem before you leave.</li>
+        </ol>
+      </Steps>
+    ),
+  },
+]
+
+const terminalExamples: Example[] = [
+  {
+    title: "Install",
+    description:
+      "Put the session in a fenced block so Markdown leaves it alone. $ marks a command, ✓ a pass.",
+    code: `import { Terminal } from "@/registry/default/terminal/terminal"
+
+<Terminal title="SHELL">
+\`\`\`
+$ pnpm dlx shadcn@latest add @mdxcn/callout
+✓ registry/default/callout/callout.tsx
+✓ registry/default/graph-frame/graph-frame.tsx
+  2 files written, 0 conflicts
+\`\`\`
+</Terminal>`,
+    preview: (
+      <Terminal title="SHELL">
+        {`$ pnpm dlx shadcn@latest add @mdxcn/callout
+✓ registry/default/callout/callout.tsx
+✓ registry/default/graph-frame/graph-frame.tsx
+  2 files written, 0 conflicts`}
+      </Terminal>
+    ),
+  },
+  {
+    title: "Comment and output",
+    description: "# lines are comments. Plain lines are output, muted.",
+    code: `import { Terminal } from "@/registry/default/terminal/terminal"
+
+<Terminal title="TESTS" prompt=">">
+\`\`\`
+# run the suite once
+> pnpm test
+ RUN  v3.2.7
+ ✓ lib/http/accept.test.ts (12)
+ ✓ lib/agent/copy.test.ts (4)
+ Test Files  2 passed (2)
+\`\`\`
+</Terminal>`,
+    preview: (
+      <Terminal prompt=">" title="TESTS">
+        {`# run the suite once
+> pnpm test
+ RUN  v3.2.7
+ ✓ lib/http/accept.test.ts (12)
+ ✓ lib/agent/copy.test.ts (4)
+ Test Files  2 passed (2)`}
+      </Terminal>
+    ),
+  },
+]
+
+const changelogExamples: Example[] = [
+  {
+    title: "Release",
+    code: `<Changelog version="1.2.0" date="Mar 12">
+
+- added: Callout, Quote, Steps, Terminal, Changelog
+- changed: Graphs read MDX children as well as arrays
+- fixed: Timeline connector on Safari
+- removed: The legacy accent prop
+
+</Changelog>`,
+    react: tsx(
+      "changelog",
+      "Changelog",
+      `<Changelog version="1.2.0" date="Mar 12">
+  <ul>
+    <li>added: Callout, Quote, Steps, Terminal, Changelog</li>
+    <li>changed: Graphs read MDX children as well as arrays</li>
+    <li>fixed: Timeline connector on Safari</li>
+    <li>removed: The legacy accent prop</li>
+  </ul>
+</Changelog>`
+    ),
+    preview: (
+      <Changelog date="Mar 12" version="1.2.0">
+        <ul>
+          <li>added: Callout, Quote, Steps, Terminal, Changelog</li>
+          <li>changed: Graphs read MDX children as well as arrays</li>
+          <li>fixed: Timeline connector on Safari</li>
+          <li>removed: The legacy accent prop</li>
+        </ul>
+      </Changelog>
+    ),
+  },
+  {
+    title: "Titled",
+    code: `<Changelog title="CHANGELOG" version="0.9.0" date="Feb 02">
+
+- added: Knap filters
+- fixed: Uptime wraps at 30 days on narrow screens
+
+</Changelog>`,
+    react: tsx(
+      "changelog",
+      "Changelog",
+      `<Changelog title="CHANGELOG" version="0.9.0" date="Feb 02">
+  <ul>
+    <li>added: Knap filters</li>
+    <li>fixed: Uptime wraps at 30 days on narrow screens</li>
+  </ul>
+</Changelog>`
+    ),
+    preview: (
+      <Changelog date="Feb 02" title="CHANGELOG" version="0.9.0">
+        <ul>
+          <li>added: Knap filters</li>
+          <li>fixed: Uptime wraps at 30 days on narrow screens</li>
+        </ul>
+      </Changelog>
+    ),
+  },
+]
+
 export const examplesBySlug: Record<string, Example[]> = {
+  callout: calloutExamples,
+  quote: quoteExamples,
+  steps: stepsExamples,
+  terminal: terminalExamples,
+  changelog: changelogExamples,
   "graph-table": tableExamples,
   "graph-sheet": sheetExamples,
   "graph-flow": flowExamples,

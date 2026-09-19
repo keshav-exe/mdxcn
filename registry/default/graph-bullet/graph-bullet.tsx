@@ -1,12 +1,20 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  childItems,
+  defineItem,
   Graph,
   GraphBody,
   GraphTick,
   GraphTrack,
+  itemText,
+  listItems,
+  numberOf,
+  splitLabel,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -18,16 +26,19 @@ import {
 } from "@/registry/default/graph-frame/graph-motion"
 
 type BulletItem = {
-  label: string
-  value: number
-  target?: number
-  max?: number
+  /** Falls back to the child text: `<Target value={42} target={40}>Design</Target>`. */
+  label?: string
+  value: number | string
+  target?: number | string
+  max?: number | string
   display?: string
 }
 
 type GraphBulletProps = {
   title: string
-  items: BulletItem[]
+  /** Data form. Or write `<Target />` children. */
+  items?: BulletItem[]
+  children?: ReactNode
   ticks?: number
   glyphs?: Glyphs
   palette?: GraphPalette
@@ -55,9 +66,21 @@ function formatItem(item: BulletItem) {
   return `${value} / ${target}`
 }
 
+/** `<Target value={72} target={80} max={100}>CPU</Target>` inside `<GraphBullet>`. */
+const Target = defineItem<BulletItem>("Target")
+
+type BulletRow = {
+  label: string
+  value: number
+  target?: number
+  max?: number
+  display?: string
+}
+
 function GraphBullet({
   title,
-  items,
+  items: itemsProp,
+  children,
   ticks = 20,
   glyphs,
   palette,
@@ -67,6 +90,31 @@ function GraphBullet({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
+  const listed = listItems(children).map((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    const [value, restMax] = rest.split(/\s*\/\s*/)
+    const [target, max] = (restMax ?? "").split(/\s+of\s+/i)
+    return {
+      label,
+      value,
+      target: target || undefined,
+      max: max || undefined,
+      display: undefined,
+    }
+  })
+  const tagged = childItems(children, Target).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+  const items: BulletRow[] = (
+    itemsProp ?? (listed.length > 0 ? listed : tagged)
+  ).map((entry) => ({
+    label: entry.label ?? "",
+    value: numberOf(entry.value),
+    target: entry.target == null ? undefined : numberOf(entry.target),
+    max: entry.max == null ? undefined : numberOf(entry.max),
+    display: entry.display,
+  }))
   const marks = trackMarks(glyphs, {
     empty: "-",
     rest: "=",
@@ -153,5 +201,5 @@ function GraphBullet({
   )
 }
 
-export { GraphBullet }
+export { GraphBullet, Target }
 export type { BulletItem, GraphBulletProps }

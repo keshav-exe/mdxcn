@@ -7,6 +7,7 @@ import {
   GraphBody,
   GraphTick,
   GraphTrack,
+  numbers,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   DIM_OPACITY,
@@ -28,7 +29,8 @@ type GraphKpiProps = {
   value: string
   label: string
   hint?: string
-  data: number[]
+  /** `[4, 5, 6]` or `"4 5 6"`. Sparkline under the number. */
+  data: number[] | string
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
@@ -40,12 +42,13 @@ function GraphKpi({
   value,
   label,
   hint,
-  data,
+  data: dataProp,
   glyphs,
   palette,
   corner,
   className,
 }: GraphKpiProps) {
+  const data = numbers(dataProp)
   const reduce = useReducedMotion()
   const enter = fadeUp(reduce)
   const max = Math.max(...data, 1)

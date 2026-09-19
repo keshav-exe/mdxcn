@@ -23,13 +23,20 @@ function GithubStarLink({
       rel="noreferrer"
       className="flex items-center gap-2"
     >
-      <Button variant="ghost" className={cn("flex shrink-0 items-center gap-2 text-muted-foreground group hover:text-foreground", "transition-all duration-300", className)}>
+      <Button
+        variant="ghost"
+        className={cn(
+          "group flex shrink-0 items-center gap-2 text-muted-foreground hover:text-foreground",
+          "transition-all duration-300",
+          className
+        )}
+      >
         <GithubIcon className="size-4 shrink-0 group-hover:text-yellow-500" />
-        {count &&
-          <span className="flex items-center gap-1 group-hover:text-yellow-500 tabular-nums">
+        {count && (
+          <span className="flex items-center gap-1 tabular-nums group-hover:text-yellow-500">
             [{count}]
           </span>
-        }
+        )}
       </Button>
     </Link>
   )

@@ -2,7 +2,12 @@ import type { Metadata } from "next"
 
 import { Command, CopyBlock, InstallCommand } from "@/components/docs/install"
 import { DocsPageHeader } from "@/components/docs/page-header"
-import { InlineCode, ProseLead, ProseP, TextLink } from "@/components/site/prose"
+import {
+  InlineCode,
+  ProseLead,
+  ProseP,
+  TextLink,
+} from "@/components/site/prose"
 import { JsonLd } from "@/components/seo/json-ld"
 import {
   KNAP_API_URL,
@@ -16,7 +21,7 @@ import { pageMeta, webPageJsonLd } from "@/lib/seo"
 
 const extra = `## Install
 
-pnpm dlx shadcn@latest add @mdx-graphs/all
+pnpm dlx shadcn@latest add @mdxcn/all
 
 The filters are graph-knap. all.json already includes them. Install knap yourself.
 
@@ -124,9 +129,9 @@ export default function KnapDocsPage() {
           Default output is the official fenced ASCII. Pass{" "}
           <InlineCode>comark</InlineCode> to emit a{" "}
           <InlineCode>::graph-*</InlineCode> block instead. Flow, Plot,
-          Activity, Heatmap, Calendar, Timer, and Countdown have no ASCII, so they
-          emit Comark YAML unless you only wanted a fence, in which case pick
-          another graph.
+          Activity, Heatmap, Calendar, Timer, and Countdown have no ASCII, so
+          they emit Comark YAML unless you only wanted a fence, in which case
+          pick another graph.
         </ProseP>
       </section>
 

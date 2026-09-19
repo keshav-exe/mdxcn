@@ -74,9 +74,8 @@ export function fromMarkdown<P extends Record<string, unknown>>(
     return <Component key={propsKey(props)} {...props} />
   }
 
-  MarkdownGraph.displayName = `FromMarkdown(${
-    Component.displayName ?? Component.name ?? "Graph"
-  })`
+  MarkdownGraph.displayName = `FromMarkdown(${Component.displayName ?? Component.name ?? "Graph"
+    })`
 
   return MarkdownGraph as ComponentType<Record<string, unknown>>
 }

@@ -3,82 +3,98 @@
 import { useState, type ReactNode } from "react"
 
 import { CopyButton } from "@/components/docs/copy-button"
+import { MonoLabel } from "@/components/docs/mono-label"
 import { FrameBox } from "@/components/site/corners"
 import { ProseMuted } from "@/components/site/prose"
 import { useAccent } from "@/hooks/use-accent"
 import { accentCss } from "@/lib/accent"
+import { toMdxCopy } from "@/lib/docs/mdx"
 import { cn } from "@/lib/utils"
+
+type SourceTab = "mdx" | "react"
 
 function ComponentPreview({
   title,
   description,
   code,
+  react,
   children,
 }: {
   title: string
   description?: string
+  /** Framed ASCII. Shown on the MDX tab and copied by default. */
   code: string
+  /** TSX with the parent import. Falls back to `code`. */
+  react?: string
   children: ReactNode
 }) {
-  const [tab, setTab] = useState<"preview" | "code">("preview")
+  const [tab, setTab] = useState<SourceTab>("mdx")
   const accent = useAccent()
-  const source = `${accentCss(accent.id)}\n\n${code}`
+  const mdx = toMdxCopy(code)
+  const tsx = `${accentCss(accent.id)}\n\n${(react ?? code).trim()}`
+  const source = tab === "mdx" ? mdx : tsx
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="flex min-w-0 flex-col gap-1">
-          <h2 className="text-xl font-semibold tracking-tight text-balance">
-            {title}
-          </h2>
-          {description ? <ProseMuted>{description}</ProseMuted> : null}
-        </div>
-        <div
-          className="flex shrink-0 items-center gap-1"
-          role="tablist"
-          aria-label="Preview or code"
-        >
-          {(
-            [
-              ["preview", "Preview"],
-              ["code", "Code"],
-            ] as const
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              aria-selected={tab === id}
-              className={cn(
-                "relative px-2 py-1 text-muted-foreground hover:text-foreground",
-                tab === id && "bg-muted text-foreground"
-              )}
-              onClick={() => setTab(id)}
-              role="tab"
-              type="button"
-            >
-              <span
-                aria-hidden="true"
-                className="absolute top-1/2 left-1/2 size-[max(100%,3rem)] -translate-1/2 pointer-fine:hidden"
-              />
-              {label}
-            </button>
-          ))}
-        </div>
+      <div className="flex min-w-0 flex-col gap-1">
+        <h2 className="text-xl font-semibold tracking-tight text-balance">
+          {title}
+        </h2>
+        {description ? <ProseMuted>{description}</ProseMuted> : null}
       </div>
 
-      <FrameBox className="min-w-0">
-        {tab === "preview" ? (
-          <div className="graph-scroll-x p-4 sm:p-8">{children}</div>
-        ) : (
-          <>
-            <div className="absolute top-2 right-2 z-20">
-              <CopyButton label="Copy code" text={source} />
-            </div>
-            <pre className="scrollbar-graph max-h-96 overflow-auto p-4 text-muted-foreground sm:p-8">
-              <code>{source}</code>
-            </pre>
-          </>
-        )}
+      <FrameBox className="min-w-0 overflow-visible bg-muted/25 p-2 sm:p-3" tone="rail">
+        <div className="graph-scroll-x min-h-44 px-3 py-4 sm:min-h-48 sm:px-4 sm:py-5">
+          {children}
+        </div>
       </FrameBox>
+
+      <div className="flex min-w-0 flex-col gap-2">
+        <div className="flex items-center justify-between gap-4">
+          <MonoLabel>{tab === "mdx" ? "MDX" : "React"}</MonoLabel>
+          <div
+            aria-label="Source format"
+            className="flex shrink-0 items-center gap-1"
+            role="tablist"
+          >
+            {(
+              [
+                ["mdx", ".mdx"],
+                ["react", ".tsx"],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                aria-selected={tab === id}
+                className={cn(
+                  "relative px-2 py-1 font-mono text-muted-foreground hover:text-foreground",
+                  tab === id && "bg-muted text-foreground"
+                )}
+                key={id}
+                onClick={() => setTab(id)}
+                role="tab"
+                type="button"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute top-1/2 left-1/2 size-[max(100%,3rem)] -translate-1/2 pointer-fine:hidden"
+                />
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <FrameBox className="min-w-0 overflow-visible" tone="rail">
+          <div className="absolute top-2 right-2 z-20">
+            <CopyButton
+              label={tab === "mdx" ? "Copy MDX" : "Copy React"}
+              text={source}
+            />
+          </div>
+          <pre className="scrollbar-graph max-h-128 min-h-48 overflow-auto p-3 pr-11 text-muted-foreground sm:p-4 sm:pr-12">
+            <code>{source}</code>
+          </pre>
+        </FrameBox>
+      </div>
     </section>
   )
 }

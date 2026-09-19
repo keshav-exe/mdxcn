@@ -2,14 +2,15 @@
 
 import { Command, CopyBlock } from "@/components/docs/install"
 import { useOrigin } from "@/lib/docs/origin"
+import { REGISTRY_SCOPE } from "@/lib/site"
 
 function NamespaceSetup() {
   const origin = useOrigin()
   const host = origin || "<origin>"
-  const add = `pnpm dlx shadcn@latest registry add @mdx-graphs=${host}/r/{name}.json`
+  const add = `pnpm dlx shadcn@latest registry add ${REGISTRY_SCOPE}=${host}/r/{name}.json`
   const config = `{
   "registries": {
-    "@mdx-graphs": "${host}/r/{name}.json"
+    "${REGISTRY_SCOPE}": "${host}/r/{name}.json"
   }
 }`
 
@@ -19,7 +20,7 @@ function NamespaceSetup() {
       <CopyBlock label="components.json" value={config} />
       <Command
         label="Then"
-        value="pnpm dlx shadcn@latest add @mdx-graphs/graph-table"
+        value={`pnpm dlx shadcn@latest add ${REGISTRY_SCOPE}/graph-table`}
       />
     </div>
   )

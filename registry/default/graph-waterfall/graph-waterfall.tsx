@@ -1,13 +1,21 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  childItems,
+  defineItem,
   Graph,
   GraphBody,
   GraphRule,
   GraphTick,
   GraphTrack,
+  itemText,
+  listItems,
+  numberOf,
+  splitLabel,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -22,15 +30,18 @@ import { cn } from "@/lib/utils"
 type WaterfallKind = "start" | "in" | "out" | "end"
 
 type WaterfallItem = {
-  label: string
-  value: number
+  /** Falls back to the child text: `<Delta value={-6}>Refunds</Delta>`. */
+  label?: string
+  value: number | string
   display?: string
   kind?: WaterfallKind
 }
 
 type GraphWaterfallProps = {
   title: string
-  items: WaterfallItem[]
+  /** Data form. Or write `<Delta />` children. */
+  items?: WaterfallItem[]
+  children?: ReactNode
   ticks?: number
   glyphs?: Glyphs
   palette?: GraphPalette
@@ -38,8 +49,18 @@ type GraphWaterfallProps = {
   className?: string
 }
 
+type WaterfallRow = {
+  label: string
+  value: number
+  display?: string
+  kind?: WaterfallKind
+}
+
+/** `<Delta value={-6}>Refunds</Delta>` inside `<GraphWaterfall>`. First and last rows are start / end. */
+const Delta = defineItem<WaterfallItem>("Delta")
+
 function resolveKind(
-  item: WaterfallItem,
+  item: WaterfallRow,
   index: number,
   length: number
 ): WaterfallKind {
@@ -58,7 +79,7 @@ function resolveKind(
   return item.value >= 0 ? "in" : "out"
 }
 
-function formatValue(item: WaterfallItem, kind: WaterfallKind) {
+function formatValue(item: WaterfallRow, kind: WaterfallKind) {
   if (item.display) {
     return item.display
   }
@@ -78,7 +99,8 @@ function formatValue(item: WaterfallItem, kind: WaterfallKind) {
 
 function GraphWaterfall({
   title,
-  items,
+  items: itemsProp,
+  children,
   ticks = 24,
   glyphs,
   palette,
@@ -89,36 +111,60 @@ function GraphWaterfall({
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
   const marks = trackMarks(glyphs)
-  let run = 0
-  const segments = items.map((entry, index) => {
+  const listed = listItems(children).map((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    const raw = rest || itemText(item)
+    const match = raw.match(/([+\-−]?[\d,]+(?:\.\d+)?)\s*$/)
+    return {
+      label: rest
+        ? label
+        : itemText(item)
+            .replace(match?.[0] ?? "", "")
+            .trim(),
+      value: match?.[1] ?? rest,
+      display: undefined,
+      kind: undefined,
+    }
+  })
+  const tagged = childItems(children, Delta).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+  const items: WaterfallRow[] = (
+    itemsProp ?? (listed.length > 0 ? listed : tagged)
+  ).map((entry) => ({
+    label: entry.label ?? "",
+    value: numberOf(entry.value),
+    display: entry.display,
+    kind: entry.kind,
+  }))
+  const segments: (WaterfallRow & {
+    kind: WaterfallKind
+    from: number
+    to: number
+  })[] = []
+  items.reduce((run, entry, index) => {
     const kind = resolveKind(entry, index, items.length)
     const magnitude = Math.abs(entry.value)
 
     if (kind === "start") {
-      const from = 0
-      const to = entry.value
-      run = entry.value
-      return { ...entry, kind, from, to }
+      segments.push({ ...entry, kind, from: 0, to: entry.value })
+      return entry.value
     }
 
     if (kind === "in") {
-      const from = run
-      const to = run + magnitude
-      run = to
-      return { ...entry, kind, from, to }
+      segments.push({ ...entry, kind, from: run, to: run + magnitude })
+      return run + magnitude
     }
 
     if (kind === "out") {
-      const to = run
-      const from = run - magnitude
-      run = from
-      return { ...entry, kind, from, to }
+      segments.push({ ...entry, kind, from: run - magnitude, to: run })
+      return run - magnitude
     }
 
-    const total = entry.value
-    run = total
-    return { ...entry, kind, from: 0, to: total }
-  })
+    segments.push({ ...entry, kind, from: 0, to: entry.value })
+    return entry.value
+  }, 0)
   const lows = segments.map((segment) => Math.min(segment.from, segment.to))
   const highs = segments.map((segment) => Math.max(segment.from, segment.to))
   const low = Math.min(0, ...lows)
@@ -207,5 +253,5 @@ function GraphWaterfall({
   )
 }
 
-export { GraphWaterfall }
+export { Delta, GraphWaterfall }
 export type { GraphWaterfallProps, WaterfallItem, WaterfallKind }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 
+import { Callout, Steps, Terminal } from "@/components/graphs"
 import { Command, InstallCommand } from "@/components/docs/install"
 import { DocsPageHeader } from "@/components/docs/page-header"
 import { NamespaceSetup } from "@/components/docs/namespace"
@@ -36,11 +37,11 @@ pnpm dlx shadcn@latest add $ORIGIN/r/all.json
 
 Add the registry once in components.json, then install components by name.
 
-pnpm dlx shadcn@latest registry add @mdx-graphs=$ORIGIN/r/{name}.json
+pnpm dlx shadcn@latest registry add @mdxcn=$ORIGIN/r/{name}.json
 
 Then:
 
-pnpm dlx shadcn@latest add @mdx-graphs/graph-table
+pnpm dlx shadcn@latest add @mdxcn/graph-table
 
 ## Import
 
@@ -50,7 +51,7 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
 ## Agents
 
-$ORIGIN/agents is write vs read — JSX in MDX, ::graph-* in Comark, graph_* in Knap, official ASCII in a README. $ORIGIN/docs/skill is the SKILL.md. Same files in Cursor, Claude Code, Codex, OpenCode, or any agent that loads Agent Skills. $ORIGIN/llms.txt is the chooser, recipes, fenced ASCII blocks, Comark blocks, and Knap filters in one file.`
+$ORIGIN/agents is write vs read — markdown in MDX and in Notion, ::graph-* in Comark, graph_* in Knap, official ASCII in a README. $ORIGIN/docs/skill is the SKILL.md. Same files in Cursor, Claude Code, Codex, OpenCode, or any agent that loads Agent Skills. $ORIGIN/llms.txt is the chooser, recipes, fenced ASCII blocks, Comark blocks, and Knap filters in one file.`
 
 export default function InstallationPage() {
   const table = getComponent("graph-table")
@@ -75,6 +76,39 @@ export default function InstallationPage() {
         title="Installation"
       />
 
+      <Callout type="tip">
+        Register the parent once in <InlineCode>mdx-components.tsx</InlineCode>.
+        The MDX tab is the framed drawing. Copy that into Notion or a README.
+        React is the other tab.
+      </Callout>
+
+      <Steps title="MDX">
+        <ol>
+          <li>
+            <p>Copy the files</p>
+            <p>CLI or GitHub. They land under registry/default.</p>
+          </li>
+          <li>
+            <p>
+              <strong>Register the parent</strong>
+            </p>
+            <p>
+              Once in mdx-components.tsx. Lists and tables inside do not need
+              their own imports.
+            </p>
+          </li>
+          <li>
+            <p>
+              <em>Paste</em>
+            </p>
+            <p>
+              The MDX tab is the framed figure. Paste it into Notion or a
+              README. Wrap the children in the parent when you want it live.
+            </p>
+          </li>
+        </ol>
+      </Steps>
+
       <div className="flex flex-col gap-6 lg:gap-8">
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold tracking-tight">
@@ -84,6 +118,11 @@ export default function InstallationPage() {
             Run the shadcn CLI against this site&apos;s registry, or copy the
             files from GitHub.
           </ProseP>
+          <Terminal title="CLI">
+            {`$ pnpm dlx shadcn@latest add @mdxcn/graph-tree
+✓ registry/default/graph-tree/graph-tree.tsx
+✓ registry/default/graph-frame/graph-frame.tsx`}
+          </Terminal>
           <InstallCommand doc={table} name="graph-table" />
         </section>
 
@@ -121,8 +160,8 @@ export default function InstallationPage() {
           <h2 className="text-xl font-semibold tracking-tight">Agents</h2>
           <ProseP>
             A skill file so the agent picks a component instead of drawing SVG.
-            JSX in MDX. A <InlineCode>::graph-*</InlineCode> block in{" "}
-            <TextLink href={COMARK_URL}>Comark</TextLink>. A{" "}
+            Markdown in MDX and in Notion. A <InlineCode>::graph-*</InlineCode>{" "}
+            block in <TextLink href={COMARK_URL}>Comark</TextLink>. A{" "}
             <InlineCode>graph_*</InlineCode> filter in{" "}
             <TextLink href={KNAP_URL}>Knap</TextLink>. Official ASCII in a
             README. <TextLink href="/agents">For agents</TextLink> is the write

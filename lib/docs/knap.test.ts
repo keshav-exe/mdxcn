@@ -45,6 +45,8 @@ describe("graphFilters", () => {
     })
     expect(out).toContain("Actor")
     expect(out).toContain("Keanu Reeves")
+    expect(out).toContain(" | ")
+    expect(out).toContain("-+-")
   })
 
   it("emits a ::graph-* block when the param is comark", () => {
@@ -108,11 +110,14 @@ describe("knap engine", () => {
     const engine = createEngine({
       filters: { ...standardFilters, ...graphFilters },
     })
-    const result = await engine.render('{{ events | graph_timeline:"NIGHT" }}', {
-      variables: {
-        events: [{ date: "14:02", label: "p95 crossed 800ms" }],
-      },
-    })
+    const result = await engine.render(
+      '{{ events | graph_timeline:"NIGHT" }}',
+      {
+        variables: {
+          events: [{ date: "14:02", label: "p95 crossed 800ms" }],
+        },
+      }
+    )
     expect(result.errors).toEqual([])
     expect(result.output).toContain("p95 crossed 800ms")
   })
@@ -137,9 +142,8 @@ describe("knap engine", () => {
   })
 
   it("lets validateFilters see graph_* names after merging metadata", async () => {
-    const { parse, standardFilterMetadata, validateFilters } = await import(
-      "knap"
-    )
+    const { parse, standardFilterMetadata, validateFilters } =
+      await import("knap")
     const parsed = parse('{{ v | graph_meter:"SHIPPED" }}')
     expect(parsed.errors).toEqual([])
     expect(
@@ -163,7 +167,7 @@ describe("knapExample", () => {
       new Set(GRAPH_FILTER_SLUGS.map((slug) => slug.replaceAll("-", "_")))
     )
     for (const item of components) {
-      if (item.slug === "graph-frame") {
+      if (item.slug === "graph-frame" || !item.slug.startsWith("graph-")) {
         expect(isKnapSlug(item.slug)).toBe(false)
         continue
       }

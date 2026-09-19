@@ -1,25 +1,26 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
 import { SourcePreview } from "@/components/comark/source-preview"
-import { Command } from "@/components/docs/install"
-import { JsonLd } from "@/components/seo/json-ld"
-import { SiteContainer } from "@/components/site/container"
-import {
-  InlineCode,
-  ProseLead,
-  ProseMuted,
-  ProseP,
-  proseMutedClass,
-  TextLink,
-} from "@/components/site/prose"
-import { Button } from "@/components/ui/button"
 import {
   GraphCheck,
   GraphCompare,
   GraphTimeline,
   GraphUptime,
 } from "@/components/graphs"
+import { JsonLd } from "@/components/seo/json-ld"
+import {
+  LandingHero,
+  LandingLinks,
+  LandingSection,
+} from "@/components/site/landing"
+import { PipelineFigure } from "@/components/site/pipeline-figure"
+import {
+  InlineCode,
+  ProseMuted,
+  ProseP,
+  proseMutedClass,
+  TextLink,
+} from "@/components/site/prose"
 import {
   COMARK_DEMO_REPO,
   COMARK_DEMO_SOURCE,
@@ -28,7 +29,6 @@ import {
   COMARK_URL,
 } from "@/lib/docs/comark"
 import { pageMeta, webPageJsonLd } from "@/lib/seo"
-import { scopedRegistryInstall } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = pageMeta({
@@ -39,10 +39,10 @@ export const metadata: Metadata = pageMeta({
 
 const steps = [
   {
-    name: "Parse",
+    name: "parse",
     detail: (
       <>
-        <TextLink href={COMARK_URL}>Comark</TextLink> turns the{" "}
+        <TextLink href={COMARK_URL}>comark</TextLink> turns the{" "}
         <InlineCode>.md</InlineCode> file into a{" "}
         <InlineCode>MarkdownDocument</InlineCode> — on the server, in a worker,
         or as tokens stream in.
@@ -50,10 +50,10 @@ const steps = [
     ),
   },
   {
-    name: "Coerce",
+    name: "coerce",
     detail: (
       <>
-        Markdown attributes arrive as strings, so the adapter turns{" "}
+        markdown attributes arrive as strings, so the adapter turns{" "}
         <InlineCode>value=&quot;0.86&quot;</InlineCode> into{" "}
         <InlineCode>0.86</InlineCode>, maps <InlineCode>class</InlineCode> to{" "}
         <InlineCode>className</InlineCode>, and holds off until required props
@@ -62,15 +62,67 @@ const steps = [
     ),
   },
   {
-    name: "Render",
+    name: "render",
     detail: (
       <>
-        Each <InlineCode>::graph-*</InlineCode> tag is already on the allowlist,
-        and the same React graph you copied from the registry draws the frame.
+        each <InlineCode>::graph-*</InlineCode> tag is already on the allowlist,
+        and the same react graph you copied from the registry draws the frame.
       </>
     ),
   },
 ]
+
+function ComarkPipeline() {
+  return (
+    <PipelineFigure
+      label="Comark pipeline from a markdown file to a framed graph"
+      plate={{ dwg: "cm-01", rev: "2026.09" }}
+      rail="markdown"
+      stages={[
+        {
+          id: "source",
+          name: "source",
+          nodes: [
+            { label: ".md file", hint: "commonmark" },
+            { label: "::graph-*", hint: "block" },
+            { label: "yaml", hint: "props" },
+            { label: "tokens", hint: "stream" },
+          ],
+        },
+        {
+          id: "parse",
+          name: "parse",
+          fanIn: true,
+          nodes: [
+            { label: "MarkdownDocument", hint: "server / worker / stream" },
+          ],
+        },
+        {
+          id: "coerce",
+          name: "coerce",
+          nodes: [
+            { label: "strings → numbers", hint: "value, ticks" },
+            { label: "class → className", hint: "hold last good tree" },
+          ],
+        },
+        {
+          id: "render",
+          name: "render",
+          fanIn: true,
+          nodes: [
+            {
+              label: "graphComponents",
+              hint: "same react graphs, no mdx",
+              accent: true,
+              wide: true,
+            },
+          ],
+        },
+      ]}
+      title="PIPELINE"
+    />
+  )
+}
 
 export default function ComarkPage() {
   return (
@@ -82,203 +134,153 @@ export default function ComarkPage() {
           path: "/comark",
         })}
       />
-      <section>
-        <SiteContainer
-          borderTop={false}
-          className="flex flex-col gap-8 py-8 sm:py-16"
-        >
-          <div className="flex flex-col gap-4">
-            <p className="font-mono tracking-wide text-graph-muted uppercase">
-              Comark · no MDX
-            </p>
-            <h1 className="max-w-[18ch] text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-              Graphs inside a plain Markdown file
-            </h1>
-            <ProseLead>
-              Put <InlineCode>::graph-*</InlineCode> blocks in a{" "}
-              <InlineCode>.md</InlineCode> file;{" "}
-              <TextLink href={COMARK_URL}>Comark</TextLink> parses them and
-              these graphs draw the frames — no MDX, no compile step.{" "}
-              <TextLink href={COMARK_DEMO_REPO}>
-                Sébastien Chopin&apos;s demo
-              </TextLink>{" "}
-              is the reference implementation; the adapter here is{" "}
-              <InlineCode>graph-comark</InlineCode>.
-            </ProseLead>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Button nativeButton={false} render={<Link href="/docs/comark" />}>
-              Read the wiring
-            </Button>
-            <Button
-              nativeButton={false}
-              render={
-                <a href={COMARK_DEMO_URL} rel="noreferrer" target="_blank" />
-              }
-              variant="outline"
-            >
-              Open the demo report
-            </Button>
-          </div>
-        </SiteContainer>
-      </section>
+      <LandingHero
+        actions={[
+          { href: "/docs/comark", label: "read the wiring" },
+          { href: COMARK_DEMO_URL, label: "open the demo" },
+        ]}
+        figure={<ComarkPipeline />}
+        item="graph-comark"
+        lead={
+          <>
+            put <InlineCode>::graph-*</InlineCode> blocks in a{" "}
+            <InlineCode>.md</InlineCode> file.{" "}
+            <TextLink href={COMARK_URL}>comark</TextLink> parses them and these
+            graphs draw the frames — no mdx, no compile step.{" "}
+            <TextLink href={COMARK_DEMO_REPO}>
+              sébastien chopin&apos;s demo
+            </TextLink>{" "}
+            is the reference; the adapter is{" "}
+            <InlineCode>graph-comark</InlineCode>.
+          </>
+        }
+        title="graphs inside a plain markdown file"
+      />
 
-      <section>
-        <SiteContainer className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="max-w-[28ch] text-2xl font-semibold tracking-tight text-balance">
-              Source and rendered view of the same file
-            </h2>
-            <ProseP>
-              The source is CommonMark plus{" "}
-              <TextLink href={COMARK_URL}>Comark</TextLink> component blocks; the
-              rendered side uses the same graphs as the docs. Toggle to read the
-              Markdown that produced them.
-            </ProseP>
-          </div>
-          <SourcePreview source={COMARK_DEMO_SOURCE}>
-            <ProseMuted>
-              p95 crossed 800ms at 14:02. Rollback at 14:11.
-            </ProseMuted>
-            <GraphTimeline
-              events={[
-                { date: "14:02", label: "p95 crossed 800ms" },
-                {
-                  date: "14:11",
-                  label: "rolled back the cache flag",
-                  state: "now",
-                },
-                {
-                  date: "14:40",
-                  label: "write the postmortem",
-                  state: "next",
-                },
-              ]}
-              title="NIGHT"
-            />
-            <ProseMuted>
-              Same night — and the two days users felt it.
-            </ProseMuted>
-            <GraphUptime
-              days={[
-                "ok",
-                "ok",
-                "ok",
-                "ok",
-                "ok",
-                "degraded",
-                "ok",
-                "ok",
-                "down",
-                "down",
-                "ok",
-                "ok",
-                "ok",
-                "ok",
-              ]}
-              from="Aug 14"
-              title="API"
-              to="Aug 27"
-            />
-          </SourcePreview>
-        </SiteContainer>
-      </section>
-
-      <section>
-        <SiteContainer className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
-              How the pieces fit
-            </h2>
-            <ProseP>
-              You own three files: parsing stays in{" "}
-              <TextLink href={COMARK_URL}>Comark</TextLink>, the graphs stay
-              copied via shadcn, and the adapter is the only new piece.
-            </ProseP>
-          </div>
-          <dl className="grid gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
-            {steps.map((entry) => (
-              <div className="flex flex-col gap-2" key={entry.name}>
-                <dt className="font-medium">{entry.name}</dt>
-                <dd className={cn(proseMutedClass, "max-w-[40ch]")}>
-                  {entry.detail}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </SiteContainer>
-      </section>
-
-      <section>
-        <SiteContainer className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
-              Where each format belongs
-            </h2>
-            <ProseP>
-              Use JSX in MDX, the fenced ASCII on GitHub and READMEs, and{" "}
-              <TextLink href={COMARK_URL}>Comark</TextLink> when you need a plain{" "}
-              <InlineCode>.md</InlineCode> file that can stream as it arrives.
-            </ProseP>
-          </div>
-          <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
-            <GraphCompare
-              columns={["JSX", "ASCII", "Comark"]}
-              rows={[
-                { label: "MDX / React", values: [true, false, true] },
-                { label: "App .md file", values: [false, false, true] },
-                { label: "README / GitHub", values: [false, true, false] },
-                { label: "Streaming tokens", values: [false, false, true] },
-              ]}
-              title="HOST"
-            />
-            <GraphCheck
-              items={[
-                { label: "auto-close dangling ::", done: true },
-                { label: "YAML all-or-nothing", done: true },
-                {
-                  label: "empty frame until props land",
-                  done: true,
-                },
-                {
-                  label: "incomplete YAML can throw",
-                  note: "hold last good tree",
-                },
-              ]}
-              title="STREAM"
-            />
-          </div>
-        </SiteContainer>
-      </section>
-
-      <section>
-        <SiteContainer className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="max-w-[24ch] text-2xl font-semibold tracking-tight text-balance">
-              Install the adapter
-            </h2>
-            <ProseP>
-              <InlineCode>all.json</InlineCode> already includes it; if the
-              graphs are already in the repo, add{" "}
-              <InlineCode>graph-comark</InlineCode> alone. Pass{" "}
-              <InlineCode>graphComponents</InlineCode> to{" "}
-              <TextLink href={COMARK_URL}>Comark</TextLink>. Streaming caveats
-              and the full wiring live on the{" "}
-              <TextLink href="/docs/comark">docs page</TextLink>.
-            </ProseP>
-          </div>
-          <Command
-            label="Adapter"
-            value={scopedRegistryInstall("graph-comark")}
+      <LandingSection
+        lead={
+          <ProseP>
+            the source is commonmark plus{" "}
+            <TextLink href={COMARK_URL}>comark</TextLink> component blocks. the
+            rendered side uses the same graphs as the docs. toggle to read the
+            markdown that produced them.
+          </ProseP>
+        }
+        title="source and rendered view of the same file"
+      >
+        <SourcePreview source={COMARK_DEMO_SOURCE}>
+          <ProseMuted>
+            p95 crossed 800ms at 14:02. rollback at 14:11.
+          </ProseMuted>
+          <GraphTimeline
+            events={[
+              { date: "14:02", label: "p95 crossed 800ms" },
+              {
+                date: "14:11",
+                label: "rolled back the cache flag",
+                state: "now",
+              },
+              {
+                date: "14:40",
+                label: "write the postmortem",
+                state: "next",
+              },
+            ]}
+            title="NIGHT"
           />
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <TextLink href="/docs/comark">Wiring</TextLink>
-            <TextLink href="/docs/skill">Skill</TextLink>
-            <TextLink href={COMARK_URL}>comark.dev</TextLink>
-            <TextLink href={COMARK_DEMO_REPO}>atinux/comark-graphs-demo</TextLink>
-          </div>
-        </SiteContainer>
-      </section>
+          <ProseMuted>same night — and the two days users felt it.</ProseMuted>
+          <GraphUptime
+            days={[
+              "ok",
+              "ok",
+              "ok",
+              "ok",
+              "ok",
+              "degraded",
+              "ok",
+              "ok",
+              "down",
+              "down",
+              "ok",
+              "ok",
+              "ok",
+              "ok",
+            ]}
+            from="Aug 14"
+            title="API"
+            to="Aug 27"
+          />
+        </SourcePreview>
+      </LandingSection>
+
+      <LandingSection
+        lead={
+          <ProseP>
+            you own three files: parsing stays in{" "}
+            <TextLink href={COMARK_URL}>comark</TextLink>, the graphs stay
+            copied via shadcn, and the adapter is the only new piece.
+          </ProseP>
+        }
+        title="how the pieces fit"
+      >
+        <dl className="grid gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
+          {steps.map((entry) => (
+            <div className="flex flex-col gap-2" key={entry.name}>
+              <dt className="font-medium">{entry.name}</dt>
+              <dd className={cn(proseMutedClass, "max-w-[40ch]")}>
+                {entry.detail}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </LandingSection>
+
+      <LandingSection
+        lead={
+          <ProseP>
+            use jsx in mdx, the fenced ascii on github and readmes, and{" "}
+            <TextLink href={COMARK_URL}>comark</TextLink> when you need a plain{" "}
+            <InlineCode>.md</InlineCode> file that can stream as it arrives.
+          </ProseP>
+        }
+        title="where each format belongs"
+      >
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+          <GraphCompare
+            columns={["JSX", "ASCII", "Comark"]}
+            rows={[
+              { label: "MDX / React", values: [true, false, true] },
+              { label: "App .md file", values: [false, false, true] },
+              { label: "README / GitHub", values: [false, true, false] },
+              { label: "Streaming tokens", values: [false, false, true] },
+            ]}
+            title="HOST"
+          />
+          <GraphCheck
+            items={[
+              { label: "auto-close dangling ::", done: true },
+              { label: "YAML all-or-nothing", done: true },
+              {
+                label: "empty frame until props land",
+                done: true,
+              },
+              {
+                label: "incomplete YAML can throw",
+                note: "hold last good tree",
+              },
+            ]}
+            title="STREAM"
+          />
+        </div>
+        <LandingLinks
+          items={[
+            { href: "/docs/comark", label: "wiring" },
+            { href: "/docs/skill", label: "skill" },
+            { href: COMARK_URL, label: "comark.dev" },
+            { href: COMARK_DEMO_REPO, label: "atinux/comark-graphs-demo" },
+          ]}
+        />
+      </LandingSection>
     </main>
   )
 }

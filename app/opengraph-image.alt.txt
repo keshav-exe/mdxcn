@@ -1,1 +1,1 @@
-markdown graphs — ASCII-framed React diagrams for MDX
+mdxcn — Markdown-friendly components

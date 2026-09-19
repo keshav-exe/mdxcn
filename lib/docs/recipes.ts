@@ -1,3 +1,4 @@
+import { toMdxCopy } from "@/lib/docs/mdx"
 import { SITE_URL } from "@/lib/site"
 
 export type RecipeTag = "plan" | "debug" | "tradeoff" | "ship"
@@ -31,41 +32,24 @@ export const recipes: Recipe[] = [
       {
         slug: "graph-flow",
         label: "request path",
-        code: `import { GraphFlow } from "@/registry/default/graph-flow/graph-flow"
+        code: `<GraphFlow title="AUTH">
 
-<GraphFlow
-  title="AUTH"
-  rows={[
-    {
-      nodes: [
-        { label: "request" },
-        { label: "handler" },
-        { label: "session util", tone: "muted" },
-      ],
-    },
-    {
-      nodes: [
-        { label: "request" },
-        { label: "middleware", tone: "accent" },
-        { label: "handler" },
-      ],
-    },
-  ]}
-/>`,
+request → handler → *session util*
+
+request → **middleware** → handler
+
+</GraphFlow>`,
       },
       {
         slug: "graph-timeline",
         label: "rollout plan",
-        code: `import { GraphTimeline } from "@/registry/default/graph-timeline/graph-timeline"
+        code: `<GraphTimeline title="PLAN">
 
-<GraphTimeline
-  title="PLAN"
-  events={[
-    { date: "w1", label: "extract session helper", state: "done" },
-    { date: "w2", label: "move checks to middleware", state: "now" },
-    { date: "w3", label: "delete the old util", state: "next" },
-  ]}
-/>`,
+- w1: extract session helper
+- **w2: move checks to middleware**
+- *w3: delete the old util*
+
+</GraphTimeline>`,
       },
     ],
   },
@@ -81,42 +65,22 @@ export const recipes: Recipe[] = [
       {
         slug: "graph-timeline",
         label: "timeline",
-        code: `import { GraphTimeline } from "@/registry/default/graph-timeline/graph-timeline"
+        code: `<GraphTimeline title="INCIDENT">
 
-<GraphTimeline
-  title="INCIDENT"
-  events={[
-    { date: "14:02", label: "p95 crossed 800ms" },
-    { date: "14:11", label: "rolled back the cache flag", state: "now" },
-    { date: "14:40", label: "write the postmortem", state: "next" },
-  ]}
-/>`,
+- 14:02: p95 crossed 800ms
+- **14:11: rolled back the cache flag**
+- *14:40: write the postmortem*
+
+</GraphTimeline>`,
       },
       {
         slug: "graph-uptime",
         label: "uptime strip",
-        code: `import { GraphUptime } from "@/registry/default/graph-uptime/graph-uptime"
-
-<GraphUptime
+        code: `<GraphUptime
   title="API"
   from="Aug 14"
   to="Aug 27"
-  days={[
-    "ok",
-    "ok",
-    "ok",
-    "ok",
-    "ok",
-    "degraded",
-    "ok",
-    "ok",
-    "down",
-    "down",
-    "ok",
-    "ok",
-    "ok",
-    "ok",
-  ]}
+  days="ok ok ok ok ok degraded ok ok down down ok ok ok ok"
 />`,
       },
     ],
@@ -132,33 +96,27 @@ export const recipes: Recipe[] = [
       {
         slug: "graph-compare",
         label: "feature matrix",
-        code: `import { GraphCompare } from "@/registry/default/graph-compare/graph-compare"
+        code: `<GraphCompare title="QUEUE" accent="BullMQ">
 
-<GraphCompare
-  title="QUEUE"
-  columns={["BullMQ", "SQS"]}
-  accent="BullMQ"
-  rows={[
-    { label: "in-process", values: [true, false] },
-    { label: "retries", values: [true, true] },
-    { label: "ops", values: ["redis", "aws"] },
-    { label: "local", values: [true, false] },
-  ]}
-/>`,
+| | BullMQ | SQS |
+| --- | --- | --- |
+| in-process | yes | no |
+| retries | yes | yes |
+| ops | redis | aws |
+| local | yes | no |
+
+</GraphCompare>`,
       },
       {
         slug: "graph-rank",
         label: "bundle size",
-        code: `import { GraphRank } from "@/registry/default/graph-rank/graph-rank"
+        code: `<GraphRank title="INSTALL">
 
-<GraphRank
-  title="INSTALL"
-  items={[
-    { label: "bullmq", value: 48, display: "48 kb" },
-    { label: "ioredis", value: 31, display: "31 kb" },
-    { label: "aws sdk", value: 120, display: "120 kb" },
-  ]}
-/>`,
+- 48 bullmq
+- 31 ioredis
+- 120 aws sdk
+
+</GraphRank>`,
       },
     ],
   },
@@ -173,33 +131,24 @@ export const recipes: Recipe[] = [
       {
         slug: "graph-diff",
         label: "files changed",
-        code: `import { GraphDiff } from "@/registry/default/graph-diff/graph-diff"
+        code: `<GraphDiff title="FILES" palette="duo">
 
-<GraphDiff
-  title="FILES"
-  palette="duo"
-  rows={[
-    { label: "auth.ts", value: "new", sign: "add" },
-    { label: "session.ts", value: "moved" },
-    { label: "legacy-auth.ts", value: "gone", sign: "remove" },
-  ]}
-/>`,
+- auth.ts: +new
+- session.ts: moved
+- legacy-auth.ts: -gone
+
+</GraphDiff>`,
       },
       {
         slug: "graph-slope",
         label: "coverage",
-        code: `import { GraphSlope } from "@/registry/default/graph-slope/graph-slope"
+        code: `<GraphSlope title="COVERAGE" fromLabel="main" toLabel="this pr">
 
-<GraphSlope
-  title="COVERAGE"
-  fromLabel="main"
-  toLabel="this pr"
-  items={[
-    { label: "auth", from: 41, to: 88 },
-    { label: "billing", from: 72, to: 74 },
-    { label: "docs", from: 11, to: 40 },
-  ]}
-/>`,
+- auth: 41 → 88
+- billing: 72 → 74
+- docs: 11 → 40
+
+</GraphSlope>`,
       },
     ],
   },
@@ -214,33 +163,24 @@ export const recipes: Recipe[] = [
       {
         slug: "graph-gantt",
         label: "calendar",
-        code: `import { GraphGantt } from "@/registry/default/graph-gantt/graph-gantt"
+        code: `<GraphGantt title="THIS WEEK" columns={20} ticks="mon wed fri" stage="patch">
 
-<GraphGantt
-  title="THIS WEEK"
-  columns={20}
-  ticks={["mon", "wed", "fri"]}
-  stage="patch"
-  items={[
-    { label: "rfc", start: 0, end: 0.4, complete: 1 },
-    { label: "patch", start: 0.35, end: 0.8, complete: 0.55 },
-    { label: "review", start: 0.7, end: 1, complete: 0 },
-  ]}
-/>`,
+- rfc: 0 0.4 1
+- **patch**: 0.35 0.8 0.55
+- review: 0.7 1 0
+
+</GraphGantt>`,
       },
       {
         slug: "graph-stat",
         label: "board counts",
-        code: `import { GraphStat } from "@/registry/default/graph-stat/graph-stat"
+        code: `<GraphStat title="BOARD">
 
-<GraphStat
-  title="BOARD"
-  items={[
-    { value: "4", label: "in review" },
-    { value: "2", label: "blocked" },
-    { value: "9", label: "shipped", accent: true },
-  ]}
-/>`,
+- 4 in review
+- 2 blocked
+- **9 shipped**
+
+</GraphStat>`,
       },
     ],
   },
@@ -255,25 +195,17 @@ export const recipes: Recipe[] = [
       {
         slug: "graph-meter",
         label: "job progress",
-        code: `import { GraphMeter } from "@/registry/default/graph-meter/graph-meter"
-
-<GraphMeter
-  title="ROWS"
-  value={0.67}
-  caption="users table"
-/>`,
+        code: `<GraphMeter title="ROWS" value="67%" caption="users table" />`,
       },
       {
         slug: "graph-kpi",
         label: "rows migrated",
-        code: `import { GraphKpi } from "@/registry/default/graph-kpi/graph-kpi"
-
-<GraphKpi
+        code: `<GraphKpi
   title="MIGRATED"
   value="1.2M"
   label="of 1.8M rows"
   hint="67%"
-  data={[2, 3, 3, 5, 8, 9, 11, 12, 14, 16, 18, 21]}
+  data="2 3 3 5 8 9 11 12 14 16 18 21"
 />`,
       },
     ],
@@ -287,25 +219,10 @@ export function getRecipe(slug: string) {
 }
 
 export function recipeCopy(recipe: Recipe) {
-  const imports = new Set<string>()
-  const bodies: string[] = []
-
-  for (const graph of recipe.graphs) {
-    const lines = graph.code.trim().split("\n")
-    const rest: string[] = []
-
-    for (const line of lines) {
-      if (line.startsWith("import ")) {
-        imports.add(line)
-      } else {
-        rest.push(line)
-      }
-    }
-
-    bodies.push(rest.join("\n").trim())
-  }
-
-  return `${[...imports].join("\n")}\n\n${bodies.join("\n\n")}`
+  return recipe.graphs
+    .map((graph) => toMdxCopy(graph.code))
+    .filter(Boolean)
+    .join("\n\n")
 }
 
 export function recipesMarkdown(origin = SITE_URL) {
@@ -319,7 +236,7 @@ export function recipesMarkdown(origin = SITE_URL) {
 
   return `## Recipes
 
-Two graphs per write-up is enough. Prose between them. Copy the JSX from the examples when the host can import components. Plain Markdown: copy the matching fence from ## MDX above. Comark: copy the matching block from ## Comark.
+Two graphs per write-up is enough. Prose between them. Copy the framed ASCII from the examples MDX tab into Notion or a README. Wrap markdown children in the parent when the host can register components. Comark: ## Comark.
 
 ${lines.join("\n")}
 

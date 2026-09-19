@@ -175,12 +175,6 @@ function HomeGraphDemos() {
           >
             llms.txt
           </Link>
-          <Link
-            className="text-foreground underline-offset-4 hover:underline"
-            href="/sponsor"
-          >
-            sponsor
-          </Link>
         </div>
       </SiteContainer>
     </section>

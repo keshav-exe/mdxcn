@@ -192,7 +192,10 @@ function RecipeFigures({
         const name = titles[graph.slug] ?? graph.slug
 
         return (
-          <figure className="flex flex-col gap-2" key={`${graph.slug}-${index}`}>
+          <figure
+            className="flex flex-col gap-2"
+            key={`${graph.slug}-${index}`}
+          >
             {figures[index]}
             <figcaption className="font-mono text-sm text-graph-muted">
               {showLinks ? (
@@ -228,8 +231,8 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
           </p>
         </div>
         <CopyButton
-          caption="Copy JSX"
-          label={`Copy ${recipe.title} JSX`}
+          caption="Copy MDX"
+          label={`Copy ${recipe.title} MDX`}
           text={recipeCopy(recipe)}
         />
       </div>

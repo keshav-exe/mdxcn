@@ -1,7 +1,8 @@
 import { GITHUB_URL } from "@/lib/github"
 import { SITE_URL } from "@/lib/site"
 
-export const SKILL_DIR = "skills/markdown-graphs"
+export const SKILL_INSTALL = "mdxcn"
+export const SKILL_DIR = "skills/mdxcn"
 export const SKILL_URL = `${GITHUB_URL}/tree/main/${SKILL_DIR}`
 
 export type SkillGraph = {
@@ -113,7 +114,7 @@ export const skillChooser: SkillChooserRow[] = [
 
 export const skillRules = [
   "At most two graphs in a section. Prose between them.",
-  "React / importable MDX: JSX. Comark: ::graph-* with YAML. Knap: graph_* filter. GitHub / README / Linear: official fenced ASCII from /llms.txt. Do not invent ASCII.",
+  "React / importable MDX: JSX. Notion / README / GitHub / Linear: framed ASCII from the docs MDX tab (keep the fence). Comark: ::graph-* with YAML. Knap: graph_* filter. Do not invent ASCII.",
   "Titles: short uppercase, drawn as [ TITLE ].",
   "Labels: lowercase, plain (auth middleware, not AuthMiddleware Layer).",
   "Copy props from docs or recipes. Do not invent APIs, extra hues, or chart libraries.",
@@ -133,35 +134,35 @@ export const skillExamples: SkillExample[] = [
     hint: "GraphFlow, then GraphTimeline",
     prompt: `We're moving session checks out of route handlers into middleware. Write a short plan for the team.
 
-Use markdown graphs for the before/after request path and the week-by-week rollout. Prose between the two figures. Don't draw SVG.`,
+Use mdxcn for the before/after request path and the week-by-week rollout. Prose between the two figures. Don't draw SVG.`,
   },
   {
     label: "Incident",
     hint: "GraphTimeline, then GraphUptime",
     prompt: `Draft a tight postmortem: p95 crossed 800ms at 14:02, we rolled back the cache flag at 14:11, the write-up is still open.
 
-Use markdown graphs — a timeline of the night, then which days users felt it. No SVG.`,
+Use mdxcn — a timeline of the night, then which days users felt it. No SVG.`,
   },
   {
     label: "Pull request",
     hint: "GraphDiff, then GraphSlope",
     prompt: `Leave a PR review comment on the auth refactor. Summarize what files moved, then show how coverage changed on main vs this branch.
 
-    Use markdown graphs from this project. At most two figures. Don't invent APIs or draw SVG.`,
+    Use mdxcn from this project. At most two figures. Don't invent APIs or draw SVG.`,
   },
   {
     label: "Pick one",
     hint: "GraphCompare, then GraphRank",
     prompt: `We're choosing a queue: BullMQ vs SQS. Write the tradeoff for the RFC.
 
-Use markdown graphs — a feature matrix, then bundle size only if it matters. Don't draw SVG.`,
+Use mdxcn — a feature matrix, then bundle size only if it matters. Don't draw SVG.`,
   },
   {
     label: "README",
     hint: "Fenced ASCII, not JSX",
     prompt: `Add a launch section to the README. It's a .md file, no React.
 
-Use markdown graphs — a punch list (GraphCheck fence) and a grouped table if it earns it. Paste the official fenced ASCII from llms.txt. Don't paste JSX.`,
+Use mdxcn — a punch list (GraphCheck fence) and a grouped table if it earns it. Paste the official fenced ASCII from llms.txt. Don't paste JSX.`,
   },
   {
     label: "Comark",
@@ -181,20 +182,20 @@ Pipe the graph props through graph_* filters so the output is the official fence
 
 export function skillCurl(origin: string, dir: string) {
   const host = origin || SITE_URL
-  return `mkdir -p ${dir}/markdown-graphs
-curl -fsSL ${host}/skill.md -o ${dir}/markdown-graphs/SKILL.md
-curl -fsSL ${host}/skill/recipes.md -o ${dir}/markdown-graphs/recipes.md`
+  return `mkdir -p ${dir}/${SKILL_INSTALL}
+curl -fsSL ${host}/skill.md -o ${dir}/${SKILL_INSTALL}/SKILL.md
+curl -fsSL ${host}/skill/recipes.md -o ${dir}/${SKILL_INSTALL}/recipes.md`
 }
 
 export function skillCopyFromRepo(dir: string) {
-  return `cp -R skills/markdown-graphs ${dir}/markdown-graphs`
+  return `cp -R skills/mdxcn ${dir}/${SKILL_INSTALL}`
 }
 
 export function skillPrompt(origin: string, dir = ".agents/skills") {
   const host = origin || SITE_URL
-  return `Copy the markdown graphs skill into this project. It is a SKILL.md (Agent Skills). It tells you when to put a framed graph next to the prose, which component to pick, and whether to write JSX, a ::graph-* block for Comark, a graph_* filter for Knap, or paste the official fenced ASCII. Do not draw SVG. Do not invent ASCII art.
+  return `Copy the mdxcn skill into this project. It is a SKILL.md (Agent Skills). It tells you when to put a framed graph next to the prose, which component to pick, and whether to write JSX, a ::graph-* block for Comark, a graph_* filter for Knap, or paste the official fenced ASCII. Do not draw SVG. Do not invent ASCII art.
 
-Put it in the skills folder this agent already reads (${dir}/markdown-graphs). If this repo uses a different skills directory (.cursor/skills, .claude/skills, .agents/skills, .opencode/skills), use that instead.
+Put it in the skills folder this agent already reads (${dir}/${SKILL_INSTALL}). If this repo uses a different skills directory (.cursor/skills, .claude/skills, .agents/skills, .opencode/skills), use that instead.
 
 ${skillCurl(host, dir)}
 

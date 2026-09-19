@@ -29,7 +29,7 @@ type FaqItem = {
 const faqItems: FaqItem[] = [
   {
     id: "what",
-    title: "what is markdown graphs?",
+    title: "what is mdxcn?",
     content: (
       <ProseP>
         a collection of react charts and diagrams drawn with text characters.
@@ -119,7 +119,7 @@ function HomeFaq() {
       <SiteContainer className="flex flex-col gap-8">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
           <div className="flex flex-col gap-4">
-            <h2 className="max-w-[20ch] text-2xl font-semibold tracking-tight text-balance">
+            <h2 className="text-2xl font-semibold tracking-tight text-balance">
               questions
             </h2>
             <ProseMuted>

@@ -1,12 +1,21 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  childItems,
+  defineItem,
   Graph,
   GraphBody,
   GraphTick,
   GraphTrack,
+  hasHost,
+  itemText,
+  listItems,
+  numberOf,
+  splitLabel,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   clamp01,
@@ -21,16 +30,19 @@ import {
 import { cn } from "@/lib/utils"
 
 type GanttItem = {
-  label: string
-  start: number
-  end: number
+  /** Falls back to the child text: `<Span start={0} end={0.35}>design</Span>`. */
+  label?: string
+  start: number | string
+  end: number | string
   accent?: boolean
-  complete?: number
+  complete?: number | string
 }
 
 type GraphGanttProps = {
   title: string
-  items: GanttItem[]
+  /** Data form. Or write `<Span />` children. */
+  items?: GanttItem[]
+  children?: ReactNode
   ticks?: string[]
   columns?: number
   stage?: string
@@ -41,9 +53,21 @@ type GraphGanttProps = {
   className?: string
 }
 
+/** `<Span start={0.2} end={0.75} complete={0.55}>build</Span>` inside `<GraphGantt>`. */
+const Span = defineItem<GanttItem>("Span")
+
+type GanttRow = {
+  label: string
+  start: number
+  end: number
+  accent?: boolean
+  complete?: number
+}
+
 function GraphGantt({
   title,
-  items,
+  items: itemsProp,
+  children,
   ticks,
   columns = 24,
   stage,
@@ -56,6 +80,38 @@ function GraphGantt({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
+  const listed = listItems(children).map((item) => {
+    const text = itemText(item)
+    const { label, rest } = splitLabel(text)
+    const source = rest || text
+    const nums = source.match(/[\d.]+/g) ?? []
+    const content = (item.props as { children?: ReactNode }).children
+    return {
+      label: rest
+        ? label
+        : text
+            .replace(/[\d.]+/g, " ")
+            .replace(/\s+/g, " ")
+            .trim(),
+      start: nums[0] ?? 0,
+      end: nums[1] ?? nums[0] ?? 0,
+      complete: nums[2],
+      accent: hasHost(content, ["strong", "b"]),
+    }
+  })
+  const tagged = childItems(children, Span).map((entry) => ({
+    ...entry,
+    label: entry.label ?? textOf(entry.children),
+  }))
+  const items: GanttRow[] = (
+    itemsProp ?? (listed.length > 0 ? listed : tagged)
+  ).map((entry) => ({
+    label: entry.label ?? "",
+    start: numberOf(entry.start),
+    end: numberOf(entry.end),
+    accent: entry.accent,
+    complete: entry.complete == null ? undefined : numberOf(entry.complete),
+  }))
   const playhead =
     progress == null ? null : Math.round(clamp01(progress) * (columns - 1))
   const marks = trackMarks(glyphs)
@@ -166,5 +222,5 @@ function GraphGantt({
   )
 }
 
-export { GraphGantt }
+export { GraphGantt, Span }
 export type { GanttItem, GraphGanttProps }

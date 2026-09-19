@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  fraction,
   Graph,
   GraphBody,
   GraphTick,
@@ -20,7 +21,8 @@ import { cn } from "@/lib/utils"
 
 type GraphMeterProps = {
   title: string
-  value: number
+  /** `0.67`, `"0.67"`, or `"67%"`. */
+  value: number | string
   ticks?: number
   caption?: string
   glyphs?: Glyphs
@@ -31,7 +33,7 @@ type GraphMeterProps = {
 
 function GraphMeter({
   title,
-  value,
+  value: valueProp,
   ticks = 14,
   caption,
   glyphs,
@@ -39,6 +41,7 @@ function GraphMeter({
   corner,
   className,
 }: GraphMeterProps) {
+  const value = fraction(valueProp)
   const reduce = useReducedMotion()
   const clamped = Math.min(1, Math.max(0, value))
   const filled = Math.round(clamped * ticks)
