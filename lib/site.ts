@@ -53,7 +53,7 @@ export const SITE_TWITTER = "@kshvbgde"
 export const SITE_EMAIL = "hi@kshv.me"
 export const SITE_AUTHOR = {
   name: "Keshav Bagaade",
-  url: "https://github.com/keshav-exe",
+  url: "https://github.com/keshav-exe/mdxcn",
   x: "https://x.com/kshvbgde",
   jobTitle: "Engineer",
 }

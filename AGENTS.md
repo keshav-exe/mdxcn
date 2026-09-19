@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # mdxcn
 
-Markdown-friendly React components for MDX. Source is copied via shadcn registry, not npm. Site: https://mdxcn.dev. Repo: https://github.com/keshav-exe/markdown-graphs.
+Markdown-friendly React components for MDX. Source is copied via shadcn registry, not npm. Site: https://mdxcn.dev. Repo: https://github.com/keshav-exe/mdxcn.
 
 Nested agent notes:
 

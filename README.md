@@ -2,7 +2,7 @@
 
 React components for ASCII-style tables, charts, and diagrams in MDX. Built so an agent can drop a figure next to prose — JSX in MDX, `::graph-*` in Comark, `graph_*` in Knap, official ASCII in a README. Each graph sits in a dashed frame with a title on the top edge. One accent color by default; drawing graphs can take `palette="duo"` or `palette="multi"`. You copy the source into your project — this is not an npm package.
 
-[docs](https://mdxcn.dev/docs) · [comark](https://mdxcn.dev/comark) · [knap](https://mdxcn.dev/knap) · [for agents](https://mdxcn.dev/agents) · [examples](https://mdxcn.dev/docs/examples) · [install](https://mdxcn.dev/docs/installation) · [skill](https://mdxcn.dev/docs/skill) · [github](https://github.com/keshav-exe/markdown-graphs)
+[docs](https://mdxcn.dev/docs) · [comark](https://mdxcn.dev/comark) · [knap](https://mdxcn.dev/knap) · [for agents](https://mdxcn.dev/agents) · [examples](https://mdxcn.dev/docs/examples) · [install](https://mdxcn.dev/docs/installation) · [skill](https://mdxcn.dev/docs/skill) · [github](https://github.com/keshav-exe/mdxcn)
 
 ## Install
 

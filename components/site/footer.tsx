@@ -150,7 +150,7 @@ function SiteFooter() {
               <li>
                 <Link
                   className="font-normal text-muted-foreground hover:text-foreground"
-                  href="https://github.com/keshav-exe/markdown-graphs/blob/main/LICENSE"
+                  href={`${GITHUB_URL}/blob/main/LICENSE`}
                   rel="noreferrer"
                 >
                   MIT

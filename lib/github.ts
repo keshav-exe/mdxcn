@@ -1,4 +1,4 @@
-export const GITHUB_REPO = "keshav-exe/markdown-graphs"
+export const GITHUB_REPO = "keshav-exe/mdxcn"
 export const GITHUB_URL = `https://github.com/${GITHUB_REPO}`
 export const GITHUB_TREE = `${GITHUB_URL}/tree/main`
 
