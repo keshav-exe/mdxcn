@@ -19,7 +19,7 @@ function DocsNav({ onNavigate }: { onNavigate?: () => void }) {
     <div className="flex flex-col gap-8">
       <nav aria-label="Docs" className="text-base sm:text-sm">
         <div className="flex flex-col gap-8">
-          <NavGroup label="Get started">
+          <NavGroup label="get started">
             {getStarted.map((item) => (
               <NavItem
                 href={item.href}
@@ -31,7 +31,7 @@ function DocsNav({ onNavigate }: { onNavigate?: () => void }) {
               </NavItem>
             ))}
           </NavGroup>
-          <NavGroup label="Components">
+          <NavGroup label="components">
             {components.map((item) => (
               <NavItem
                 href={`/docs/${item.slug}`}
@@ -92,7 +92,7 @@ function NavItem({
       >
         <span className="min-w-0 truncate">{children}</span>
         {isNew ? (
-          <span className="shrink-0 font-mono text-[10px] tracking-wide text-graph-accent uppercase">
+          <span className="shrink-0 font-mono text-[10px] tracking-wide text-graph-accent">
             new
           </span>
         ) : null}
@@ -166,7 +166,7 @@ function DocsMobileNav() {
           size={16}
           strokeWidth={1.5}
         />
-        <span>Docs</span>
+        <span>docs</span>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Popup
@@ -178,7 +178,7 @@ function DocsMobileNav() {
           )}
         >
           <div className="flex items-center justify-between">
-            <Dialog.Title className="text-foreground">Docs</Dialog.Title>
+            <Dialog.Title className="text-foreground">docs</Dialog.Title>
             <Dialog.Close
               aria-label="Close docs menu"
               className="relative size-8 text-foreground"

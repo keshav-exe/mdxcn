@@ -5,21 +5,22 @@ import { RecipeList } from "@/components/docs/recipe-card"
 import { DocsPageHeader } from "@/components/docs/page-header"
 import { JsonLd } from "@/components/seo/json-ld"
 import { Callout } from "@/components/graphs"
+import { ProseLead } from "@/components/site/prose"
 import { recipes, recipeCopy } from "@/lib/docs/recipes"
 import { pageMeta } from "@/lib/seo"
 import { SITE_AUTHOR, SITE_NAME_SHORT, SITE_URL } from "@/lib/site"
 
 const description =
-  "Short write-ups with two graphs each. A refactor, an incident, a tradeoff, a pull request."
+  "short write-ups with two graphs each. a refactor, an incident, a tradeoff, a pull request."
 
 export const metadata: Metadata = pageMeta({
-  title: "Examples",
+  title: "examples",
   description,
   path: "/docs/examples",
 })
 
 const extra = [
-  "## Examples",
+    "## examples",
   "",
   ...recipes.flatMap((item) => [
     `### ${item.title}`,
@@ -57,16 +58,16 @@ export default function ExamplesPage() {
         copy={{
           description,
           extra,
-          title: "Examples",
+          title: "examples",
         }}
         lead={
-          <>
-            {description} Copy the MDX tab — it is the framed figure. Paste it
-            into Notion or a README and the drawing is still there. Each graph
-            has its own page if you want the props.
-          </>
+          <ProseLead>
+            short write-ups with two graphs each. copy the mdx tab — it is the
+            framed figure. paste it into notion or a readme and the drawing is
+            still there. each graph has its own page if you want the props.
+          </ProseLead>
         }
-        title="Examples"
+        title="examples"
       >
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-muted-foreground">
           {recipes.map((item) => (
@@ -83,8 +84,8 @@ export default function ExamplesPage() {
       </DocsPageHeader>
 
       <Callout type="tip">
-        Copy is the framed figure from the MDX tab. Paste it into Notion or a
-        README and the drawing is still there.
+        copy is the framed figure from the mdx tab. paste it into notion or a
+        readme and the drawing is still there.
       </Callout>
 
       <RecipeList />
@@ -95,14 +96,14 @@ export default function ExamplesPage() {
           className="text-foreground underline-offset-4 hover:underline"
           href="/agents"
         >
-          For agents
+          for agents
         </Link>
         . Install:{" "}
         <Link
           className="text-foreground underline-offset-4 hover:underline"
           href="/docs/skill"
         >
-          Skill
+          skill
         </Link>
         . Every graph in one file, including the fenced ASCII blocks:{" "}
         <Link

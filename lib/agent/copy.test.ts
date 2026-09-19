@@ -38,8 +38,8 @@ describe("homepage copy", () => {
   it("includes when-to-use jobs in the markdown export", () => {
     const md = homeMarkdown()
     expect(md).toContain("# mdxcn")
-    expect(md).toContain("## Write")
-    expect(md).toContain("## Read")
+    expect(md).toContain("## write")
+    expect(md).toContain("## read")
     expect(md).toContain("/llms.txt")
     expect(md).toContain("/openapi.json")
   })

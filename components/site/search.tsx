@@ -29,9 +29,9 @@ type Hit = {
 const HITS: Hit[] = [
   {
     href: "/developers",
-    title: "mdxcn API",
+    title: "mdxcn api",
     detail: "/developers",
-    group: "Get started",
+    group: "get started",
     haystack:
       "mdxcn api developer openapi json catalog health rate limit deprecation",
   },
@@ -39,66 +39,66 @@ const HITS: Hit[] = [
     href: "/agents.md",
     title: "agents.md",
     detail: "/agents.md",
-    group: "Get started",
+    group: "get started",
     haystack: "agents md markdown for agents skill llms machine readable",
   },
   {
     href: "/comark",
-    title: "Comark",
+    title: "comark",
     detail: "/comark",
-    group: "Get started",
+    group: "get started",
     haystack:
       "comark markdown component syntax yaml graph-table no mdx streaming atinux",
   },
   {
     href: "/knap",
-    title: "Knap",
+    title: "knap",
     detail: "/knap",
-    group: "Get started",
+    group: "get started",
     haystack:
       "knap template filter graph_timeline graph_meter data markdown obsidian kepano graph-knap",
   },
   {
     href: "/agents",
-    title: "For agents",
+    title: "for agents",
     detail: "/agents",
-    group: "Get started",
+    group: "get started",
     haystack:
       "for agents skill llms.txt cursor claude codex opencode mdx write read ascii fence recipes comark knap",
   },
   {
     href: "/about",
-    title: "About",
+    title: "about",
     detail: "/about",
-    group: "Get started",
+    group: "get started",
     haystack: "about mdxcn mdxcn keshav bagaade mit open source",
   },
   {
     href: "/contact",
-    title: "Contact",
+    title: "contact",
     detail: "/contact",
-    group: "Get started",
+    group: "get started",
     haystack: "contact email hi@kshv.me github issues",
   },
   {
     href: "/privacy",
-    title: "Privacy",
+    title: "privacy",
     detail: "/privacy",
-    group: "Get started",
+    group: "get started",
     haystack: "privacy analytics vercel github stars",
   },
   {
     href: "/openapi.json",
-    title: "OpenAPI",
+    title: "openapi",
     detail: "/openapi.json",
-    group: "Get started",
+    group: "get started",
     haystack: "openapi swagger api json catalog function calling",
   },
   ...getStarted.map((item) => ({
     href: item.href,
     title: item.label,
     detail: item.href,
-    group: "Get started",
+    group: "get started",
     haystack:
       item.href === "/docs/skill"
         ? "skill /docs/skill cursor claude codex opencode agent skill.md recipes"
@@ -112,7 +112,7 @@ const HITS: Hit[] = [
     href: `/docs/examples#${item.slug}`,
     title: item.title,
     detail: item.blurb,
-    group: "Examples",
+    group: "examples",
     haystack:
       `${item.title} ${item.blurb} ${item.story} ${item.tags.join(" ")}`.toLowerCase(),
   })),
@@ -120,7 +120,7 @@ const HITS: Hit[] = [
     href: `/docs/${item.slug}`,
     title: item.title,
     detail: item.name,
-    group: "Components",
+    group: "components",
     haystack:
       `${item.title} ${item.name} ${item.slug} ${item.description}`.toLowerCase(),
   })),
@@ -329,7 +329,7 @@ function SiteSearch() {
             ) : (
               groups.map((group) => (
                 <div className="flex flex-col gap-1 py-2" key={group.label}>
-                  <p className="px-3 font-mono tracking-wide text-graph-muted uppercase">
+                  <p className="px-3 font-mono tracking-wide text-graph-muted">
                     {group.label}
                   </p>
                   <ul className="flex flex-col" role="presentation">

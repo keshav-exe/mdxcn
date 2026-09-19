@@ -2,7 +2,7 @@
 
 React components for ASCII-style tables, charts, and diagrams in MDX. Built so an agent can drop a figure next to prose — JSX in MDX, `::graph-*` in Comark, `graph_*` in Knap, official ASCII in a README. Each graph sits in a dashed frame with a title on the top edge. One accent color by default; drawing graphs can take `palette="duo"` or `palette="multi"`. You copy the source into your project — this is not an npm package.
 
-[Docs](https://mdxcn.dev/docs) · [Comark](https://mdxcn.dev/comark) · [Knap](https://mdxcn.dev/knap) · [For agents](https://mdxcn.dev/agents) · [Examples](https://mdxcn.dev/docs/examples) · [Install](https://mdxcn.dev/docs/installation) · [Skill](https://mdxcn.dev/docs/skill) · [GitHub](https://github.com/keshav-exe/markdown-graphs)
+[docs](https://mdxcn.dev/docs) · [comark](https://mdxcn.dev/comark) · [knap](https://mdxcn.dev/knap) · [for agents](https://mdxcn.dev/agents) · [examples](https://mdxcn.dev/docs/examples) · [install](https://mdxcn.dev/docs/installation) · [skill](https://mdxcn.dev/docs/skill) · [github](https://github.com/keshav-exe/markdown-graphs)
 
 ## Install
 
@@ -83,7 +83,7 @@ Comark apps render the same figures from `::graph-*` blocks in a plain `.md` fil
 
 Knap templates pipe the same props through `graph_*` filters and emit the official fence (or a `::graph-*` block). Copy `graph-knap` (already in `all.json`). Spread `graphFilters` into `createEngine`. The Knap CLI does not load them. Wiring: [Knap](https://mdxcn.dev/docs/knap). Pitch: [Knap landing](https://mdxcn.dev/knap).
 
-Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on [Examples](https://mdxcn.dev/docs/examples). [For agents](https://mdxcn.dev/agents) is the write and read story. The [skill](https://mdxcn.dev/docs/skill) tells an agent which graph to put next to the prose — JSX in React, `::graph-*` in Comark, `graph_*` in Knap, fenced ASCII in GitHub. Agents can also fetch [`/llms.txt`](https://mdxcn.dev/llms.txt) for the chooser, the ASCII blocks, the Comark blocks, and the Knap filters.
+Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on [Examples](https://mdxcn.dev/docs/examples). [for agents](https://mdxcn.dev/agents) is the write and read story. The [skill](https://mdxcn.dev/docs/skill) tells an agent which graph to put next to the prose — JSX in React, `::graph-*` in Comark, `graph_*` in Knap, fenced ASCII in GitHub. Agents can also fetch [`/llms.txt`](https://mdxcn.dev/llms.txt) for the chooser, the ASCII blocks, the Comark blocks, and the Knap filters.
 
 ## Design
 

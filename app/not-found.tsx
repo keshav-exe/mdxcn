@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { DocsLink, ErrorFrame, HomeLink } from "@/components/site/error-frame"
 
 export const metadata: Metadata = {
-  title: "Not found",
+  title: "not found",
   robots: { index: false, follow: false },
 }
 
@@ -18,7 +18,7 @@ export default function NotFound() {
       }
       body="That URL is not a page. Look next at /docs."
       code="404"
-      title="Not found"
+      title="not found"
     />
   )
 }

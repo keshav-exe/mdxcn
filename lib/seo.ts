@@ -62,8 +62,8 @@ export function developersJsonLd() {
         provider: organizationNode(),
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "mdxcn API", path: "/developers" },
+        { name: "home", path: "/" },
+        { name: "mdxcn api", path: "/developers" },
       ]),
     ],
   }
@@ -160,7 +160,7 @@ export function webPageJsonLd({
         },
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
+        { name: "home", path: "/" },
         { name, path },
       ]),
     ],
@@ -207,8 +207,8 @@ export function componentJsonLd(item: ComponentDoc) {
         },
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "Docs", path: "/docs" },
+        { name: "home", path: "/" },
+        { name: "docs", path: "/docs" },
         { name: item.title, path: `/docs/${item.slug}` },
       ]),
     ],
@@ -228,8 +228,8 @@ export function skillJsonLd() {
         author,
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "Docs", path: "/docs" },
+        { name: "home", path: "/" },
+        { name: "docs", path: "/docs" },
         { name: "Skill", path: "/docs/skill" },
       ]),
     ],
@@ -242,16 +242,16 @@ export function installationJsonLd() {
     "@graph": [
       {
         "@type": "TechArticle",
-        headline: "Installation",
+        headline: "installation",
         description:
           "Copy the source into a shadcn project. Then give the agent the skill.",
         url: `${SITE_URL}/docs/installation`,
         author,
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "Docs", path: "/docs" },
-        { name: "Installation", path: "/docs/installation" },
+        { name: "home", path: "/" },
+        { name: "docs", path: "/docs" },
+        { name: "installation", path: "/docs/installation" },
       ]),
     ],
   }
@@ -263,14 +263,14 @@ export function agentsJsonLd() {
     "@graph": [
       {
         "@type": "WebPage",
-        name: "For agents",
+        name: "for agents",
         description: AGENTS_DESCRIPTION,
         url: `${SITE_URL}/agents`,
         author,
       },
       breadcrumbJsonLd([
-        { name: "Home", path: "/" },
-        { name: "For agents", path: "/agents" },
+        { name: "home", path: "/" },
+        { name: "for agents", path: "/agents" },
       ]),
     ],
   }

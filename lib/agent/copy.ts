@@ -33,11 +33,11 @@ ${HOME_WHAT}
 
 ${HOME_WRITE}
 
-## Write
+## write
 
 Install the skill into the folder the agent already reads. Ask for a write-up. The chooser picks the graph. Copy the props from the docs or a recipe, then swap the labels.
 
-## Read
+## read
 
 ${HOME_READ}
 
@@ -55,10 +55,10 @@ ${HOME_BRAND}
 
 ## Links
 
-- Developer API: ${host}/developers
+- developer api: ${host}/developers
 - OpenAPI: ${host}/openapi.json
 - JSON catalog: ${host}/api/v1/components
-- For agents: ${host}/agents
+- for agents: ${host}/agents
 - Comark: ${host}/comark
 - Knap: ${host}/knap
 - agents.md: ${host}/agents.md
@@ -109,7 +109,7 @@ export const PRIVACY_PARAS = [
 export function developersMarkdown(origin = SITE_URL) {
   const host = origin || SITE_URL
 
-  return `# mdxcn Developer API
+  return `# mdxcn developer api
 
 ${DEVELOPERS_PARAS.join("\n\n")}
 
@@ -128,41 +128,41 @@ export function deprecationMarkdown(origin = SITE_URL) {
 
 ${DEPRECATION_PARAS.join("\n\n")}
 
-- Developer API: ${origin}/developers
+- developer api: ${origin}/developers
 - OpenAPI: ${origin}/openapi.json
 `
 }
 
 export function aboutMarkdown(origin = SITE_URL) {
-  return `# About mdxcn
+  return `# about mdxcn
 
 ${ABOUT_PARAS.join("\n\n")}
 
 ## Also
 
-- Contact: ${origin}/contact
-- Privacy: ${origin}/privacy
+- contact: ${origin}/contact
+- privacy: ${origin}/privacy
 - Source: ${GITHUB_URL}
 `
 }
 
 export function contactMarkdown(origin = SITE_URL) {
-  return `# Contact mdxcn
+  return `# contact mdxcn
 
 ${CONTACT_PARAS.join("\n\n")}
 
-- About: ${origin}/about
-- Privacy: ${origin}/privacy
+- about: ${origin}/about
+- privacy: ${origin}/privacy
 `
 }
 
 export function privacyMarkdown(origin = SITE_URL) {
-  return `# Privacy · mdxcn
+  return `# privacy · mdxcn
 
 ${PRIVACY_PARAS.join("\n\n")}
 
-- About: ${origin}/about
-- Contact: ${origin}/contact
+- about: ${origin}/about
+- contact: ${origin}/contact
 `
 }
 

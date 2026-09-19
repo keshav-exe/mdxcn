@@ -48,30 +48,30 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
   const ascii = mdxExample(name)
   const comark = comarkExample(name)
   const knap = knapExample(name)
-  const tabs: [InstallTab, string][] = [["cli", "CLI"]]
+  const tabs: [InstallTab, string][] = [["cli", "cli"]]
 
   if (doc) {
-    tabs.push(["mdx", "MDX"])
+    tabs.push(["mdx", "mdx"])
   }
 
-  tabs.push(["manual", "Manual"], ["agent", "Agent"])
+  tabs.push(["manual", "manual"], ["agent", "agent"])
 
   if (ascii) {
-    tabs.push(["markdown", "Markdown"])
+    tabs.push(["markdown", "markdown"])
   }
 
   if (comark) {
-    tabs.push(["comark", "Comark"])
+    tabs.push(["comark", "comark"])
   }
 
   if (knap) {
-    tabs.push(["knap", "Knap"])
+    tabs.push(["knap", "knap"])
   }
 
   return (
     <div className="flex flex-col gap-4">
       <div
-        aria-label="Install method"
+        aria-label="install method"
         className="flex flex-wrap items-center gap-1"
         role="tablist"
       >
@@ -112,14 +112,14 @@ function InstallCommand({ name, doc, example }: InstallCommandProps) {
           template={knap.template}
         />
       ) : (
-        <CopyBlock label="Prompt" value={prompt} />
+        <CopyBlock label="prompt" value={prompt} />
       )}
     </div>
   )
 }
 
 function CliInstall({ name }: { name: string }) {
-  return <Command label="Command" value={scopedRegistryInstall(name)} />
+  return <Command label="command" value={scopedRegistryInstall(name)} />
 }
 
 function fileUrl(file: string) {
@@ -140,16 +140,16 @@ function ManualInstall({ name }: { name: string }) {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <p className="text-pretty text-muted-foreground">
-          Install <code className="font-mono">motion</code>, paste the CSS, then
+          install <code className="font-mono">motion</code>, paste the css, then
           copy these files from the repo.
         </p>
-        <Command label="Dependency" value="pnpm add motion" />
+        <Command label="dependency" value="pnpm add motion" />
       </div>
 
-      <CopyBlock label="CSS" value={css} />
+      <CopyBlock label="css" value={css} />
 
       <div className="flex flex-col gap-2">
-        <MonoLabel>Files</MonoLabel>
+        <MonoLabel>files</MonoLabel>
         <ul
           className="flex flex-col gap-1 font-mono text-muted-foreground"
           role="list"
@@ -172,7 +172,7 @@ function ManualInstall({ name }: { name: string }) {
             href={fileUrl(source)}
             rel="noreferrer"
           >
-            Open on GitHub
+            open on github
           </a>
         </p>
       </div>
@@ -211,16 +211,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return (
     <div className="flex flex-col gap-6">
       <ProseP>
-        Register the parent once in <InlineCode>mdx-components.tsx</InlineCode>
+        register the parent once in <InlineCode>mdx-components.tsx</InlineCode>
         {names.length > 1 ? (
           <>
             {" "}
             — including <InlineCode>{names.slice(1).join(", ")}</InlineCode>
           </>
         ) : null}
-        . Lists and tables inside the tag do not need extra imports. The .mdx
+        . lists and tables inside the tag do not need extra imports. the .mdx
         tab on the example is the framed figure — that is what you paste into
-        Notion or a README.
+        notion or a readme.
       </ProseP>
       <CopyBlock label="mdx-components.tsx" value={register} />
       {example ? <CopyBlock label="page.mdx" value={example} /> : null}
@@ -232,12 +232,12 @@ function MarkdownInstall({ markdown }: { markdown: string }) {
   return (
     <div className="flex flex-col gap-6">
       <ProseP>
-        Paste this fenced block into a Markdown file that cannot import the
-        component — README, GitHub, Linear, PR comments, a bare{" "}
-        <InlineCode>.md</InlineCode>. Monospace keeps the frame aligned. Swap
-        labels, keep the frame. Do not invent a different drawing.
+        paste this fenced block into a markdown file that cannot import the
+        component — readme, github, linear, pr comments, a bare{" "}
+        <InlineCode>.md</InlineCode>. monospace keeps the frame aligned. swap
+        labels, keep the frame. do not invent a different drawing.
       </ProseP>
-      <CopyBlock label="Markdown" value={markdown} />
+      <CopyBlock label="markdown" value={markdown} />
     </div>
   )
 }
@@ -246,13 +246,13 @@ function ComarkInstall({ markdown }: { markdown: string }) {
   return (
     <div className="flex flex-col gap-6">
       <ProseP>
-        Paste this into a <InlineCode>.md</InlineCode> file that a{" "}
-        <TextLink href={COMARK_URL}>Comark</TextLink> app will render. YAML
-        props match the React API. GitHub and Linear still need the MDX fence —
-        they do not run Comark. Wiring is on{" "}
+        paste this into a <InlineCode>.md</InlineCode> file that a{" "}
+        <TextLink href={COMARK_URL}>comark</TextLink> app will render. yaml
+        props match the react api. github and linear still need the mdx fence —
+        they do not run comark. wiring is on{" "}
         <TextLink href="/docs/comark">/docs/comark</TextLink>.
       </ProseP>
-      <CopyBlock label="Comark" value={markdown} />
+      <CopyBlock label="comark" value={markdown} />
     </div>
   )
 }
@@ -269,16 +269,16 @@ function KnapInstall({
   return (
     <div className="flex flex-col gap-6">
       <ProseP>
-        Pipe the graph props through a <TextLink href={KNAP_URL}>Knap</TextLink>{" "}
-        filter. The output is the official fence (or a{" "}
-        <InlineCode>::graph-*</InlineCode> block when the figure has no ASCII).
-        Wire <InlineCode>graphFilters</InlineCode> in{" "}
-        <TextLink href="/docs/knap">/docs/knap</TextLink>. The Knap CLI does not
+        pipe the graph props through a <TextLink href={KNAP_URL}>knap</TextLink>{" "}
+        filter. the output is the official fence (or a{" "}
+        <InlineCode>::graph-*</InlineCode> block when the figure has no ascii).
+        wire <InlineCode>graphFilters</InlineCode> in{" "}
+        <TextLink href="/docs/knap">/docs/knap</TextLink>. the knap cli does not
         load them.
       </ProseP>
-      <CopyBlock label="Template" value={template} />
-      <CopyBlock label="Data" value={data} />
-      <CopyBlock label="Markdown" value={markdown} />
+      <CopyBlock label="template" value={template} />
+      <CopyBlock label="data" value={data} />
+      <CopyBlock label="markdown" value={markdown} />
     </div>
   )
 }
@@ -293,7 +293,7 @@ function CopyToggle({
   return (
     <div className="flex justify-center site-rail py-2">
       <button
-        className="relative w-full px-2 py-1 font-mono tracking-wide text-muted-foreground uppercase hover:text-foreground"
+        className="relative w-full px-2 py-1 font-mono tracking-wide text-muted-foreground hover:text-foreground"
         onClick={onClick}
         type="button"
       >
@@ -362,10 +362,10 @@ function CopyBlock({ label, value }: { label: string; value: string }) {
           <CopyMark copied={copied} />
         </span>
         {collapsed ? (
-          <CopyToggle label="Show all" onClick={() => setOpen(true)} />
+          <CopyToggle label="show all" onClick={() => setOpen(true)} />
         ) : null}
         {open && (overflows || likelyLong) ? (
-          <CopyToggle label="Show less" onClick={collapse} />
+          <CopyToggle label="show less" onClick={collapse} />
         ) : null}
       </FrameBox>
     </div>

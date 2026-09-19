@@ -17,7 +17,7 @@ const description =
   "Open-source ASCII-framed React diagrams for MDX. Source on GitHub, MIT license, copied with the shadcn CLI."
 
 export const metadata: Metadata = pageMeta({
-  title: "About",
+  title: "about",
   description,
   path: "/about",
 })
@@ -47,7 +47,7 @@ export default function AboutPage() {
               { label: "site", value: "mdxcn.dev" },
               { label: "mail", value: SITE_EMAIL },
             ]}
-            title="SPEC"
+            title="spec"
           />
         }
         lead={ABOUT_PARAS[0]}

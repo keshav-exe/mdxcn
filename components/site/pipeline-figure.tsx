@@ -15,12 +15,6 @@ type PipelineStage = {
   fanIn?: boolean
 }
 
-type PipelinePlate = {
-  dwg: string
-  rev: string
-  scale?: string
-}
-
 function PipelineNodeBox({ node }: { node: PipelineNode }) {
   return (
     <div
@@ -32,9 +26,7 @@ function PipelineNodeBox({ node }: { node: PipelineNode }) {
           : "border-graph-frame text-foreground"
       )}
     >
-      <span className="font-mono text-[11px] tracking-wide uppercase">
-        {node.label}
-      </span>
+      <span className="font-mono text-[11px] tracking-wide">{node.label}</span>
       {node.hint ? (
         <span className="font-mono text-[10px] tracking-normal text-graph-muted normal-case">
           {node.hint}
@@ -83,36 +75,19 @@ function PipelineFigure({
   title,
   label,
   stages,
-  plate,
-  rail,
 }: {
   title: string
   label: string
   stages: PipelineStage[]
-  plate?: PipelinePlate
-  rail?: string
 }) {
   return (
     <Graph className="min-w-0" title={title}>
-      <GraphBody
-        className={cn(
-          "relative overflow-hidden graph-grid px-4 py-6 sm:px-6 sm:py-7",
-          rail && "sm:pr-10"
-        )}
-      >
+      <GraphBody>
         <div
           aria-label={label}
-          className="pointer-events-none relative select-none"
+          className="pointer-events-none select-none"
           role="img"
         >
-          {rail ? (
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 -right-1 hidden -translate-y-1/2 font-mono text-[10px] tracking-[0.28em] text-graph-muted uppercase [writing-mode:vertical-rl] sm:block"
-            >
-              {rail}
-            </span>
-          ) : null}
           <div className="grid grid-cols-[2.75rem_minmax(0,1fr)] items-start gap-x-3 gap-y-0 sm:grid-cols-[3.25rem_minmax(0,1fr)] sm:gap-x-4">
             {stages.map((stage, index) => (
               <div className="contents" key={stage.id}>
@@ -124,7 +99,7 @@ function PipelineFigure({
                     <StageJoin fanIn={stage.fanIn} />
                   </>
                 ) : null}
-                <div className="flex flex-col gap-0.5 pt-1 font-mono text-[10px] leading-tight tracking-widest text-graph-muted uppercase tabular-nums">
+                <div className="flex flex-col gap-0.5 pt-1 font-mono text-[10px] leading-tight tracking-widest text-graph-muted tabular-nums">
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <span>{stage.name}</span>
                 </div>
@@ -132,16 +107,6 @@ function PipelineFigure({
               </div>
             ))}
           </div>
-          {plate ? (
-            <dl className="mt-8 ml-auto grid w-max grid-cols-[auto_auto] gap-x-4 gap-y-1 border border-dashed border-graph-frame px-2.5 py-2 font-mono text-[10px] tracking-wider text-graph-muted uppercase tabular-nums">
-              <dt>dwg</dt>
-              <dd className="text-foreground">{plate.dwg}</dd>
-              <dt>rev</dt>
-              <dd className="text-foreground">{plate.rev}</dd>
-              <dt>scale</dt>
-              <dd className="text-foreground">{plate.scale ?? "nts"}</dd>
-            </dl>
-          ) : null}
         </div>
       </GraphBody>
     </Graph>
@@ -149,4 +114,4 @@ function PipelineFigure({
 }
 
 export { PipelineFigure }
-export type { PipelineNode, PipelinePlate, PipelineStage }
+export type { PipelineNode, PipelineStage }

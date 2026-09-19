@@ -67,7 +67,7 @@ const kit = [
 ]
 
 export const metadata: Metadata = pageMeta({
-  title: "For agents",
+  title: "for agents",
   description: AGENTS_DESCRIPTION,
   path: "/agents",
 })
@@ -75,9 +75,7 @@ export const metadata: Metadata = pageMeta({
 function AgentsPipeline() {
   return (
     <PipelineFigure
-      label="Agent loop from a write-up to a framed figure the agent can edit"
-      plate={{ dwg: "ag-01", rev: "2026.09" }}
-      rail="skill"
+      label="agent loop: pick a graph for the write-up, emit it, then edit the labels in the file"
       stages={[
         {
           id: "write",
@@ -122,7 +120,7 @@ function AgentsPipeline() {
           ],
         },
       ]}
-      title="LOOP"
+      title="loop"
     />
   )
 }
@@ -174,7 +172,7 @@ export default function AgentsPage() {
               },
               { label: "Edit the labels", values: [true, true, true, true] },
             ]}
-            title="HOST"
+            title="host"
           />
           <GraphFlow
             rows={[
@@ -193,7 +191,7 @@ export default function AgentsPage() {
                 ],
               },
             ]}
-            title="LOOP"
+            title="loop"
           />
         </div>
       </LandingSection>
@@ -237,7 +235,7 @@ export default function AgentsPage() {
                 ],
               },
             ]}
-            title="KIT"
+            title="kit"
           />
           <GraphCheck
             items={[
@@ -246,7 +244,7 @@ export default function AgentsPage() {
               { label: "official fence, not homemade", done: true },
               { label: "no svg", done: true },
             ]}
-            title="RULES"
+            title="rules"
           />
         </div>
       </LandingSection>

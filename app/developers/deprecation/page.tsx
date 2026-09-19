@@ -10,7 +10,7 @@ const description =
   "mdxcn API versioning and deprecation. URL version prefixes, Sunset headers, and six-month notice."
 
 export const metadata: Metadata = pageMeta({
-  title: "API deprecation",
+  title: "api deprecation",
   description,
   path: "/developers/deprecation",
 })
@@ -34,14 +34,14 @@ export default function DeprecationPage() {
             className="text-foreground underline-offset-4 hover:underline"
             href="/developers"
           >
-            Developer API
+            developer api
           </Link>
           {" · "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/openapi.json"
           >
-            OpenAPI
+            openapi
           </Link>
         </p>
       </ProsePage>

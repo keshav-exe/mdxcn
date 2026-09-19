@@ -78,7 +78,7 @@ ${body.trim()}`
 
 const tableExamples: Example[] = [
   {
-    title: "Research cost",
+    title: "research cost",
     code: `<GraphTable title="WHAT THE RESEARCH COST">
 
 | Agent | Tokens | Tool calls | Time |
@@ -177,7 +177,7 @@ const tableExamples: Example[] = [
     ),
   },
   {
-    title: "Taste, explained",
+    title: "taste, explained",
     code: `<GraphTable title="TASTE, EXPLAINED">
 
 | Decision | Reason |
@@ -264,7 +264,7 @@ const tableExamples: Example[] = [
 
 const sheetExamples: Example[] = [
   {
-    title: "RFC",
+    title: "rfc",
     code: `<GraphSheet title="RFC">
 
 ### Scope
@@ -382,7 +382,7 @@ const sheetExamples: Example[] = [
     ),
   },
   {
-    title: "Surface",
+    title: "surface",
     code: `<GraphSheet title="SURFACE">
 
 ### Frame
@@ -503,7 +503,7 @@ const sheetExamples: Example[] = [
 
 const flowExamples: Example[] = [
   {
-    title: "Optimistic UI",
+    title: "optimistic ui",
     code: `<GraphFlow title="OPTIMISTIC UI">
 
 tap → server → update
@@ -531,7 +531,7 @@ tap → **update** → *server syncs*
     ),
   },
   {
-    title: "Publish path",
+    title: "publish path",
     code: `<GraphFlow title="PUBLISH PATH">
 
 write → review → ship
@@ -554,7 +554,7 @@ write → review → ship
 
 const barsExamples: Example[] = [
   {
-    title: "Before / after",
+    title: "before / after",
     code: `<GraphBars title="THROUGHPUT" palette="duo">
 
 - before: 2 4 3 5 2
@@ -585,7 +585,7 @@ const barsExamples: Example[] = [
     ),
   },
   {
-    title: "Draft to shipped",
+    title: "draft to shipped",
     code: `<GraphBars title="DRAFT TO SHIPPED" processor="edit">
 
 - draft: 1 2 2 3 1
@@ -619,7 +619,7 @@ const barsExamples: Example[] = [
 
 const rankExamples: Example[] = [
   {
-    title: "Routes",
+    title: "routes",
     code: `<GraphRank title="ROUTES">
 
 - 12,400 /docs
@@ -652,7 +652,7 @@ const rankExamples: Example[] = [
     ),
   },
   {
-    title: "Coverage",
+    title: "coverage",
     code: `<GraphRank title="COVERAGE" max={100}>
 
 - 100% frame
@@ -685,7 +685,7 @@ const rankExamples: Example[] = [
 
 const cellsExamples: Example[] = [
   {
-    title: "Two ways to learn",
+    title: "two ways to learn",
     code: `<GraphCells title="TWO WAYS TO LEARN">
 
 - fragments: 1 0 1 0 0 / 0 1 0 1 0 / 1 0 0 0 1
@@ -712,7 +712,7 @@ const cellsExamples: Example[] = [
     ),
   },
   {
-    title: "Coverage",
+    title: "coverage",
     code: `<GraphCells title="COVERAGE">
 
 - this week: 1 1 1 1 0 / 1 1 0 1 1 / 1 0 1 1 1
@@ -739,7 +739,7 @@ const cellsExamples: Example[] = [
 
 const meterExamples: Example[] = [
   {
-    title: "Shipped",
+    title: "shipped",
     description: "Dashes stay empty until the fill animates in.",
     code: `import { GraphMeter } from "@/registry/default/graph-meter/graph-meter"
 
@@ -753,7 +753,7 @@ const meterExamples: Example[] = [
     ),
   },
   {
-    title: "Coverage",
+    title: "coverage",
     description: "Fewer ticks. Tighter meter.",
     code: `import { GraphMeter } from "@/registry/default/graph-meter/graph-meter"
 
@@ -771,7 +771,7 @@ const meterExamples: Example[] = [
 
 const sparkExamples: Example[] = [
   {
-    title: "Latency",
+    title: "latency",
     description:
       "data can be a string of numbers. The last point is the accent.",
     code: `import { GraphSpark } from "@/registry/default/graph-spark/graph-spark"
@@ -786,7 +786,7 @@ const sparkExamples: Example[] = [
     ),
   },
   {
-    title: "Requests",
+    title: "requests",
     description: "A quieter series.",
     code: `import { GraphSpark } from "@/registry/default/graph-spark/graph-spark"
 
@@ -807,7 +807,7 @@ const sparkExamples: Example[] = [
 
 const treeExamples: Example[] = [
   {
-    title: "Registry",
+    title: "registry",
     code: `<GraphTree title="REGISTRY">
 
 - registry/default
@@ -874,7 +874,7 @@ const treeExamples: Example[] = [
     ),
   },
   {
-    title: "Team",
+    title: "team",
     code: `<GraphTree title="ON CALL">
 
 - platform
@@ -922,7 +922,7 @@ const treeExamples: Example[] = [
 
 const timelineExamples: Example[] = [
   {
-    title: "Shipped",
+    title: "shipped",
     code: `<GraphTimeline title="SHIPPED">
 
 - Mar 12: CLI copies the files
@@ -960,7 +960,7 @@ const timelineExamples: Example[] = [
     ),
   },
   {
-    title: "Incident",
+    title: "incident",
     code: `<GraphTimeline title="INCIDENT">
 
 - 14:02: p95 crossed 800ms
@@ -1001,7 +1001,7 @@ const timelineExamples: Example[] = [
 
 const checkExamples: Example[] = [
   {
-    title: "Launch",
+    title: "launch",
     code: `<GraphCheck title="LAUNCH">
 
 - [x] freeze tokens
@@ -1031,7 +1031,7 @@ const checkExamples: Example[] = [
     ),
   },
   {
-    title: "Review",
+    title: "review",
     code: `<GraphCheck title="REVIEW">
 
 - [x] title is a sentence
@@ -1064,7 +1064,7 @@ const checkExamples: Example[] = [
 
 const stackExamples: Example[] = [
   {
-    title: "Bundle",
+    title: "bundle",
     code: `<GraphStack title="BUNDLE" palette="multi">
 
 - marketing: 48 js, 22 css, 30 images
@@ -1091,7 +1091,7 @@ const stackExamples: Example[] = [
     ),
   },
   {
-    title: "Tokens",
+    title: "tokens",
     code: `<GraphStack title="TOKENS" ticks={28}>
 
 - week: 61 prompt, 27 completion, 12 cached
@@ -1118,7 +1118,7 @@ const stackExamples: Example[] = [
 
 const funnelExamples: Example[] = [
   {
-    title: "Install",
+    title: "install",
     code: `<GraphFunnel title="INSTALL" stage="ship">
 
 - 12,400 docs
@@ -1148,7 +1148,7 @@ const funnelExamples: Example[] = [
     ),
   },
   {
-    title: "Signup",
+    title: "signup",
     code: `<GraphFunnel title="SIGNUP" ticks={16}>
 
 - 8,000 visit
@@ -1184,7 +1184,7 @@ const funnelExamples: Example[] = [
 
 const ganttExamples: Example[] = [
   {
-    title: "Launch",
+    title: "launch",
     code: `<GraphGantt title="LAUNCH" stage="build" progress={0.58} ticks={["q1", "q2", "q3", "q4"]}>
 
 - design: 0 0.35 1
@@ -1226,7 +1226,7 @@ const ganttExamples: Example[] = [
     ),
   },
   {
-    title: "Week",
+    title: "week",
     code: `<GraphGantt title="THIS WEEK" columns={20} ticks={["mon", "wed", "fri"]}>
 
 - **rfc**: 0 0.4
@@ -1277,7 +1277,7 @@ const plotExamples: Example[] = [
     ),
   },
   {
-    title: "Errors",
+    title: "errors",
     description: "Line only. progress reveals a prefix.",
     code: `import { GraphPlot } from "@/registry/default/graph-plot/graph-plot"
 
@@ -1304,7 +1304,7 @@ const plotExamples: Example[] = [
 
 const waffleExamples: Example[] = [
   {
-    title: "Coverage",
+    title: "coverage",
     description: "One hundred cells. Value is how many are lit.",
     code: `import { GraphWaffle } from "@/registry/default/graph-waffle/graph-waffle"
 
@@ -1318,7 +1318,7 @@ const waffleExamples: Example[] = [
     ),
   },
   {
-    title: "Quota",
+    title: "quota",
     description: "Fewer cells. Same 0–1 value.",
     code: `import { GraphWaffle } from "@/registry/default/graph-waffle/graph-waffle"
 
@@ -1343,7 +1343,7 @@ const waffleExamples: Example[] = [
 
 const diffExamples: Example[] = [
   {
-    title: "Bundle",
+    title: "bundle",
     code: `<GraphDiff title="BUNDLE" palette="duo">
 
 - vendor: 84 kb
@@ -1380,7 +1380,7 @@ const diffExamples: Example[] = [
     ),
   },
   {
-    title: "Headcount",
+    title: "headcount",
     code: `<GraphDiff title="HEADCOUNT">
 
 - start: 12
@@ -1420,7 +1420,7 @@ const diffExamples: Example[] = [
 
 const invoiceExamples: Example[] = [
   {
-    title: "Studio invoice",
+    title: "studio invoice",
     code: `<GraphInvoice
   title="INVOICE 0041"
   from="mdxcn"
@@ -1540,7 +1540,7 @@ Net 30. Wire to the account on file.
     ),
   },
   {
-    title: "Quote",
+    title: "quote",
     code: `<GraphInvoice title="QUOTE" from="mdxcn" to="Northwind">
 
 - Valid until: May 01
@@ -1616,7 +1616,7 @@ Net 30. Wire to the account on file.
 
 const compareExamples: Example[] = [
   {
-    title: "Plans",
+    title: "plans",
     code: `<GraphCompare title="PLANS" accent="Studio">
 
 | | Solo | Studio |
@@ -1701,7 +1701,7 @@ const compareExamples: Example[] = [
     ),
   },
   {
-    title: "Before after",
+    title: "before after",
     code: `<GraphCompare title="RENDER" accent="This">
 
 | | Mermaid | SVG | This |
@@ -1786,7 +1786,7 @@ const compareExamples: Example[] = [
 
 const matrixExamples: Example[] = [
   {
-    title: "Detect",
+    title: "detect",
     code: `<GraphMatrix title="DETECT" accent="Pos">
 
 | | Pos | Neg |
@@ -1849,7 +1849,7 @@ const matrixExamples: Example[] = [
     ),
   },
   {
-    title: "Latency",
+    title: "latency",
     code: `<GraphMatrix title="P95" accent="write">
 
 | | iad | sfo | nrt |
@@ -1934,7 +1934,7 @@ const matrixExamples: Example[] = [
 
 const statExamples: Example[] = [
   {
-    title: "This week",
+    title: "this week",
     code: `<GraphStat title="THIS WEEK">
 
 - 12,400 docs
@@ -1968,7 +1968,7 @@ const statExamples: Example[] = [
     ),
   },
   {
-    title: "Latency",
+    title: "latency",
     code: `<GraphStat title="P95">
 
 - 142ms read — −18ms
@@ -2002,7 +2002,7 @@ const statExamples: Example[] = [
 
 const kpiExamples: Example[] = [
   {
-    title: "Reads",
+    title: "reads",
     description:
       "The number is the headline. The spark is the last twelve points.",
     code: `import { GraphKpi } from "@/registry/default/graph-kpi/graph-kpi"
@@ -2025,7 +2025,7 @@ const kpiExamples: Example[] = [
     ),
   },
   {
-    title: "Latency",
+    title: "latency",
     description: "A latency number with a falling series.",
     code: `import { GraphKpi } from "@/registry/default/graph-kpi/graph-kpi"
 
@@ -2050,7 +2050,7 @@ const kpiExamples: Example[] = [
 
 const specExamples: Example[] = [
   {
-    title: "Type",
+    title: "type",
     code: `<GraphSpec title="TYPE">
 
 - Family: Geist Mono
@@ -2090,7 +2090,7 @@ const specExamples: Example[] = [
     ),
   },
   {
-    title: "Ship to",
+    title: "ship to",
     code: `<GraphSpec title="SHIP TO">
 
 - Name: A. Rao
@@ -2171,7 +2171,7 @@ const uptimeQuarter = Array.from({ length: 90 }, (_, index) => {
 
 const activityExamples: Example[] = [
   {
-    title: "Year",
+    title: "year",
     description:
       "Dated counts. The grid, month labels, and intensity scale are derived.",
     code: `import { GraphActivity } from "@/registry/default/graph-activity/graph-activity"
@@ -2201,7 +2201,7 @@ function activityDays(start: string, length: number) {
     preview: <GraphActivity days={yearActivity} title="COMMITS" />,
   },
   {
-    title: "Quarter",
+    title: "quarter",
     description:
       'Shorter range. glyphs="ascii" swaps the block characters for .- =#@.',
     code: `import { GraphActivity } from "@/registry/default/graph-activity/graph-activity"
@@ -2227,7 +2227,7 @@ function activityDays(start: string, length: number) {
 
 const heatmapExamples: Example[] = [
   {
-    title: "Punchcard",
+    title: "punchcard",
     code: `<GraphHeatmap title="DEPLOYS" palette="duo">
 
 | | 0 | 4 | 8 | 12 | 16 | 20 |
@@ -2409,7 +2409,7 @@ const heatmapExamples: Example[] = [
     ),
   },
   {
-    title: "Coverage",
+    title: "coverage",
     code: `<GraphHeatmap title="TESTS" max={10} legend={false}>
 
 | | a | b | c | d |
@@ -2502,7 +2502,7 @@ const heatmapExamples: Example[] = [
 
 const calendarExamples: Example[] = [
   {
-    title: "Marked days",
+    title: "marked days",
     description: "month is 1–12. today is passed in so render stays stable.",
     code: `import { GraphCalendar } from "@/registry/default/graph-calendar/graph-calendar"
 
@@ -2512,7 +2512,7 @@ const calendarExamples: Example[] = [
     ),
   },
   {
-    title: "Sunday start",
+    title: "sunday start",
     description: "weekStartsOn 0 matches a US calendar.",
     code: `import { GraphCalendar } from "@/registry/default/graph-calendar/graph-calendar"
 
@@ -2537,7 +2537,7 @@ const calendarExamples: Example[] = [
 
 const waterfallExamples: Example[] = [
   {
-    title: "Margin",
+    title: "margin",
     code: `<GraphWaterfall title="MARGIN" palette="duo">
 
 - Revenue: 48
@@ -2570,7 +2570,7 @@ const waterfallExamples: Example[] = [
     ),
   },
   {
-    title: "Headcount",
+    title: "headcount",
     code: `<GraphWaterfall title="TEAM">
 
 - Start: 12
@@ -2606,7 +2606,7 @@ const waterfallExamples: Example[] = [
 
 const uptimeExamples: Example[] = [
   {
-    title: "Ninety days",
+    title: "ninety days",
     description:
       "One glyph per day, wrapped every 30. Percent is the share of ok days.",
     code: `import { GraphUptime } from "@/registry/default/graph-uptime/graph-uptime"
@@ -2628,7 +2628,7 @@ const uptimeExamples: Example[] = [
     ),
   },
   {
-    title: "Incident window",
+    title: "incident window",
     description:
       "days as one string. empty days sit as dashes so a gap stays visible.",
     code: `import { GraphUptime } from "@/registry/default/graph-uptime/graph-uptime"
@@ -2652,7 +2652,7 @@ const uptimeExamples: Example[] = [
 
 const slopeExamples: Example[] = [
   {
-    title: "Traffic",
+    title: "traffic",
     code: `<GraphSlope title="TRAFFIC" palette="duo" fromLabel="2025" toLabel="2026">
 
 - docs: 8,200 → 12,400
@@ -2682,7 +2682,7 @@ const slopeExamples: Example[] = [
     ),
   },
   {
-    title: "Latency",
+    title: "latency",
     code: `<GraphSlope title="P95" fromLabel="before" toLabel="after">
 
 - read: 160 → 142
@@ -2715,7 +2715,7 @@ const slopeExamples: Example[] = [
 
 const bulletExamples: Example[] = [
   {
-    title: "Targets",
+    title: "targets",
     code: `<GraphBullet title="BUDGET">
 
 - Design: 42 / 40
@@ -2745,7 +2745,7 @@ const bulletExamples: Example[] = [
     ),
   },
   {
-    title: "Capacity",
+    title: "capacity",
     code: `<GraphBullet title="LOAD">
 
 - CPU: 72 / 80 of 100
@@ -2778,7 +2778,7 @@ const bulletExamples: Example[] = [
 
 const timerExamples: Example[] = [
   {
-    title: "Incident",
+    title: "incident",
     description: "Counts up from a start time.",
     code: `import { GraphTimer } from "@/registry/default/graph-timer/graph-timer"
 
@@ -2798,7 +2798,7 @@ const timerExamples: Example[] = [
     ),
   },
   {
-    title: "Last deploy",
+    title: "last deploy",
     description: "How long since the last deploy.",
     code: `import { GraphTimer } from "@/registry/default/graph-timer/graph-timer"
 
@@ -2818,7 +2818,7 @@ const timerExamples: Example[] = [
     ),
   },
   {
-    title: "Local",
+    title: "local",
     description: "The time of day, updating every second.",
     code: `import { GraphTimer } from "@/registry/default/graph-timer/graph-timer"
 
@@ -2832,7 +2832,7 @@ const timerExamples: Example[] = [
 
 const countdownExamples: Example[] = [
   {
-    title: "Freeze",
+    title: "freeze",
     description: "Until New Year's. After that it says open.",
     code: `import { GraphCountdown } from "@/registry/default/graph-countdown/graph-countdown"
 
@@ -2852,7 +2852,7 @@ const countdownExamples: Example[] = [
     ),
   },
   {
-    title: "Closed",
+    title: "closed",
     description: "The date has passed, so the frame shows the label you set.",
     code: `import { GraphCountdown } from "@/registry/default/graph-countdown/graph-countdown"
 
@@ -2869,7 +2869,7 @@ const countdownExamples: Example[] = [
 
 const frameExamples: Example[] = [
   {
-    title: "Titled frame",
+    title: "titled frame",
     description: "Compose Graph, GraphTitle, GraphBody, and GraphRule.",
     code: `import {
   Graph,
@@ -2897,7 +2897,7 @@ const frameExamples: Example[] = [
     ),
   },
   {
-    title: "Untitled",
+    title: "untitled",
     description:
       "Skip title and the top edge stays a dashed line. corner swaps the +.",
     code: `import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
@@ -2919,7 +2919,7 @@ const frameExamples: Example[] = [
 
 const calloutExamples: Example[] = [
   {
-    title: "Warning",
+    title: "warning",
     description:
       "type sets the frame title and the glyph. The body is Markdown — write it like a paragraph.",
     code: `import { Callout } from "@/registry/default/callout/callout"
@@ -2938,7 +2938,7 @@ const calloutExamples: Example[] = [
     ),
   },
   {
-    title: "Tip with a title",
+    title: "tip with a title",
     description: "title overrides the type on the frame. Lists work.",
     code: `import { Callout } from "@/registry/default/callout/callout"
 
@@ -2965,7 +2965,7 @@ const calloutExamples: Example[] = [
 
 const quoteExamples: Example[] = [
   {
-    title: "Attributed",
+    title: "attributed",
     description: "by is the name. source is muted after it. No frame title.",
     code: `import { Quote } from "@/registry/default/quote/quote"
 
@@ -2979,7 +2979,7 @@ const quoteExamples: Example[] = [
     ),
   },
   {
-    title: "Titled",
+    title: "titled",
     description: "Pass title when the quote belongs to a section.",
     code: `import { Quote } from "@/registry/default/quote/quote"
 
@@ -2996,7 +2996,7 @@ const quoteExamples: Example[] = [
 
 const stepsExamples: Example[] = [
   {
-    title: "Install",
+    title: "install",
     code: `<Steps title="INSTALL">
 
 1. Copy the source
@@ -3060,7 +3060,7 @@ const stepsExamples: Example[] = [
     ),
   },
   {
-    title: "Runbook",
+    title: "runbook",
     code: `<Steps title="ROLLBACK">
 
 1. Flip the flag — cache.v2 to off in the dashboard.
@@ -3093,7 +3093,7 @@ const stepsExamples: Example[] = [
 
 const terminalExamples: Example[] = [
   {
-    title: "Install",
+    title: "install",
     description:
       "Put the session in a fenced block so Markdown leaves it alone. $ marks a command, ✓ a pass.",
     code: `import { Terminal } from "@/registry/default/terminal/terminal"
@@ -3116,7 +3116,7 @@ $ pnpm dlx shadcn@latest add @mdxcn/callout
     ),
   },
   {
-    title: "Comment and output",
+    title: "comment and output",
     description: "# lines are comments. Plain lines are output, muted.",
     code: `import { Terminal } from "@/registry/default/terminal/terminal"
 
@@ -3145,7 +3145,7 @@ $ pnpm dlx shadcn@latest add @mdxcn/callout
 
 const changelogExamples: Example[] = [
   {
-    title: "Release",
+    title: "release",
     code: `<Changelog version="1.2.0" date="Mar 12">
 
 - added: Callout, Quote, Steps, Terminal, Changelog
@@ -3178,7 +3178,7 @@ const changelogExamples: Example[] = [
     ),
   },
   {
-    title: "Titled",
+    title: "titled",
     code: `<Changelog title="CHANGELOG" version="0.9.0" date="Feb 02">
 
 - added: Knap filters

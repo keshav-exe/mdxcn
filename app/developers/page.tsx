@@ -19,10 +19,10 @@ import { developersJsonLd, pageMeta } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 const description =
-  "mdxcn developer API. OpenAPI spec, JSON catalog, rate limits, and shadcn CLI install."
+  "mdxcn developer API. openapi spec, JSON catalog, rate limits, and shadcn CLI install."
 
 export const metadata: Metadata = pageMeta({
-  title: "mdxcn API",
+  title: "mdxcn api",
   description,
   path: "/developers",
 })
@@ -64,23 +64,21 @@ const endpoints = [
 function DevelopersPipeline() {
   return (
     <PipelineFigure
-      label="Developer API from a catalog request to a shadcn install"
-      plate={{ dwg: "dv-01", rev: "2026.09" }}
-      rail="v1"
+      label="read-only json catalog: fetch an endpoint, get json or a problem document"
       stages={[
         {
-          id: "request",
-          name: "request",
+          id: "get",
+          name: "get",
           nodes: [
-            { label: "GET", hint: "/api/v1" },
-            { label: "catalog", hint: "/components" },
-            { label: "openapi", hint: "/openapi.json" },
-            { label: "llms.txt", hint: "chooser" },
+            { label: "/api/v1", hint: "index" },
+            { label: "/components", hint: "catalog" },
+            { label: "/openapi.json", hint: "openapi 3.1" },
+            { label: "/llms.txt", hint: "chooser" },
           ],
         },
         {
-          id: "read",
-          name: "read",
+          id: "return",
+          name: "return",
           fanIn: true,
           nodes: [
             { label: "json", hint: "no api keys" },
@@ -88,20 +86,20 @@ function DevelopersPipeline() {
           ],
         },
         {
-          id: "install",
-          name: "install",
+          id: "use",
+          name: "use",
           fanIn: true,
           nodes: [
             {
-              label: "shadcn cli",
-              hint: "copies source, not an npm package",
+              label: "json catalog",
+              hint: "agents and integrators",
               accent: true,
               wide: true,
             },
           ],
         },
       ]}
-      title="API"
+      title="api"
     />
   )
 }
@@ -142,20 +140,29 @@ export default function DevelopersPage() {
               { label: "/llms.txt", value: "chooser + ascii" },
               { label: "/.well-known/api-catalog", value: "rfc 9727" },
             ]}
-            title="FETCH"
+            title="fetch"
           />
-          <GraphCheck
-            items={[
-              { label: "no api keys", done: true },
-              { label: "RateLimit-* headers", done: true },
-              { label: "rfc 9457 errors", done: true },
-              {
-                label: "breaking changes as /api/v2/",
-                note: "six months notice",
-              },
-            ]}
-            title="CONTRACT"
-          />
+          <div className="flex flex-col gap-8">
+            <GraphKpi
+              data={[4, 5, 6, 8, 7, 9, 11, 10, 12, 14, 13, 16]}
+              hint="1000 / hr"
+              label="get requests"
+              title="rate"
+              value="1,000"
+            />
+            <GraphCheck
+              items={[
+                { label: "no api keys", done: true },
+                { label: "RateLimit-* headers", done: true },
+                { label: "rfc 9457 errors", done: true },
+                {
+                  label: "breaking changes as /api/v2/",
+                  note: "six months notice",
+                },
+              ]}
+              title="contract"
+            />
+          </div>
         </div>
         <dl className="grid gap-6 sm:grid-cols-3 sm:gap-8">
           {endpoints.map((entry) => (
@@ -178,25 +185,16 @@ export default function DevelopersPage() {
         }
         title="copy the source"
       >
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
-          <GraphKpi
-            data={[4, 5, 6, 8, 7, 9, 11, 10, 12, 14, 13, 16]}
-            hint="1000 / hr"
-            label="get requests"
-            title="RATE"
-            value="1,000"
-          />
-          <GraphSpec
-            rows={[
-              { label: "cli", value: "/r/all.json", accent: true },
-              { label: "skill", value: "/skill.md" },
-              { label: "deprecation", value: "/developers/deprecation" },
-              { label: "comark", value: "/docs/comark" },
-              { label: "knap", value: "/docs/knap" },
-            ]}
-            title="PATHS"
-          />
-        </div>
+        <GraphSpec
+          rows={[
+            { label: "cli", value: "/r/all.json", accent: true },
+            { label: "skill", value: "/skill.md" },
+            { label: "deprecation", value: "/developers/deprecation" },
+            { label: "comark", value: "/docs/comark" },
+            { label: "knap", value: "/docs/knap" },
+          ]}
+          title="paths"
+        />
         <LandingLinks
           items={[
             { href: "/developers/deprecation", label: "deprecation policy" },

@@ -22,7 +22,7 @@ export type Recipe = {
 export const recipes: Recipe[] = [
   {
     slug: "refactor",
-    title: "Refactor",
+    title: "refactor",
     blurb: "Old path, new path, then the weeks.",
     story:
       "You're moving auth checks out of handlers. Show the request path first, then the work in order, with the current week marked.",
@@ -55,7 +55,7 @@ request → **middleware** → handler
   },
   {
     slug: "incident",
-    title: "Incident",
+    title: "incident",
     blurb: "What happened, and which days took the hit.",
     story:
       "p95 crossed the line, you rolled back a flag, and the postmortem is still open. The strip is the two days people felt it.",
@@ -87,7 +87,7 @@ request → **middleware** → handler
   },
   {
     slug: "pick",
-    title: "Pick one",
+    title: "pick one",
     blurb: "A matrix, then the sizes if they matter.",
     story:
       "You're choosing a queue. Checks and dashes first. Bundle size only if that's part of the argument.",
@@ -122,7 +122,7 @@ request → **middleware** → handler
   },
   {
     slug: "review",
-    title: "Pull request",
+    title: "pull request",
     blurb: "What moved, and what the numbers did.",
     story:
       "A review comment with a file list and a coverage slope. The reader shouldn't have to open the diff to get the shape.",
@@ -154,7 +154,7 @@ request → **middleware** → handler
   },
   {
     slug: "sprint",
-    title: "This week",
+    title: "this week",
     blurb: "Overlapping work, then the board counts.",
     story:
       "Monday stand-up. The track is the calendar. The numbers are what's in review, blocked, and already shipped.",
@@ -186,7 +186,7 @@ request → **middleware** → handler
   },
   {
     slug: "migrate",
-    title: "Migration",
+    title: "migration",
     blurb: "How far the job is, and the count behind it.",
     story:
       "A backfill that's still running. The fill is the share. The figure is the row count, with the last points of the job underneath.",
@@ -240,7 +240,7 @@ Two graphs per write-up is enough. Prose between them. Copy the framed ASCII fro
 
 ${lines.join("\n")}
 
-For agents: ${host}/agents
+for agents: ${host}/agents
 Skill: ${host}/docs/skill
 `
 }

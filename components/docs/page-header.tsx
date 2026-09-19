@@ -37,7 +37,11 @@ function DocsPageHeader({
       </div>
       {kicker ? <p className="font-mono text-graph-accent">{kicker}</p> : null}
       {lead ? (
-        <div className={cn(proseLeadClass, "flex flex-col gap-4")}>{lead}</div>
+        typeof lead === "string" ? (
+          <p className={proseLeadClass}>{lead}</p>
+        ) : (
+          <div className={proseLeadClass}>{lead}</div>
+        )
       ) : null}
       {children}
     </header>

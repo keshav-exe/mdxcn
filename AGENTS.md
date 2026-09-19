@@ -35,7 +35,7 @@ Do the full list. Docs pages are generated from the catalog; there is no per-com
 11. Knap: `GRAPH_VALUE_KEY` / `ASCII` / `GRAPH_FILTER_SLUGS` in `graph-knap` (`props.ts`, `filters.ts`). Do not add a catalog row for `graph-knap`.
 12. `pnpm registry:build` so `public/r/` matches source
 
-OG is one static `app/opengraph-image.png` (+ `.alt.txt`) shared by every route. No per-page `opengraph-image.tsx`, no `ImageResponse` at request time. Redraw the PNG only if the mark or palette changes; `lib/og/mark.tsx` is the source of the mark.
+OG is one shared route: `app/opengraph-image.tsx` renders via `lib/og/opengraph.tsx` (`ImageResponse` at build time). Font: `lib/og/geist-mono-latin-400-normal.ttf` (official Geist Mono — fontsource subsets break satori). Alt text in `app/opengraph-image.alt.txt`. No per-page OG files. Mark geometry lives in `lib/og/mark.tsx`.
 
 ## Design
 

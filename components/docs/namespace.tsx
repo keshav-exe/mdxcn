@@ -16,10 +16,10 @@ function NamespaceSetup() {
 
   return (
     <div className="flex flex-col gap-6">
-      <Command label="CLI" value={add} />
+      <Command label="cli" value={add} />
       <CopyBlock label="components.json" value={config} />
       <Command
-        label="Then"
+        label="then"
         value={`pnpm dlx shadcn@latest add ${REGISTRY_SCOPE}/graph-table`}
       />
     </div>

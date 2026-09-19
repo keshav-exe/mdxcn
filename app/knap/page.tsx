@@ -33,7 +33,7 @@ import { pageMeta, webPageJsonLd } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = pageMeta({
-  title: "Knap",
+  title: "knap",
   description: KNAP_DESCRIPTION,
   path: "/knap",
 })
@@ -75,9 +75,7 @@ const steps = [
 function KnapPipeline() {
   return (
     <PipelineFigure
-      label="Knap pipeline from a props object to fenced ascii"
-      plate={{ dwg: "kn-01", rev: "2026.09" }}
-      rail="template"
+      label="knap filter: props in, official fence or a ::graph-* block out"
       stages={[
         {
           id: "data",
@@ -107,20 +105,15 @@ function KnapPipeline() {
               label: "fenced ascii",
               hint: "readme / github / linear",
               accent: true,
-              wide: true,
+            },
+            {
+              label: "::graph-*",
+              hint: "pass comark · no ascii",
             },
           ],
         },
-        {
-          id: "or",
-          name: "or",
-          nodes: [
-            { label: "::graph-*", hint: "pass comark" },
-            { label: "yaml", hint: "no ascii graphs" },
-          ],
-        },
       ]}
-      title="FILTER"
+      title="filter"
     />
   )
 }
@@ -229,7 +222,7 @@ export default function KnapPage() {
                 values: [false, false, false, true],
               },
             ]}
-            title="HOST"
+            title="host"
           />
           <GraphCheck
             items={[
@@ -241,7 +234,7 @@ export default function KnapPage() {
                 note: "wire createEngine",
               },
             ]}
-            title="FILTER"
+            title="filter"
           />
         </div>
         <LandingLinks

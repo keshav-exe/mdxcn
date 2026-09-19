@@ -20,17 +20,17 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
 
 export const metadata: Metadata = pageMeta({
-  title: "Introduction",
+  title: "introduction",
   description: DOCS_DESCRIPTION,
   path: "/docs",
 })
 
-const intro = `Register the parent once in mdx-components.tsx. The .mdx tab is the framed figure — copy it into Notion, Linear, a README. The .tsx tab is the React. Wrap the same content in the parent when you want it live.`
+const intro = `register the parent once in mdx-components.tsx. the .mdx tab is the framed figure — copy it into notion, linear, a readme. the .tsx tab is the react. wrap the same content in the parent when you want it live.`
 
 export default function DocsPage() {
   const groups = componentsByCategory()
   const extra = [
-    "## Components",
+    "## components",
     "",
     ...groups.flatMap((group) => [
       `### ${group.label}`,
@@ -51,45 +51,45 @@ export default function DocsPage() {
           description: intro,
           extra,
           registry: "all",
-          title: "Introduction",
+          title: "introduction",
         }}
         lead={intro}
-        title="Introduction"
+        title="introduction"
       >
         <p className="max-w-[56ch] text-pretty text-muted-foreground">
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/docs/installation"
           >
-            Installation
+            installation
           </Link>{" "}
-          covers the CLI and <code className="font-mono">mdx-components</code>.{" "}
+          covers the cli and <code className="font-mono">mdx-components</code>.{" "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/docs/examples"
           >
-            Examples
+            examples
           </Link>{" "}
           are short write-ups with two figures each.{" "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/agents"
           >
-            For agents
+            for agents
           </Link>{" "}
           is the skill.{" "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/docs/comark"
           >
-            Comark
+            comark
           </Link>{" "}
           and{" "}
           <Link
             className="text-foreground underline-offset-4 hover:underline"
             href="/docs/knap"
           >
-            Knap
+            knap
           </Link>{" "}
           render the same graphs from plain{" "}
           <code className="font-mono">.md</code>.
@@ -97,30 +97,30 @@ export default function DocsPage() {
       </DocsPageHeader>
 
       <Callout type="tip">
-        The MDX tab is the drawing: dashed frame, title, glyphs. Copy that into
-        Notion or a README and the figure is still there. React is the other
-        tab. Register the parent once to render it live.
+        the mdx tab is the drawing: dashed frame, title, glyphs. copy that into
+        notion or a readme and the figure is still there. react is the other
+        tab. register the parent once to render it live.
       </Callout>
 
       <div className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold tracking-tight">Install</h2>
+        <h2 className="text-xl font-semibold tracking-tight">install</h2>
         <p className="max-w-[56ch] text-pretty text-muted-foreground">
-          The CLI copies a registry item into your repo. You can also copy the
-          files from GitHub.
+          the cli copies a registry item into your repo. you can also copy the
+          files from github.
         </p>
         <InstallCommand doc={getComponent("callout")} name="callout" />
       </div>
 
       <div className="flex flex-col gap-6">
         <div className="flex items-baseline justify-between gap-4">
-          <h2 className="text-xl font-semibold tracking-tight">Components</h2>
+          <h2 className="text-xl font-semibold tracking-tight">components</h2>
           <MonoLabel>{components.length} total</MonoLabel>
         </div>
         <div className="flex flex-col gap-10">
           {groups.map((group) => (
             <section className="flex flex-col gap-3" key={group.id}>
               <div className="flex flex-col gap-1">
-                <h3 className="font-mono tracking-wide text-graph-accent uppercase">
+                <h3 className="font-mono tracking-wide text-graph-accent">
                   [ {group.label} ]
                 </h3>
                 <p className="max-w-[56ch] text-pretty text-muted-foreground">
@@ -152,7 +152,7 @@ export default function DocsPage() {
                         <dt className="flex items-center gap-2 font-medium text-foreground">
                           {item.title}
                           {isNewSlug(item.slug) ? (
-                            <span className="font-mono text-[10px] tracking-wide text-graph-accent uppercase">
+                            <span className="font-mono text-[10px] tracking-wide text-graph-accent">
                               new
                             </span>
                           ) : null}

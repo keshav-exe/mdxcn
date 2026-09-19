@@ -128,7 +128,7 @@ Same night. Two days users felt it.
 {{ uptime | graph_uptime }}`
 
 export const KNAP_DEMO_DATA = {
-  title: "Incident",
+  title: "incident",
   start: "14:02",
   rollback: "14:11",
   events: [
@@ -141,7 +141,7 @@ export const KNAP_DEMO_DATA = {
     { date: "14:40", label: "write the postmortem", state: "next" },
   ],
   uptime: {
-    title: "API",
+    title: "api",
     from: "Aug 14",
     to: "Aug 27",
     days: [

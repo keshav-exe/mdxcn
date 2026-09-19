@@ -10,7 +10,7 @@ const description =
   "No accounts. Vercel Analytics on the site. Public GitHub star count. Mail is ordinary email."
 
 export const metadata: Metadata = pageMeta({
-  title: "Privacy",
+  title: "privacy",
   description,
   path: "/privacy",
 })

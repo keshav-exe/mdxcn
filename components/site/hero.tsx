@@ -15,8 +15,8 @@ function Hero() {
           </h1>
           <ProseLead>
             mdxcn is a free, open-source set of callouts, steps, terminals,
-            charts, and timelines for MDX. Copy any component with the shadcn
-            CLI.
+            charts, and timelines for mdx. copy any component with the shadcn
+            cli.
           </ProseLead>
           <HeroInstall />
         </div>

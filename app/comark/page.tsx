@@ -32,7 +32,7 @@ import { pageMeta, webPageJsonLd } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = pageMeta({
-  title: "Comark",
+  title: "comark",
   description: COMARK_DESCRIPTION,
   path: "/comark",
 })
@@ -75,18 +75,14 @@ const steps = [
 function ComarkPipeline() {
   return (
     <PipelineFigure
-      label="Comark pipeline from a markdown file to a framed graph"
-      plate={{ dwg: "cm-01", rev: "2026.09" }}
-      rail="markdown"
+      label="comark pipeline from a plain .md file to the same react graphs"
       stages={[
         {
           id: "source",
           name: "source",
           nodes: [
             { label: ".md file", hint: "commonmark" },
-            { label: "::graph-*", hint: "block" },
-            { label: "yaml", hint: "props" },
-            { label: "tokens", hint: "stream" },
+            { label: "::graph-*", hint: "yaml props" },
           ],
         },
         {
@@ -119,7 +115,7 @@ function ComarkPipeline() {
           ],
         },
       ]}
-      title="PIPELINE"
+      title="pipeline"
     />
   )
 }
@@ -254,7 +250,7 @@ export default function ComarkPage() {
               { label: "README / GitHub", values: [false, true, false] },
               { label: "Streaming tokens", values: [false, false, true] },
             ]}
-            title="HOST"
+            title="host"
           />
           <GraphCheck
             items={[
@@ -269,7 +265,7 @@ export default function ComarkPage() {
                 note: "hold last good tree",
               },
             ]}
-            title="STREAM"
+            title="stream"
           />
         </div>
         <LandingLinks

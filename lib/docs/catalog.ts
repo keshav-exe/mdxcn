@@ -19,33 +19,33 @@ export type Category =
 export const CATEGORIES: { id: Category; label: string; blurb: string }[] = [
   {
     id: "content",
-    label: "Content",
-    blurb: "Markdown children. Callouts, quotes, steps, a shell, a release.",
+    label: "content",
+    blurb: "markdown children. callouts, quotes, steps, a shell, a release.",
   },
   {
     id: "diagrams",
-    label: "Diagrams",
-    blurb: "Paths, trees, timelines, schedules. Written as children.",
+    label: "diagrams",
+    blurb: "paths, trees, timelines, schedules. written as children.",
   },
   {
     id: "data",
-    label: "Data",
-    blurb: "Numbers with labels. Stats, specs, tables, diffs.",
+    label: "data",
+    blurb: "numbers with labels. stats, specs, tables, diffs.",
   },
   {
     id: "charts",
-    label: "Charts",
-    blurb: "Glyphs on a track. Ranks, meters, sparks, grids.",
+    label: "charts",
+    blurb: "glyphs on a track. ranks, meters, sparks, grids.",
   },
   {
     id: "time",
-    label: "Time",
-    blurb: "Days and clocks. Uptime, a month, elapsed, remaining.",
+    label: "time",
+    blurb: "days and clocks. uptime, a month, elapsed, remaining.",
   },
   {
     id: "primitives",
-    label: "Primitives",
-    blurb: "The frame every component is drawn in.",
+    label: "primitives",
+    blurb: "the frame every component is drawn in.",
   },
 ]
 
@@ -65,13 +65,13 @@ export type ComponentDoc = {
 }
 
 export const getStarted: NavLink[] = [
-  { href: "/docs", label: "Introduction" },
-  { href: "/docs/installation", label: "Installation" },
-  { href: "/docs/examples", label: "Examples" },
-  { href: "/docs/comark", label: "Comark" },
-  { href: "/docs/knap", label: "Knap", isNew: true },
-  { href: "/agents", label: "For agents" },
-  { href: "/docs/skill", label: "Skill" },
+  { href: "/docs", label: "introduction" },
+  { href: "/docs/installation", label: "installation" },
+  { href: "/docs/examples", label: "examples" },
+  { href: "/docs/comark", label: "comark" },
+  { href: "/docs/knap", label: "knap", isNew: true },
+  { href: "/agents", label: "for agents" },
+  { href: "/docs/skill", label: "skill" },
 ]
 
 type CatalogEntry = Omit<ComponentDoc, "category">
@@ -98,7 +98,7 @@ const markdownChildren = (what: string): PropRow => ({
 const content: CatalogEntry[] = [
   {
     slug: "callout",
-    title: "Callout",
+    title: "callout",
     name: "Callout",
     description:
       "An aside between paragraphs — a caveat, a tip, a warning. The body is Markdown. A quote is Quote.",
@@ -123,7 +123,7 @@ const content: CatalogEntry[] = [
   },
   {
     slug: "quote",
-    title: "Quote",
+    title: "quote",
     name: "Quote",
     description:
       "Someone else's sentence, with a name under it. Your own caveat is Callout.",
@@ -152,7 +152,7 @@ const content: CatalogEntry[] = [
   },
   {
     slug: "steps",
-    title: "Steps",
+    title: "steps",
     name: "Steps",
     description:
       "A numbered procedure. Write an ordered list; bold the current step, italic the next. Dated events are Timeline. A punch list is Check.",
@@ -177,7 +177,7 @@ const content: CatalogEntry[] = [
   },
   {
     slug: "terminal",
-    title: "Terminal",
+    title: "terminal",
     name: "Terminal",
     description:
       "A shell session. `$` is a command, `#` a comment, `✓` a pass. Source code stays in a fence. A file tree is Tree.",
@@ -208,7 +208,7 @@ const content: CatalogEntry[] = [
   },
   {
     slug: "changelog",
-    title: "Changelog",
+    title: "changelog",
     name: "Changelog",
     description:
       "One release. A markdown list: `added:`, `changed:`, `fixed:`, `removed:`. Numeric deltas are Diff.",
@@ -248,7 +248,7 @@ const catalog: CatalogEntry[] = [
   ...content,
   {
     slug: "graph-table",
-    title: "Table",
+    title: "table",
     name: "GraphTable",
     description:
       "A framed table. Write a markdown table inside the tag. Grouped sections are Sheet. Label/value rows are Spec.",
@@ -297,7 +297,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-sheet",
-    title: "Sheet",
+    title: "sheet",
     name: "GraphSheet",
     description:
       "A table with section titles — an API, an RFC. Write `### Scope` then a markdown table. A flat table is Table.",
@@ -346,7 +346,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-flow",
-    title: "Flow",
+    title: "flow",
     name: "GraphFlow",
     description:
       "A process on a dashed arrow. One markdown line per path, split on →. Bold the node you're on. A dated list is Timeline. A schedule is Gantt.",
@@ -378,7 +378,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-bars",
-    title: "Bars",
+    title: "bars",
     name: "GraphBars",
     description:
       "Two small histograms, before and after. Write `- before: 2 4 3 5 2`. A ranked list is Rank.",
@@ -427,7 +427,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-rank",
-    title: "Rank",
+    title: "rank",
     name: "GraphRank",
     description:
       "Labels ranked by a number. Write `- 12,400 /docs`. Two histograms side by side is Bars.",
@@ -478,7 +478,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-cells",
-    title: "Cells",
+    title: "cells",
     name: "GraphCells",
     description:
       "A small 0/1 grid. Write `- fragments: 1 0 1 0 0 / 0 1 0 1 0`. A share of a hundred cells is Waffle.",
@@ -517,7 +517,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-meter",
-    title: "Meter",
+    title: "meter",
     name: "GraphMeter",
     description:
       "Progress bar drawn with = characters. Empty slots stay as dashes.",
@@ -567,7 +567,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-spark",
-    title: "Spark",
+    title: "spark",
     name: "GraphSpark",
     description:
       "Sparkline from block characters. Values scale to the highest point.",
@@ -611,7 +611,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-tree",
-    title: "Tree",
+    title: "tree",
     name: "GraphTree",
     description:
       "Nested list drawn with branch glyphs. Bold a node to highlight it — files, an org chart. Not a timeline or a table.",
@@ -644,7 +644,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-timeline",
-    title: "Timeline",
+    title: "timeline",
     name: "GraphTimeline",
     description:
       "A dated list. Write `- Mar 18: Docs`; bold the current row, italic the next. A punch list is Check. A schedule with start and end is Gantt.",
@@ -676,7 +676,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-check",
-    title: "Check",
+    title: "check",
     name: "GraphCheck",
     description:
       "A punch list. Write `- [x] freeze tokens`. A note after an em dash sits under the row. Dated steps are Timeline.",
@@ -708,7 +708,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-stack",
-    title: "Stack",
+    title: "stack",
     name: "GraphStack",
     description:
       "Parts of a whole on one track. Write `- marketing: 48 js, 22 css, 30 images`. A share of cells is Waffle.",
@@ -758,7 +758,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-funnel",
-    title: "Funnel",
+    title: "funnel",
     name: "GraphFunnel",
     description:
       "Steps that get narrower as people drop off. Write `- 12,400 docs`. A ranked list is Rank. A process is Flow.",
@@ -808,7 +808,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-gantt",
-    title: "Gantt",
+    title: "gantt",
     name: "GraphGantt",
     description:
       "Work that overlaps on a shared calendar. Write `- build: 0.2 0.75 0.55`. A dated log is Timeline.",
@@ -869,7 +869,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-plot",
-    title: "Plot",
+    title: "plot",
     name: "GraphPlot",
     description: "Line or area chart built from columns of block characters.",
     registry: "graph-plot",
@@ -930,7 +930,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-waffle",
-    title: "Waffle",
+    title: "waffle",
     name: "GraphWaffle",
     description: "Grid of 100 cells. The value sets how many are filled in.",
     registry: "graph-waffle",
@@ -985,7 +985,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-diff",
-    title: "Diff",
+    title: "diff",
     name: "GraphDiff",
     description:
       "What was added, removed, or kept. Write `- app: +31 kb`. Bold the total. Numeric before/after is Slope.",
@@ -1022,7 +1022,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-invoice",
-    title: "Invoice",
+    title: "invoice",
     name: "GraphInvoice",
     description:
       "From, bill-to, line items, and a totals block. Write a markdown table; from and to are strings. A generic grid is Table.",
@@ -1080,7 +1080,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-compare",
-    title: "Compare",
+    title: "compare",
     name: "GraphCompare",
     description:
       "Two options side by side. Write a markdown table; `yes`/`no` become ✓ and –. Exact numbers on both axes are Matrix.",
@@ -1122,7 +1122,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-matrix",
-    title: "Matrix",
+    title: "matrix",
     name: "GraphMatrix",
     description:
       "Exact numbers on both axes. Write a markdown table. Intensities are Heatmap. Yes/no features are Compare.",
@@ -1164,7 +1164,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-stat",
-    title: "Stat",
+    title: "stat",
     name: "GraphStat",
     description:
       "Two to four large numbers. Write `- 12,400 docs`; bold the one that matters. One number with a trend is KPI.",
@@ -1196,7 +1196,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-kpi",
-    title: "KPI",
+    title: "kpi",
     name: "GraphKpi",
     description: "One large number with a sparkline under it.",
     registry: "graph-kpi",
@@ -1247,7 +1247,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-spec",
-    title: "Spec",
+    title: "spec",
     name: "GraphSpec",
     description:
       "Aligned label and value rows. Write `- Family: Geist Mono`. Headline numbers are Stat. A table with headers is Table.",
@@ -1279,7 +1279,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-activity",
-    title: "Activity",
+    title: "activity",
     name: "GraphActivity",
     description:
       "GitHub-style contribution grid. Pass dated counts; weeks, months, and intensity are derived.",
@@ -1341,7 +1341,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-heatmap",
-    title: "Heatmap",
+    title: "heatmap",
     name: "GraphHeatmap",
     description:
       "A labeled grid of intensities. Write a markdown table. Exact numbers are Matrix. A contribution calendar is Activity.",
@@ -1401,7 +1401,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-calendar",
-    title: "Calendar",
+    title: "calendar",
     name: "GraphCalendar",
     description:
       "One month as a seven-column grid. Marked days use the accent. today is wrapped in brackets.",
@@ -1454,7 +1454,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-waterfall",
-    title: "Waterfall",
+    title: "waterfall",
     name: "GraphWaterfall",
     description:
       "Running total as floating bars. First row is the start, last is the end, signed values in between.",
@@ -1500,7 +1500,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-uptime",
-    title: "Uptime",
+    title: "uptime",
     name: "GraphUptime",
     description:
       "One glyph per day. ok, degraded, down, or empty. Wraps every 30 days.",
@@ -1555,7 +1555,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-slope",
-    title: "Slope",
+    title: "slope",
     name: "GraphSlope",
     description:
       "Two figures per row with an arrow between. Up uses the accent, down recedes.",
@@ -1597,7 +1597,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-bullet",
-    title: "Bullet",
+    title: "bullet",
     name: "GraphBullet",
     description:
       "Actual versus target on a shared track. The marker is the target.",
@@ -1642,7 +1642,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-timer",
-    title: "Timer",
+    title: "timer",
     name: "GraphTimer",
     description:
       "Elapsed time, how long ago, or the time of day. The numbers update every second.",
@@ -1687,7 +1687,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-countdown",
-    title: "Countdown",
+    title: "countdown",
     name: "GraphCountdown",
     description:
       "Time left until a date. After that it shows a short label you pass in.",
@@ -1730,7 +1730,7 @@ const catalog: CatalogEntry[] = [
   },
   {
     slug: "graph-frame",
-    title: "Frame",
+    title: "frame",
     name: "Graph",
     description:
       "Dashed frame wrapper used by every graph. Compose with GraphTitle, GraphBody, GraphRule, GraphTrack, and GraphTick. corner picks the character at each corner.",

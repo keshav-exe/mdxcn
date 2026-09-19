@@ -16,7 +16,7 @@ import { SITE_AUTHOR, SITE_EMAIL } from "@/lib/site"
 const description = `Mail ${SITE_EMAIL} for the library and the site. Bugs go to GitHub.`
 
 export const metadata: Metadata = pageMeta({
-  title: "Contact",
+  title: "contact",
   description,
   path: "/contact",
 })
@@ -45,7 +45,7 @@ export default function ContactPage() {
               { label: "desk", value: "none" },
               { label: "sla", value: "none" },
             ]}
-            title="CHANNELS"
+            title="channels"
           />
         }
         lead={CONTACT_PARAS[0]}

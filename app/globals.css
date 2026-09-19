@@ -399,21 +399,6 @@ html.dark[data-accent="prism"] {
   );
 }
 
-@utility graph-grid {
-  background-image:
-    linear-gradient(
-      to right,
-      color-mix(in oklch, var(--graph-frame) 22%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--graph-frame) 22%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 1.25rem 1.25rem;
-}
-
 @utility scrollbar-none {
   scrollbar-width: none;
 
