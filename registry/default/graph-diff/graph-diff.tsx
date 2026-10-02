@@ -1,6 +1,6 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { isValidElement, type ReactElement, type ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
@@ -10,8 +10,11 @@ import {
   GraphBody,
   GraphRule,
   hasHost,
+  isHost,
+  itemParts,
   itemText,
   listItems,
+  childNodes,
   splitLabel,
   textOf,
 } from "@/registry/default/graph-frame/graph-frame"
@@ -62,16 +65,59 @@ function signOf(value: string): DiffSign | undefined {
   return undefined
 }
 
+/**
+ * `- config: ~~next.config.js~~ next.config.ts` → the old line, removed, and
+ * the new line, added. Text before the strike stays on both.
+ */
+function rewriteOf(item: ReactElement): DiffLineProps[] | null {
+  let before = ""
+  let struck = ""
+  let after = ""
+  let seen = false
+
+  for (const node of childNodes(itemParts(item).head)) {
+    const text = textOf(node)
+    if (isValidElement(node) && isHost(node, ["del", "s"])) {
+      struck += text
+      seen = true
+    } else if (seen) {
+      after += text
+    } else {
+      before += text
+    }
+  }
+
+  if (!seen) {
+    return null
+  }
+
+  const clean = (text: string) => text.replace(/\s+/g, " ").trim()
+  const lines: DiffLineProps[] = []
+  if (clean(struck)) {
+    lines.push({ label: clean(before + struck), value: "", sign: "remove" })
+  }
+  if (clean(after)) {
+    lines.push({ label: clean(before + after), value: "", sign: "add" })
+  }
+  return lines
+}
+
 function diffFromList(children: ReactNode): DiffLineProps[] {
-  return listItems(children).map((item) => {
+  return listItems(children).flatMap((item): DiffLineProps[] => {
+    const rewrite = rewriteOf(item)
+    if (rewrite) {
+      return rewrite
+    }
     const { label, rest } = splitLabel(itemText(item))
     const content = (item.props as { children?: ReactNode }).children
-    return {
-      label,
-      value: rest.replace(/^[+\-−]\s*/, "") || rest,
-      sign: signOf(rest),
-      total: hasHost(content, ["strong", "b"]),
-    }
+    return [
+      {
+        label,
+        value: rest.replace(/^[+\-−]\s*/, "") || rest,
+        sign: signOf(rest),
+        total: hasHost(content, ["strong", "b"]),
+      },
+    ]
   })
 }
 

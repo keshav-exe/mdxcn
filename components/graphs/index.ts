@@ -21,6 +21,15 @@ export { Quote } from "@/registry/default/quote/quote"
 export { Step, Steps } from "@/registry/default/steps/steps"
 export { Terminal } from "@/registry/default/terminal/terminal"
 export { Change, Changelog } from "@/registry/default/changelog/changelog"
+export { Annotate } from "@/registry/default/annotate/annotate"
+export { Decision } from "@/registry/default/decision/decision"
+export { Chat } from "@/registry/default/chat/chat"
+export { Env } from "@/registry/default/env/env"
+export { Endpoint } from "@/registry/default/endpoint/endpoint"
+export { Keys } from "@/registry/default/keys/keys"
+export { Faq } from "@/registry/default/faq/faq"
+export { withMdxcn } from "@/registry/default/mdx/mdx"
+export { Footnotes } from "@/registry/default/mdx/mdx-footnotes"
 export { GraphArrow } from "@/registry/default/graph-frame/graph-arrow"
 export {
   fadeUp,
@@ -60,6 +69,7 @@ export {
   Stage,
 } from "@/registry/default/graph-funnel/graph-funnel"
 export { GraphGantt, Span } from "@/registry/default/graph-gantt/graph-gantt"
+export { GraphBoard } from "@/registry/default/graph-board/graph-board"
 export { GraphDiff, Line } from "@/registry/default/graph-diff/graph-diff"
 export { GraphPlot } from "@/registry/default/graph-plot/graph-plot"
 export { GraphWaffle } from "@/registry/default/graph-waffle/graph-waffle"
@@ -94,6 +104,7 @@ export {
 } from "@/registry/default/graph-bullet/graph-bullet"
 export { GraphTimer } from "@/registry/default/graph-timer/graph-timer"
 export { GraphCountdown } from "@/registry/default/graph-countdown/graph-countdown"
+export { GraphScore } from "@/registry/default/graph-score/graph-score"
 
 export type {
   GlyphSetName,
@@ -116,6 +127,33 @@ export type {
   ChangeProps,
   ChangeType,
 } from "@/registry/default/changelog/changelog"
+export type { AnnotateProps } from "@/registry/default/annotate/annotate"
+export type {
+  DecisionOption,
+  DecisionProps,
+  OptionState,
+} from "@/registry/default/decision/decision"
+export type { ChatProps, ChatTurn } from "@/registry/default/chat/chat"
+export type { EnvProps, EnvVar } from "@/registry/default/env/env"
+export type {
+  EndpointBlock,
+  EndpointParam,
+  EndpointProps,
+} from "@/registry/default/endpoint/endpoint"
+export type { KeyBinding, KeysProps } from "@/registry/default/keys/keys"
+export type { FaqEntry, FaqProps } from "@/registry/default/faq/faq"
+export type { MdxcnOptions } from "@/registry/default/mdx/mdx"
+export type { FootnotesProps } from "@/registry/default/mdx/mdx-footnotes"
+export type {
+  BoardColumn,
+  BoardItem,
+  BoardState,
+  GraphBoardProps,
+} from "@/registry/default/graph-board/graph-board"
+export type {
+  GraphScoreProps,
+  ScoreRow,
+} from "@/registry/default/graph-score/graph-score"
 export type { GraphTableProps } from "@/registry/default/graph-table/graph-table"
 export type {
   GraphSheetProps,

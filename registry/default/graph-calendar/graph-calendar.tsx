@@ -1,11 +1,17 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
   Graph,
   GraphBody,
+  GraphRule,
+  hasHost,
+  itemText,
+  listItems,
   numbers,
+  splitLabel,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -36,6 +42,8 @@ const MONTHS = [
 type CalendarMark = {
   day: number
   accent?: boolean
+  /** Listed under the month, next to the day. */
+  label?: string
 }
 
 type GraphCalendarProps = {
@@ -46,6 +54,8 @@ type GraphCalendarProps = {
   /** `[12, 18]`, `"12 18"`, or `{ day, accent }` objects. */
   marks?: CalendarMark[] | number[] | string
   today?: number
+  /** Markdown list: `- 12: launch`. Bold is today. Labels list under the month. */
+  children?: ReactNode
   palette?: GraphPalette
   corner?: string
   className?: string
@@ -58,6 +68,25 @@ function monthLength(year: number, monthIndex: number) {
 function leadingBlanks(year: number, monthIndex: number, weekStartsOn: 0 | 1) {
   const weekday = new Date(Date.UTC(year, monthIndex, 1)).getUTCDay()
   return (weekday - weekStartsOn + 7) % 7
+}
+
+function marksOf(children: ReactNode) {
+  return listItems(children).flatMap((item) => {
+    const { label, rest } = splitLabel(itemText(item))
+    const day = Number.parseInt(label, 10)
+    if (!Number.isFinite(day)) {
+      return []
+    }
+    const content = (item.props as { children?: ReactNode }).children
+    return [
+      {
+        day,
+        accent: true,
+        label: rest || undefined,
+        today: hasHost(content, ["strong", "b"]),
+      },
+    ]
+  })
 }
 
 function markSet(marks?: CalendarMark[] | number[]) {
@@ -85,12 +114,22 @@ function GraphCalendar({
   month,
   weekStartsOn = 1,
   marks: marksProp,
-  today,
+  today: todayProp,
+  children,
   palette,
   corner,
   className,
 }: GraphCalendarProps) {
-  const marks = typeof marksProp === "string" ? numbers(marksProp) : marksProp
+  const listed = marksOf(children)
+  const marks =
+    typeof marksProp === "string"
+      ? numbers(marksProp)
+      : (marksProp ?? (listed.length > 0 ? listed : undefined))
+  const today = todayProp ?? listed.find((mark) => mark.today)?.day
+  const notes = (marks ?? [])
+    .filter((mark): mark is CalendarMark => typeof mark !== "number")
+    .filter((mark) => mark.label)
+    .sort((a, b) => a.day - b.day)
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
@@ -170,6 +209,39 @@ function GraphCalendar({
             </motion.div>
           ))}
         </motion.div>
+        {notes.length > 0 ? (
+          <>
+            <GraphRule className="mt-2" />
+            <motion.ul
+              className="flex flex-col gap-2"
+              initial={reduce ? false : "hidden"}
+              role="list"
+              variants={list}
+              viewport={{ once: true, amount: 0.4 }}
+              whileInView="show"
+            >
+              {notes.map((mark) => (
+                <motion.li
+                  className="grid grid-cols-[4ch_minmax(0,1fr)] items-baseline gap-x-3"
+                  key={mark.day}
+                  variants={item}
+                >
+                  <span
+                    className={cn(
+                      "text-right tabular-nums",
+                      mark.accent === false
+                        ? "text-foreground"
+                        : toneClass(palette, "primary")
+                    )}
+                  >
+                    {mark.day === today ? `[${mark.day}]` : mark.day}
+                  </span>
+                  <span className="text-foreground">{mark.label}</span>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </>
+        ) : null}
         <span className="sr-only">
           {MONTHS[monthIndex]} {year}
           {today ? `, today ${today}` : ""}

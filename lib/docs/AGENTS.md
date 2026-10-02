@@ -7,6 +7,8 @@ Sidenav, `/docs/[slug]`, install copy, and props tables all read from here. Addi
 | File                                  | Role                                                                            |
 | ------------------------------------- | ------------------------------------------------------------------------------- |
 | `catalog.ts`                          | `components[]` — slug, title, name, description, registry, props                |
+| `grammar.ts`                          | The Markdown rules every component reads. `/docs/grammar`, `/llms.txt`, skill   |
+| `mdx-wiring.ts`                       | `withMdxcn` copy for `/docs/mdx`                                                |
 | `files.ts`                            | Source paths shown on the Manual / GitHub install tabs                          |
 | `new.ts`                              | `NEW_SLUGS` — which sidenav links get a **new** mark                            |
 | `recipes.ts`                          | Composed write-ups on `/docs/examples` and `/llms.txt`                          |
@@ -42,11 +44,11 @@ Drawing graphs take `palette?: "mono" | "duo" | "multi"`. Don't paste it into ev
 
 ## MDX (ASCII)
 
-Graphs that are a character grid get a fenced ASCII. Renderers live in `registry/default/graph-knap/graphs.ts` (`lib/ascii` re-exports). Example props for the docs tab live in `ascii.ts`. Add the slug to `MDX_SLUGS` when the figure survives a `<pre>` without wrapping. Skip flow, plot, activity, heatmap, calendar, timer, countdown, and frame (`MDX_SKIP_SLUGS`). Fenced ASCII also ships in `/llms.txt` under `## MDX` so agents can paste them into README / GitHub / Linear instead of JSX.
+Graphs that are a character grid get a fenced ASCII. Renderers live in `registry/default/graph-knap/graphs.ts` (`lib/ascii` re-exports). Markdown bodies are parsed by `graph-knap/markdown.ts` (`drawMarkdown`) — the docs `.md` tab, content Knap filters, and `MDX_SLUGS` content entries all go through it. Example tabs: `.mdx` is the source, `.md` the fenced figure, `.tsx` the React. Example props for the docs tab live in `ascii.ts`. Add the slug to `MDX_SLUGS` when the figure survives a `<pre>` without wrapping. Skip flow, plot, activity, heatmap, calendar, timer, countdown, and frame (`MDX_SKIP_SLUGS`). Fenced ASCII also ships in `/llms.txt` under `## MDX` so agents can paste them into README / GitHub / Linear instead of JSX.
 
 ## Comark
 
-`::graph-*` blocks for [Comark](https://comark.dev). Example YAML in `lib/docs/comark-props.ts` → docs **Comark** tab and `/llms.txt` `## Comark`. Adapter: `registry/default/graph-comark/` (`coerce.ts`, `adapters.ts`, `from-markdown.tsx`, `layout.tsx`, `graph-comark.tsx` tag map). Landing `/comark`, wiring `/docs/comark`. No catalog row.
+`::graph-*` blocks for [Comark](https://comark.dev). Content tags (`::callout`, `::steps`, …) take a Markdown body; graph blocks take YAML or the same Markdown body. A `body` key in `COMARK_PROPS` is written inside the block. Example YAML in `lib/docs/comark-props.ts` → docs **Comark** tab and `/llms.txt` `## Comark`. Adapter: `registry/default/graph-comark/` (`coerce.ts`, `adapters.ts`, `from-markdown.tsx`, `layout.tsx`, `graph-comark.tsx` tag map). Landing `/comark`, wiring `/docs/comark`. No catalog row.
 
 ## Knap
 

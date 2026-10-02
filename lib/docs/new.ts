@@ -1,9 +1,13 @@
 export const NEW_SLUGS = [
-  "callout",
-  "quote",
-  "steps",
-  "terminal",
-  "changelog",
+  "annotate",
+  "decision",
+  "chat",
+  "env",
+  "endpoint",
+  "keys",
+  "faq",
+  "graph-board",
+  "graph-score",
 ] as const
 
 const newSlugSet = new Set<string>(NEW_SLUGS)

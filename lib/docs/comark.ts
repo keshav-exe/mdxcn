@@ -12,9 +12,9 @@ export const COMARK_DESCRIPTION =
 
 export const COMARK_SKIP_SLUGS = ["graph-frame"] as const
 
+/** Graphs and content blocks. Content carries its data as a Markdown body. */
 export function isComarkSlug(slug: string) {
   return (
-    slug.startsWith("graph-") &&
     !(COMARK_SKIP_SLUGS as readonly string[]).includes(slug) &&
     slug in COMARK_PROPS
   )
@@ -60,7 +60,7 @@ ${example.markdown}`
 
   return `## Comark
 
-Plain \`.md\` that a Comark app will render. Paste a \`::graph-*\` block. YAML props match the React API. Do not paste JSX. GitHub and Linear still need the fenced ASCII from ## MDX — they do not run Comark.
+Plain \`.md\` that a Comark app will render. Paste a \`::graph-*\` block. YAML props match the React API — or write the block body in the same Markdown grammar MDX children use. Content blocks (\`::callout\`, \`::steps\`, \`::chat\`, …) always take a Markdown body. Do not paste JSX. GitHub and Linear still need the fenced ASCII from ## MDX — they do not run Comark.
 
 Install the adapter after the graphs:
 

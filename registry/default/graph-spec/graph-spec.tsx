@@ -6,10 +6,12 @@ import { motion, useReducedMotion } from "motion/react"
 import {
   childItems,
   defineItem,
+  dropLead,
   Graph,
   GraphBody,
+  GraphProse,
   hasHost,
-  itemText,
+  itemParts,
   listItems,
   splitLabel,
   textOf,
@@ -25,6 +27,13 @@ type SpecRow = {
   /** Falls back to the child text: `<Field label="Family">Geist Mono</Field>`. */
   value?: string
   accent?: boolean
+  /** Muted, under the value. A list item's body paragraphs land here. */
+  note?: ReactNode
+}
+
+type SpecLine = SpecRow & {
+  /** Inline Markdown after the label — code and links survive. */
+  rich?: ReactNode
 }
 
 type GraphSpecProps = {
@@ -49,22 +58,27 @@ function GraphSpec({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.04)
-  const listed = listItems(children).map((item) => {
-    const { label, rest } = splitLabel(itemText(item))
-    const content = (item.props as { children?: ReactNode }).children
+  const listed = listItems(children).map((item): SpecLine => {
+    const { head, body } = itemParts(item)
+    const { label, rest } = splitLabel(textOf(head).replace(/\s+/g, " ").trim())
+    const rich = hasHost(head, ["code", "a", "del", "s"])
+      ? dropLead(head, /^\s*[^\n]+?:\s+/).rest
+      : undefined
     return {
       label,
       value: rest,
-      accent: hasHost(content, ["strong", "b"]),
+      rich,
+      note: body.length > 0 ? body : undefined,
+      accent: hasHost(head, ["strong", "b"]),
     }
   })
   const tagged = childItems(children, Field).map((entry) => ({
     ...entry,
     value: entry.value ?? textOf(entry.children),
   }))
-  const rows = (rowsProp ?? (listed.length > 0 ? listed : tagged)).map(
-    (entry) => ({ ...entry, value: entry.value ?? "" })
-  )
+  const rows: SpecLine[] = (
+    rowsProp ?? (listed.length > 0 ? listed : tagged)
+  ).map((entry) => ({ ...entry, value: entry.value ?? "" }))
 
   return (
     <Graph title={title} className={className} corner={corner}>
@@ -83,13 +97,31 @@ function GraphSpec({
               variants={item}
             >
               <dt className="text-graph-muted">{row.label}</dt>
-              <dd
-                className={cn(
-                  "tabular-nums",
-                  row.accent ? "text-graph-accent" : "text-foreground"
+              <dd className="flex min-w-0 flex-col gap-1">
+                {row.rich ? (
+                  <GraphProse
+                    className={cn(
+                      "tabular-nums [overflow-wrap:anywhere]",
+                      row.accent ? "text-graph-accent" : "text-foreground"
+                    )}
+                  >
+                    <span>{row.rich}</span>
+                  </GraphProse>
+                ) : (
+                  <span
+                    className={cn(
+                      "tabular-nums",
+                      row.accent ? "text-graph-accent" : "text-foreground"
+                    )}
+                  >
+                    {row.value}
+                  </span>
                 )}
-              >
-                {row.value}
+                {row.note ? (
+                  <GraphProse className="text-graph-muted">
+                    {row.note}
+                  </GraphProse>
+                ) : null}
               </dd>
             </motion.div>
           ))}

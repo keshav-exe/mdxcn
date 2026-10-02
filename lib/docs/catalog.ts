@@ -20,12 +20,13 @@ export const CATEGORIES: { id: Category; label: string; blurb: string }[] = [
   {
     id: "content",
     label: "content",
-    blurb: "markdown children. callouts, quotes, steps, a shell, a release.",
+    blurb:
+      "markdown children. callouts, steps, a shell, a release, code notes, a decision, a chat, env, an endpoint, keys, a faq.",
   },
   {
     id: "diagrams",
     label: "diagrams",
-    blurb: "paths, trees, timelines, schedules. written as children.",
+    blurb: "paths, trees, timelines, schedules, boards. written as children.",
   },
   {
     id: "data",
@@ -68,8 +69,10 @@ export const getStarted: NavLink[] = [
   { href: "/docs", label: "introduction" },
   { href: "/docs/installation", label: "installation" },
   { href: "/docs/examples", label: "examples" },
+  { href: "/docs/grammar", label: "grammar", isNew: true },
+  { href: "/docs/mdx", label: "mdx", isNew: true },
   { href: "/docs/comark", label: "comark" },
-  { href: "/docs/knap", label: "knap", isNew: true },
+  { href: "/docs/knap", label: "knap" },
   { href: "/agents", label: "for agents" },
   { href: "/docs/skill", label: "skill" },
 ]
@@ -237,6 +240,262 @@ const content: CatalogEntry[] = [
         type: "<Change />",
         description:
           "Change takes type (add | change | fix | remove) and Markdown children.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "annotate",
+    title: "annotate",
+    name: "Annotate",
+    description:
+      "Code with numbered notes. Put `// (1)` at the end of a line in the fence, then explain it in an ordered list. Marked lines stay bright; the rest recede. A shell session is Terminal.",
+    registry: "annotate",
+    dependencies: ["motion"],
+    mdx: "```tsx\nconst x = 1 // (1)\n```\n\n1. Why x is 1.",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        description: "Defaults to the fence language, or code.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description:
+          "A fenced block with `// (1)`, `# (1)`, or `<!-- (1) -->` markers, then an ordered list. Item 1 explains (1).",
+      },
+      {
+        name: "code",
+        type: "string",
+        description: "Data form of the fence.",
+      },
+      {
+        name: "notes",
+        type: "ReactNode[]",
+        description: "Data form of the list.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "decision",
+    title: "decision",
+    name: "Decision",
+    description:
+      "One decision and the options next to it. Bold is chosen, italic is rejected, `— why` after each. Paragraphs after the list say what follows. A feature grid is Compare.",
+    registry: "decision",
+    dependencies: ["motion"],
+    mdx: "- **Postgres** — we already run it\n- *Mongo* — no joins we trust",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        default: '"decision"',
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "status",
+        type: "string",
+        description: "proposed, accepted, superseded. First row, left.",
+      },
+      {
+        name: "date",
+        type: "string",
+        description: "Muted, first row, right.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description:
+          "A list of options, then paragraphs. Bold is chosen, italic is rejected.",
+      },
+      {
+        name: "options",
+        type: "{ label, reason?, state? }[]",
+        description: "Data form. state is chosen, open, or rejected.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "chat",
+    title: "chat",
+    name: "Chat",
+    description:
+      "A conversation. Write `- you: …` / `- agent: …`. Your turns get the prompt, an italic turn is an aside, and a repeated speaker is not repeated. One sentence someone said is Quote.",
+    registry: "chat",
+    dependencies: ["motion"],
+    mdx: "- you: which graph shows a rollback?\n- agent: Timeline.",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        default: '"chat"',
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "you",
+        type: "string",
+        description: "The person asking. Defaults to the first speaker.",
+      },
+      {
+        name: "prompt",
+        type: "string",
+        default: '">"',
+        description: "The glyph on your turns.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description:
+          "A list of `speaker: message` items. Loose items can hold paragraphs and code.",
+      },
+      {
+        name: "turns",
+        type: "{ by, children?, aside? }[]",
+        description: "Data form.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "env",
+    title: "env",
+    name: "Env",
+    description:
+      "Environment variables. Paste a `.env` fence: comments above a key describe it, and a comment that says required marks it. Label/value rows that are not variables are Spec.",
+    registry: "env",
+    dependencies: ["motion"],
+    mdx: "```bash\n# Postgres URL. Required.\nDATABASE_URL=postgres://…\n```",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        default: '".env"',
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description:
+          "A fenced .env, or a list: `- **KEY**: value — note` (bold is required).",
+      },
+      {
+        name: "vars",
+        type: "{ name, value?, note?, required? }[]",
+        description: "Data form.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "endpoint",
+    title: "endpoint",
+    name: "Endpoint",
+    description:
+      "One API route. First line `POST /v1/graphs`, a sentence, a params table (bold name is required), then request and response fences. Many routes in one table are Sheet.",
+    registry: "endpoint",
+    dependencies: ["motion"],
+    mdx: "POST /v1/graphs\n\n| Field | Type | |\n| --- | --- | --- |\n| **slug** | string | the graph |",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        default: '"endpoint"',
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description:
+          "Method and path, paragraphs, a table of name / type / description, fenced blocks.",
+      },
+      {
+        name: "method",
+        type: "string",
+        description: "Or the first line of the children.",
+      },
+      {
+        name: "path",
+        type: "string",
+        description: "Or the first line of the children.",
+      },
+      {
+        name: "params",
+        type: "{ name, type?, description?, required? }[]",
+        description: "Data form of the table.",
+      },
+      {
+        name: "blocks",
+        type: "{ label?, code }[]",
+        description: "Data form of the fences.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "keys",
+    title: "keys",
+    name: "Keys",
+    description:
+      "Keyboard shortcuts drawn as keycaps. Write `- ⌘K: search`, `- Ctrl+Shift+P: palette`, or `- g then d: docs`. Bold is the one to learn first.",
+    registry: "keys",
+    dependencies: ["motion"],
+    mdx: "- ⌘K: search the docs",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        default: '"keys"',
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description:
+          "A list of `keys: action`. `+` or a space joins a chord; `then` starts the next.",
+      },
+      {
+        name: "bindings",
+        type: "{ keys, action, accent? }[]",
+        description: "Data form.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "faq",
+    title: "faq",
+    name: "Faq",
+    description:
+      "Questions and answers. Each `### heading` is a question; the Markdown under it is the answer. Bold the one to read first. A procedure is Steps.",
+    registry: "faq",
+    dependencies: ["motion"],
+    mdx: "### Is this an npm package?\n\nNo. The CLI copies the source.",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        default: '"faq"',
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description: "Headings and the paragraphs, lists, or code under them.",
+      },
+      {
+        name: "entries",
+        type: "{ question, answer?, accent? }[]",
+        description: "Data form.",
       },
       corner,
       className,
@@ -520,7 +779,7 @@ const catalog: CatalogEntry[] = [
     title: "meter",
     name: "GraphMeter",
     description:
-      "Progress bar drawn with = characters. Empty slots stay as dashes.",
+      "Progress bar drawn with = characters. Empty slots stay as dashes. Write `67% — of the disk` as children.",
     registry: "graph-meter",
     dependencies: ["motion"],
     props: [
@@ -570,7 +829,7 @@ const catalog: CatalogEntry[] = [
     title: "spark",
     name: "GraphSpark",
     description:
-      "Sparkline from block characters. Values scale to the highest point.",
+      "Sparkline from block characters. Values scale to the highest point. Write `2 3 5 8 — caption` as children.",
     registry: "graph-spark",
     dependencies: ["motion"],
     props: [
@@ -647,7 +906,7 @@ const catalog: CatalogEntry[] = [
     title: "timeline",
     name: "GraphTimeline",
     description:
-      "A dated list. Write `- Mar 18: Docs`; bold the current row, italic the next. A punch list is Check. A schedule with start and end is Gantt.",
+      "A dated list. Write `- Mar 18: Docs`; bold the current row, italic the next. `— note` or an indented paragraph sits under the row. A punch list is Check. A schedule with start and end is Gantt.",
     registry: "graph-timeline",
     dependencies: ["motion"],
     props: [
@@ -679,7 +938,7 @@ const catalog: CatalogEntry[] = [
     title: "check",
     name: "GraphCheck",
     description:
-      "A punch list. Write `- [x] freeze tokens`. A note after an em dash sits under the row. Dated steps are Timeline.",
+      "A punch list. Write `- [x] freeze tokens`. A note after an em dash sits under the row; a nested list is sub-tasks. Dated steps are Timeline. Columns of work are Board.",
     registry: "graph-check",
     dependencies: ["motion"],
     props: [
@@ -871,7 +1130,8 @@ const catalog: CatalogEntry[] = [
     slug: "graph-plot",
     title: "plot",
     name: "GraphPlot",
-    description: "Line or area chart built from columns of block characters.",
+    description:
+      "Line or area chart built from columns of block characters. Write numbers, or `- Mon: 4` rows to keep the labels.",
     registry: "graph-plot",
     dependencies: ["motion"],
     props: [
@@ -932,7 +1192,8 @@ const catalog: CatalogEntry[] = [
     slug: "graph-waffle",
     title: "waffle",
     name: "GraphWaffle",
-    description: "Grid of 100 cells. The value sets how many are filled in.",
+    description:
+      "Grid of 100 cells. The value sets how many are filled in. Write `73% — tests green` as children.",
     registry: "graph-waffle",
     dependencies: ["motion"],
     props: [
@@ -988,7 +1249,7 @@ const catalog: CatalogEntry[] = [
     title: "diff",
     name: "GraphDiff",
     description:
-      "What was added, removed, or kept. Write `- app: +31 kb`. Bold the total. Numeric before/after is Slope.",
+      "What was added, removed, or kept. Write `- app: +31 kb`. Bold the total. `- ~~old~~ new` draws a removed line and an added line. Numeric before/after is Slope.",
     registry: "graph-diff",
     dependencies: ["motion"],
     props: [
@@ -1198,7 +1459,8 @@ const catalog: CatalogEntry[] = [
     slug: "graph-kpi",
     title: "kpi",
     name: "GraphKpi",
-    description: "One large number with a sparkline under it.",
+    description:
+      "One large number with a sparkline under it. Write `12,400 this week — +18%`, then a line of numbers.",
     registry: "graph-kpi",
     dependencies: ["motion"],
     props: [
@@ -1250,7 +1512,7 @@ const catalog: CatalogEntry[] = [
     title: "spec",
     name: "GraphSpec",
     description:
-      "Aligned label and value rows. Write `- Family: Geist Mono`. Headline numbers are Stat. A table with headers is Table.",
+      "Aligned label and value rows. Write `- Family: Geist Mono`. Inline code and links survive; an indented paragraph sits under the value. Headline numbers are Stat. A table with headers is Table.",
     registry: "graph-spec",
     dependencies: ["motion"],
     props: [
@@ -1282,7 +1544,7 @@ const catalog: CatalogEntry[] = [
     title: "activity",
     name: "GraphActivity",
     description:
-      "GitHub-style contribution grid. Pass dated counts; weeks, months, and intensity are derived.",
+      "GitHub-style contribution grid. Pass dated counts, or write `- 2026-03-02: 0 1 4 2 0*3` — counts run day by day from the date.",
     registry: "graph-activity",
     dependencies: ["motion"],
     props: [
@@ -1404,7 +1666,7 @@ const catalog: CatalogEntry[] = [
     title: "calendar",
     name: "GraphCalendar",
     description:
-      "One month as a seven-column grid. Marked days use the accent. today is wrapped in brackets.",
+      "One month as a seven-column grid. Marked days use the accent. today is wrapped in brackets. Write `- 12: launch` and the labels list under the month; bold is today.",
     registry: "graph-calendar",
     dependencies: ["motion"],
     props: [
@@ -1503,7 +1765,7 @@ const catalog: CatalogEntry[] = [
     title: "uptime",
     name: "GraphUptime",
     description:
-      "One glyph per day. ok, degraded, down, or empty. Wraps every 30 days.",
+      "One glyph per day. ok, degraded, down, or empty. Wraps every 30 days. Runs keep it short: `ok*40 down*2 ok*48`.",
     registry: "graph-uptime",
     dependencies: ["motion"],
     props: [
@@ -1596,6 +1858,76 @@ const catalog: CatalogEntry[] = [
     ],
   },
   {
+    slug: "graph-board",
+    title: "board",
+    name: "GraphBoard",
+    description:
+      "Columns of work. Each `### heading` is a column with a list under it. Bold is now, italic is next, `— note` sits under the item. A punch list is Check. Dates are Timeline.",
+    registry: "graph-board",
+    dependencies: ["motion"],
+    mdx: "### Now\n- **Children for every graph**\n\n### Next\n- Board",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description:
+          "Headings, each followed by a list. Up to four columns; they stack on small screens.",
+      },
+      {
+        name: "columns",
+        type: "{ title, items: (string | { label, note?, state? })[] }[]",
+        description: "Data form. Optional when children are Markdown.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
+    slug: "graph-score",
+    title: "score",
+    name: "GraphScore",
+    description:
+      "Ratings as dots. Write `- Docs: 4/5`; halves draw a half dot. Bold the row that matters and the rest recede. Actual versus target is Bullet.",
+    registry: "graph-score",
+    dependencies: ["motion"],
+    mdx: "- Performance: 4/5\n- **Docs: 2.5/5**",
+    props: [
+      {
+        name: "title",
+        type: "string",
+        description: "Caption drawn on the top edge of the frame.",
+      },
+      {
+        name: "children",
+        type: "Markdown",
+        description: "A list of `label: value/max`. Bold is the row to read.",
+      },
+      {
+        name: "items",
+        type: "{ label, value, max?, accent? }[]",
+        description: "Data form. Optional when children are Markdown.",
+      },
+      {
+        name: "max",
+        type: "number",
+        default: "5",
+        description: "Dots per row. Defaults to the /n in the first row.",
+      },
+      {
+        name: "glyphs",
+        type: "Glyphs",
+        description: "Empty, half, and full dot. Default ○ ◐ ●.",
+      },
+      corner,
+      className,
+    ],
+  },
+  {
     slug: "graph-bullet",
     title: "bullet",
     name: "GraphBullet",
@@ -1645,7 +1977,7 @@ const catalog: CatalogEntry[] = [
     title: "timer",
     name: "GraphTimer",
     description:
-      "Elapsed time, how long ago, or the time of day. The numbers update every second.",
+      "Elapsed time, how long ago, or the time of day. The numbers update every second. Write the start as children: `2026-09-01T09:00Z — since deploy`.",
     registry: "graph-timer",
     dependencies: ["motion"],
     props: [
@@ -1690,7 +2022,7 @@ const catalog: CatalogEntry[] = [
     title: "countdown",
     name: "GraphCountdown",
     description:
-      "Time left until a date. After that it shows a short label you pass in.",
+      "Time left until a date. After that it shows a short label you pass in. Write `2026-12-01 — until launch` as children.",
     registry: "graph-countdown",
     dependencies: ["motion"],
     props: [
@@ -1763,6 +2095,16 @@ const catalog: CatalogEntry[] = [
 ]
 
 const PALETTE_SLUGS = new Set([
+  "changelog",
+  "annotate",
+  "decision",
+  "chat",
+  "env",
+  "endpoint",
+  "keys",
+  "faq",
+  "graph-board",
+  "graph-score",
   "graph-flow",
   "graph-bars",
   "graph-rank",
@@ -1804,8 +2146,27 @@ const paletteProp: PropRow = {
  * then the graphs that read children, then the ones that take data.
  */
 const ORDER: Record<Category, string[]> = {
-  content: ["callout", "quote", "steps", "terminal", "changelog"],
-  diagrams: ["graph-flow", "graph-timeline", "graph-tree", "graph-gantt"],
+  content: [
+    "callout",
+    "quote",
+    "steps",
+    "terminal",
+    "changelog",
+    "annotate",
+    "decision",
+    "chat",
+    "env",
+    "endpoint",
+    "keys",
+    "faq",
+  ],
+  diagrams: [
+    "graph-flow",
+    "graph-timeline",
+    "graph-tree",
+    "graph-gantt",
+    "graph-board",
+  ],
   data: [
     "graph-stat",
     "graph-spec",
@@ -1823,6 +2184,7 @@ const ORDER: Record<Category, string[]> = {
     "graph-funnel",
     "graph-slope",
     "graph-bullet",
+    "graph-score",
     "graph-waterfall",
     "graph-stack",
     "graph-spark",
@@ -1862,6 +2224,58 @@ const CHILD_ITEMS: Record<
   string,
   { data: string; child: string; usage: string; note?: string }
 > = {
+  "graph-meter": {
+    data: "value",
+    child: "text",
+    usage: "67% — of the disk",
+  },
+  "graph-waffle": {
+    data: "value",
+    child: "text",
+    usage: "73% — tests green",
+  },
+  "graph-spark": {
+    data: "data",
+    child: "text",
+    usage: "2 3 5 8 13 — last point is the accent",
+  },
+  "graph-plot": {
+    data: "data",
+    child: "list",
+    usage: "- Mon: 4",
+    note: "Or a line of numbers.",
+  },
+  "graph-kpi": {
+    data: "data",
+    child: "text",
+    usage: "12,400 this week — +18%\n\n4 5 5 6 8 7 9",
+    note: "value, label, and hint come from the first line.",
+  },
+  "graph-uptime": {
+    data: "days",
+    child: "text",
+    usage: "ok*40 degraded ok*20 down*2 ok*27",
+  },
+  "graph-calendar": {
+    data: "marks",
+    child: "list",
+    usage: "- 12: launch\n- **18: today**",
+  },
+  "graph-activity": {
+    data: "days",
+    child: "list",
+    usage: "- 2026-03-02: 0 1 4 2 0*3 3",
+  },
+  "graph-timer": {
+    data: "at",
+    child: "text",
+    usage: "2026-09-01T09:00Z — since deploy",
+  },
+  "graph-countdown": {
+    data: "to",
+    child: "text",
+    usage: "2026-12-01 — until launch",
+  },
   "graph-stat": {
     data: "items",
     child: "list",

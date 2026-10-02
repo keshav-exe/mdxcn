@@ -104,9 +104,9 @@ describe("toComarkBlock", () => {
 })
 
 describe("comarkExample", () => {
-  it("covers every graph except frame", () => {
+  it("covers every component except frame", () => {
     for (const item of components) {
-      if (item.slug === "graph-frame" || !item.slug.startsWith("graph-")) {
+      if (item.slug === "graph-frame") {
         expect(isComarkSlug(item.slug)).toBe(false)
         continue
       }

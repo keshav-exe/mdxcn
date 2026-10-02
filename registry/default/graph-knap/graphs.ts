@@ -254,15 +254,23 @@ function asciiTimeline({
     date: string
     label: string
     state?: "done" | "now" | "next"
+    note?: string
   }[]
 }) {
   const dates = colWidth(events.map((event) => event.date))
   const lines: string[] = []
+  const indent = " ".repeat(3 + dates + 2)
 
   events.forEach((event, index) => {
     const mark = event.state === "next" ? "○" : "●"
+    const last = index === events.length - 1
     lines.push(`${mark}  ${col(event.date, dates)}  ${event.label}`)
-    if (index < events.length - 1) {
+    if (event.note) {
+      wrapText(event.note, 48).forEach((line) =>
+        lines.push(`${last ? " " : "│"}${indent.slice(1)}${line}`)
+      )
+    }
+    if (!last) {
       lines.push(`│`)
     }
   })
@@ -416,24 +424,36 @@ function asciiSheet({
   return frameAscii(title, lines)
 }
 
-function asciiCheck({
-  title,
-  items,
-}: {
-  title: string
-  items: { label: string; done?: boolean; note?: string }[]
-}) {
-  const labels = colWidth(items.map((item) => item.label))
+function asciiCheck({ title, items }: { title: string; items: CheckLine[] }) {
+  const flat: { item: CheckLine; depth: number }[] = []
+  const walk = (list: CheckLine[], depth: number) => {
+    for (const item of list) {
+      flat.push({ item, depth })
+      walk(item.items ?? [], depth + 1)
+    }
+  }
+  walk(items, 0)
+  const labels = colWidth(
+    flat.map(({ item, depth }) => " ".repeat(depth * 5) + item.label)
+  )
 
   return frameAscii(
     title,
-    items.map((item) => {
+    flat.map(({ item, depth }) => {
       const mark = item.done ? "[x]" : "[ ]"
       const note = item.note ? `  ${item.note}` : ""
+      const pad = " ".repeat(depth * 5)
 
-      return `${mark}  ${col(item.label, labels)}${note}`
+      return `${pad}${mark}  ${col(item.label, labels - pad.length)}${note}`
     })
   )
+}
+
+type CheckLine = {
+  label: string
+  done?: boolean
+  note?: string
+  items?: CheckLine[]
 }
 
 function asciiStat({
@@ -484,13 +504,20 @@ function asciiSpec({
   rows,
 }: {
   title: string
-  rows: { label: string; value: string }[]
+  rows: { label: string; value: string; note?: string }[]
 }) {
   const labels = colWidth(rows.map((row) => row.label))
 
   return frameAscii(
     title,
-    rows.map((row) => `${col(row.label, labels)}  ${row.value}`)
+    rows.flatMap((row) => [
+      `${col(row.label, labels)}  ${row.value}`,
+      ...(row.note
+        ? wrapText(row.note, 48).map(
+            (line) => `${" ".repeat(labels + 2)}${line}`
+          )
+        : []),
+    ])
   )
 }
 
@@ -1180,8 +1207,341 @@ function asciiFlow({ title, rows }: { title: string; rows: string[] }) {
   return frameAscii(title, rows.length > 0 ? rows : [""])
 }
 
+/* ---- drop: board, annotate, decision, score, chat, env, endpoint, keys, faq */
+
+type BoardLine = { label: string; note?: string; state?: string }
+
+function asciiBoard({
+  title,
+  columns,
+}: {
+  title: string
+  columns: { title: string; items: (BoardLine | string)[] }[]
+}) {
+  const shaped = columns.map((column) => {
+    const items = column.items.map((item) =>
+      typeof item === "string" ? { label: item } : item
+    )
+    const head = `${column.title}  ${items.length}`
+    const lines = items.flatMap((item) => {
+      const mark = item.state === "now" ? "●" : "-"
+      const label = wrapText(item.label, 20)
+      return [
+        ...label.map((line, index) =>
+          index === 0 ? `${mark} ${line}` : `  ${line}`
+        ),
+        ...(item.note
+          ? wrapText(item.note, 20).map((line) => `  ${line}`)
+          : []),
+      ]
+    })
+    const width = Math.max(colWidth([head, ...lines]), 12)
+    return { head, lines, width }
+  })
+  const height = Math.max(0, ...shaped.map((column) => column.lines.length))
+  const join = (cells: string[]) => cells.join(" | ")
+  const lines = [
+    join(shaped.map((column) => col(column.head, column.width))),
+    join(shaped.map((column) => rule(column.width))),
+    ...Array.from({ length: height }, (_, row) =>
+      join(shaped.map((column) => col(column.lines[row] ?? "", column.width)))
+    ),
+  ]
+
+  return frameAscii(
+    title,
+    lines.map((line) => line.trimEnd())
+  )
+}
+
+function asciiAnnotate({
+  title,
+  lines,
+  notes,
+}: {
+  title?: string
+  lines: { text: string; mark?: number }[]
+  notes: string[]
+}) {
+  const width = String(
+    Math.max(1, notes.length, ...lines.map((line) => line.mark ?? 0))
+  ).length
+  const tag = (index: number) => `[${String(index).padStart(width, " ")}]`
+  const blank = " ".repeat(width + 2)
+  const drawn = lines.map((line) =>
+    `${line.mark ? tag(line.mark) : blank}  ${line.text}`.trimEnd()
+  )
+
+  if (notes.length > 0) {
+    drawn.push("")
+    notes.forEach((note, index) => {
+      wrapText(note, 52).forEach((line, at) =>
+        drawn.push(`${at === 0 ? tag(index + 1) : blank}  ${line}`)
+      )
+    })
+  }
+
+  return frameAscii(title ?? "CODE", drawn)
+}
+
+function asciiDecision({
+  title,
+  status,
+  date,
+  options,
+  body,
+}: {
+  title?: string
+  status?: string
+  date?: string
+  options: { label: string; reason?: string; state?: string }[]
+  body?: string
+}) {
+  const glyph: Record<string, string> = {
+    chosen: "●",
+    open: "○",
+    rejected: "×",
+  }
+  const labels = colWidth(options.map((option) => option.label))
+  const drawn: string[] = []
+
+  if (status || date) {
+    drawn.push([status, date].filter(Boolean).join("  "), "")
+  }
+
+  for (const option of options) {
+    const reason = option.reason ? `  ${option.reason}` : ""
+    drawn.push(
+      `${glyph[option.state ?? "open"] ?? "○"}  ${col(option.label, labels)}${reason}`.trimEnd()
+    )
+  }
+
+  if (body) {
+    drawn.push("")
+    body
+      .split(/\n+/)
+      .forEach((paragraph) => drawn.push(...wrapText(paragraph, 56)))
+  }
+
+  return frameAscii(title ?? "DECISION", drawn)
+}
+
+function asciiScore({
+  title,
+  items,
+  max = 5,
+}: {
+  title: string
+  items: { label: string; value: number; max?: number }[]
+  max?: number
+}) {
+  const labels = colWidth(items.map((item) => item.label))
+  const fmt = (value: number) =>
+    Number.isInteger(value) ? String(value) : value.toFixed(1)
+
+  return frameAscii(
+    title,
+    items.map((item) => {
+      const out = Math.max(1, Math.round(item.max ?? max))
+      const value = Math.min(out, Math.max(0, item.value))
+      const full = Math.floor(value)
+      const half = value - full >= 0.5 ? 1 : 0
+      const dots =
+        "●".repeat(full) + "◐".repeat(half) + "○".repeat(out - full - half)
+      return `${col(item.label, labels)}  ${dots}  ${fmt(value)}/${out}`
+    })
+  )
+}
+
+function asciiChat({
+  title,
+  turns,
+  you,
+  prompt = ">",
+}: {
+  title?: string
+  turns: { by: string; text: string }[]
+  you?: string
+  prompt?: string
+}) {
+  const asker = (you ?? turns[0]?.by ?? "").toLowerCase()
+  const names = colWidth(turns.map((turn) => turn.by))
+  const drawn: string[] = []
+
+  turns.forEach((turn, index) => {
+    const same = index > 0 && turns[index - 1]?.by === turn.by
+    if (index > 0 && !same) {
+      drawn.push("")
+    }
+    const mine = turn.by.toLowerCase() === asker
+    const mark = mine && !same ? prompt : " ".repeat(prompt.length)
+    const name = same ? "" : turn.by
+    wrapText(turn.text, 44).forEach((line, at) =>
+      drawn.push(
+        at === 0
+          ? `${mark}  ${col(name, names)}  ${line}`
+          : `${" ".repeat(prompt.length)}  ${" ".repeat(names)}  ${line}`
+      )
+    )
+  })
+
+  return frameAscii(title ?? "CHAT", drawn)
+}
+
+function asciiEnv({
+  title,
+  vars,
+}: {
+  title?: string
+  vars: { name: string; value?: string; note?: string; required?: boolean }[]
+}) {
+  const names = colWidth(vars.map((entry) => entry.name))
+  const drawn: string[] = []
+
+  const spaced = vars.some((entry) => entry.note)
+  for (const [index, entry] of vars.entries()) {
+    if (spaced && index > 0) {
+      drawn.push("")
+    }
+    const mark = entry.required ? "*" : " "
+    drawn.push(`${mark}  ${col(entry.name, names)}  ${entry.value || "—"}`)
+    if (entry.note) {
+      wrapText(entry.note, 52).forEach((line) => drawn.push(`   ${line}`))
+    }
+  }
+
+  if (vars.some((entry) => entry.required)) {
+    drawn.push("", "* required")
+  }
+
+  return frameAscii(title ?? ".ENV", drawn)
+}
+
+function asciiEndpoint({
+  title,
+  method,
+  path,
+  about,
+  params,
+  blocks,
+}: {
+  title?: string
+  method: string
+  path: string
+  about?: string
+  params: {
+    name: string
+    type?: string
+    description?: string
+    required?: boolean
+  }[]
+  blocks: { label?: string; code: string }[]
+}) {
+  const drawn = [`${method.toUpperCase()}  ${path}`]
+
+  if (about) {
+    drawn.push(...wrapText(about, 56))
+  }
+
+  if (params.length > 0) {
+    const names = colWidth(params.map((param) => param.name))
+    const types = colWidth(params.map((param) => param.type ?? ""))
+    drawn.push("")
+    for (const param of params) {
+      const mark = param.required ? "*" : " "
+      drawn.push(
+        `${mark}  ${col(param.name, names)}  ${col(param.type ?? "", types)}  ${param.description ?? ""}`.trimEnd()
+      )
+    }
+  }
+
+  for (const block of blocks) {
+    drawn.push("")
+    if (block.label) {
+      drawn.push(block.label)
+    }
+    drawn.push(...block.code.split("\n"))
+  }
+
+  return frameAscii(title ?? "ENDPOINT", drawn)
+}
+
+function asciiKeys({
+  title,
+  bindings,
+}: {
+  title?: string
+  bindings: { keys: string; action: string }[]
+}) {
+  const MODS = new Set(["⌘", "⌥", "⇧", "⌃", "⎋", "↵", "⌫", "⇥"])
+  const caps = bindings.map((binding) =>
+    binding.keys
+      .split(/\s+then\s+/i)
+      .map((chord) =>
+        chord
+          .split(/\s*\+\s*|\s+/)
+          .filter(Boolean)
+          .flatMap((token) => {
+            const glyphs = [...token]
+            const lead = glyphs.findIndex((glyph) => !MODS.has(glyph))
+            if (lead <= 0) {
+              return lead === -1 ? glyphs : [token]
+            }
+            return [...glyphs.slice(0, lead), glyphs.slice(lead).join("")]
+          })
+          .map((key) => `[${key}]`)
+          .join("")
+      )
+      .join(" then ")
+  )
+  const width = colWidth(caps)
+
+  return frameAscii(
+    title ?? "KEYS",
+    bindings.map(
+      (binding, index) => `${col(caps[index] ?? "", width)}  ${binding.action}`
+    )
+  )
+}
+
+function asciiFaq({
+  title,
+  entries,
+}: {
+  title?: string
+  entries: { question: string; answer?: string }[]
+}) {
+  const drawn: string[] = []
+
+  entries.forEach((entry, index) => {
+    if (index > 0) {
+      drawn.push("")
+    }
+    wrapText(entry.question, 54).forEach((line, at) =>
+      drawn.push(`${at === 0 ? "?" : " "}  ${line}`)
+    )
+    if (entry.answer) {
+      entry.answer
+        .split(/\n+/)
+        .flatMap((paragraph) => wrapText(paragraph, 54))
+        .forEach((line) => drawn.push(`   ${line}`))
+    }
+  })
+
+  return frameAscii(title ?? "FAQ", drawn)
+}
+
 export {
+  asciiAnnotate,
   asciiBars,
+  asciiBoard,
+  asciiChat,
+  asciiDecision,
+  asciiEndpoint,
+  asciiEnv,
+  asciiFaq,
+  asciiKeys,
+  asciiScore,
   asciiBullet,
   asciiCallout,
   asciiCells,

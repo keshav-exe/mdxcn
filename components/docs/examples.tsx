@@ -1,12 +1,20 @@
 import type { ReactNode } from "react"
 
 import { ComponentPreview } from "@/components/docs/preview"
+import { MDX_SKIP_SLUGS } from "@/lib/docs/ascii"
 import {
+  Annotate,
   Callout,
   Changelog,
+  Chat,
+  Decision,
+  Endpoint,
+  Env,
+  Faq,
   Graph,
   GraphActivity,
   GraphBars,
+  GraphBoard,
   GraphBody,
   GraphBullet,
   GraphCalendar,
@@ -26,6 +34,7 @@ import {
   GraphPlot,
   GraphRank,
   GraphRule,
+  GraphScore,
   GraphSheet,
   GraphSlope,
   GraphSpark,
@@ -39,6 +48,7 @@ import {
   GraphUptime,
   GraphWaffle,
   GraphWaterfall,
+  Keys,
   Quote,
   Steps,
   Terminal,
@@ -47,20 +57,27 @@ import {
 type Example = {
   title: string
   description?: string
+  /** MDX unless `source` says otherwise. Compiled in tests against `preview`. */
   code: string
+  /** `tsx` when the code needs JavaScript (a helper, a loop) and is not MDX. */
+  source?: "mdx" | "tsx"
   react?: string
   preview: ReactNode
 }
 
-function Examples({ items }: { items: Example[] }) {
+function Examples({ items, slug }: { items: Example[]; slug?: string }) {
+  const ascii = !slug || !(MDX_SKIP_SLUGS as readonly string[]).includes(slug)
+
   return (
     <div className="flex flex-col gap-16">
       {items.map((item) => (
         <ComponentPreview
+          ascii={ascii}
           code={item.code}
           description={item.description}
           key={item.title}
           react={item.react}
+          source={item.source}
           title={item.title}
         >
           {item.preview}
@@ -767,6 +784,17 @@ const meterExamples: Example[] = [
       />
     ),
   },
+  {
+    title: "written",
+    description: "The value, then the caption after an em dash.",
+    code: `<GraphMeter title="DISK">78% — of 500 GB</GraphMeter>`,
+    react: tsx(
+      "graph-meter",
+      "GraphMeter",
+      `<GraphMeter title="DISK">78% — of 500 GB</GraphMeter>`
+    ),
+    preview: <GraphMeter title="DISK">78% — of 500 GB</GraphMeter>,
+  },
 ]
 
 const sparkExamples: Example[] = [
@@ -801,6 +829,28 @@ const sparkExamples: Example[] = [
         data={[4, 4, 5, 3, 6, 8, 7, 9, 8, 6, 5, 7]}
         title="REQUESTS"
       />
+    ),
+  },
+  {
+    title: "written",
+    description:
+      "Numbers as children. `0*3` repeats a value. The caption follows an em dash.",
+    code: `<GraphSpark title="DEPLOYS">
+
+2 3 0*3 5 8 6 9 — three quiet days, then a busy week
+
+</GraphSpark>`,
+    react: tsx(
+      "graph-spark",
+      "GraphSpark",
+      `<GraphSpark title="DEPLOYS">
+  <p>2 3 0*3 5 8 6 9 — three quiet days, then a busy week</p>
+</GraphSpark>`
+    ),
+    preview: (
+      <GraphSpark title="DEPLOYS">
+        <p>2 3 0*3 5 8 6 9 — three quiet days, then a busy week</p>
+      </GraphSpark>
     ),
   },
 ]
@@ -997,6 +1047,64 @@ const timelineExamples: Example[] = [
       </GraphTimeline>
     ),
   },
+  {
+    title: "with notes",
+    description:
+      "`— note` sits under the row. Leave blank lines between items and an indented paragraph does the same.",
+    code: `<GraphTimeline title="NIGHT">
+
+- 14:02: p95 crossed 800ms — paged the on-call
+
+- **14:11: rolled back the cache flag**
+
+  Errors stopped inside a minute. Latency took ten.
+
+- *14:40: write the postmortem*
+
+</GraphTimeline>`,
+    react: tsx(
+      "graph-timeline",
+      "GraphTimeline",
+      `<GraphTimeline title="NIGHT">
+  <ul>
+    <li>
+      <p>14:02: p95 crossed 800ms — paged the on-call</p>
+    </li>
+    <li>
+      <p>
+        <strong>14:11: rolled back the cache flag</strong>
+      </p>
+      <p>Errors stopped inside a minute. Latency took ten.</p>
+    </li>
+    <li>
+      <p>
+        <em>14:40: write the postmortem</em>
+      </p>
+    </li>
+  </ul>
+</GraphTimeline>`
+    ),
+    preview: (
+      <GraphTimeline title="NIGHT">
+        <ul>
+          <li>
+            <p>14:02: p95 crossed 800ms — paged the on-call</p>
+          </li>
+          <li>
+            <p>
+              <strong>14:11: rolled back the cache flag</strong>
+            </p>
+            <p>Errors stopped inside a minute. Latency took ten.</p>
+          </li>
+          <li>
+            <p>
+              <em>14:40: write the postmortem</em>
+            </p>
+          </li>
+        </ul>
+      </GraphTimeline>
+    ),
+  },
 ]
 
 const checkExamples: Example[] = [
@@ -1056,6 +1164,59 @@ const checkExamples: Example[] = [
           <li>[x] title is a sentence</li>
           <li>[x] numbers are tabular</li>
           <li>[ ] motion respects reduced — check the timer</li>
+        </ul>
+      </GraphCheck>
+    ),
+  },
+  {
+    title: "sub-tasks",
+    description: "Nest a list under an item. The count covers every box.",
+    code: `<GraphCheck title="RELEASE">
+
+- [x] freeze tokens
+- [ ] docs
+  - [x] grammar page
+  - [ ] mdx page — needs screenshots
+- [ ] tag 1.3.0
+
+</GraphCheck>`,
+    react: tsx(
+      "graph-check",
+      "GraphCheck",
+      `<GraphCheck title="RELEASE">
+  <ul>
+    <li>[x] freeze tokens</li>
+    <li>
+      [ ] docs
+      <ul>
+        <li>[x] grammar page</li>
+        <li>[ ] mdx page — needs screenshots</li>
+      </ul>
+    </li>
+    <li>[ ] tag 1.3.0</li>
+  </ul>
+</GraphCheck>`
+    ),
+    preview: (
+      <GraphCheck title="RELEASE">
+        <ul className="contains-task-list">
+          <li className="task-list-item">
+            <input checked disabled type="checkbox" /> freeze tokens
+          </li>
+          <li className="task-list-item">
+            <input disabled type="checkbox" /> docs
+            <ul className="contains-task-list">
+              <li className="task-list-item">
+                <input checked disabled type="checkbox" /> grammar page
+              </li>
+              <li className="task-list-item">
+                <input disabled type="checkbox" /> mdx page — needs screenshots
+              </li>
+            </ul>
+          </li>
+          <li className="task-list-item">
+            <input disabled type="checkbox" /> tag 1.3.0
+          </li>
         </ul>
       </GraphCheck>
     ),
@@ -1300,6 +1461,43 @@ const plotExamples: Example[] = [
       />
     ),
   },
+  {
+    title: "labeled rows",
+    description: "A list of `label: value` keeps the labels for the axis.",
+    code: `<GraphPlot title="SIGNUPS" variant="line">
+
+- Mon: 12
+- Tue: 18
+- Wed: 15
+- Thu: 24
+- Fri: 31
+
+</GraphPlot>`,
+    react: tsx(
+      "graph-plot",
+      "GraphPlot",
+      `<GraphPlot title="SIGNUPS" variant="line">
+  <ul>
+    <li>Mon: 12</li>
+    <li>Tue: 18</li>
+    <li>Wed: 15</li>
+    <li>Thu: 24</li>
+    <li>Fri: 31</li>
+  </ul>
+</GraphPlot>`
+    ),
+    preview: (
+      <GraphPlot title="SIGNUPS" variant="line">
+        <ul>
+          <li>Mon: 12</li>
+          <li>Tue: 18</li>
+          <li>Wed: 15</li>
+          <li>Thu: 24</li>
+          <li>Fri: 31</li>
+        </ul>
+      </GraphPlot>
+    ),
+  },
 ]
 
 const waffleExamples: Example[] = [
@@ -1338,6 +1536,17 @@ const waffleExamples: Example[] = [
         value={0.4}
       />
     ),
+  },
+  {
+    title: "written",
+    description: "The value, then the caption after an em dash.",
+    code: `<GraphWaffle title="TESTS">91% — 182 of 200 green</GraphWaffle>`,
+    react: tsx(
+      "graph-waffle",
+      "GraphWaffle",
+      `<GraphWaffle title="TESTS">91% — 182 of 200 green</GraphWaffle>`
+    ),
+    preview: <GraphWaffle title="TESTS">91% — 182 of 200 green</GraphWaffle>,
   },
 ]
 
@@ -1412,6 +1621,46 @@ const diffExamples: Example[] = [
           <li>
             <strong>now: 14</strong>
           </li>
+        </ul>
+      </GraphDiff>
+    ),
+  },
+  {
+    title: "rename",
+    description:
+      "Strike the old text and write the new after it. One row becomes a removed line and an added line.",
+    code: `<GraphDiff title="MIGRATION">
+
+- config: ~~next.config.js~~ next.config.ts
+- middleware: ~~middleware.ts~~ proxy.ts
+- app: +31 kb
+
+</GraphDiff>`,
+    react: tsx(
+      "graph-diff",
+      "GraphDiff",
+      `<GraphDiff title="MIGRATION">
+  <ul>
+    <li>
+      config: <del>next.config.js</del> next.config.ts
+    </li>
+    <li>
+      middleware: <del>middleware.ts</del> proxy.ts
+    </li>
+    <li>app: +31 kb</li>
+  </ul>
+</GraphDiff>`
+    ),
+    preview: (
+      <GraphDiff title="MIGRATION">
+        <ul>
+          <li>
+            config: <del>next.config.js</del> next.config.ts
+          </li>
+          <li>
+            middleware: <del>middleware.ts</del> proxy.ts
+          </li>
+          <li>app: +31 kb</li>
         </ul>
       </GraphDiff>
     ),
@@ -1492,11 +1741,7 @@ Net 30. Wire to the account on file.
 </GraphInvoice>`
     ),
     preview: (
-      <GraphInvoice
-        from="mdxcn"
-        title="INVOICE 0041"
-        to="Acme Studio"
-      >
+      <GraphInvoice from="mdxcn" title="INVOICE 0041" to="Acme Studio">
         <ul>
           <li>No.: 0041</li>
           <li>Issued: Mar 12, 2026</li>
@@ -2046,6 +2291,36 @@ const kpiExamples: Example[] = [
       />
     ),
   },
+  {
+    title: "written",
+    description:
+      "First line is the value, the label, and `— hint`. The next line is the sparkline.",
+    code: `<GraphKpi title="READS">
+
+**12,400** this week — +18%
+
+4 5 5 6 8 7 9 8 11 10 12 14
+
+</GraphKpi>`,
+    react: tsx(
+      "graph-kpi",
+      "GraphKpi",
+      `<GraphKpi title="READS">
+  <p>
+    <strong>12,400</strong> this week — +18%
+  </p>
+  <p>4 5 5 6 8 7 9 8 11 10 12 14</p>
+</GraphKpi>`
+    ),
+    preview: (
+      <GraphKpi title="READS">
+        <p>
+          <strong>12,400</strong> this week — +18%
+        </p>
+        <p>4 5 5 6 8 7 9 8 11 10 12 14</p>
+      </GraphKpi>
+    ),
+  },
 ]
 
 const specExamples: Example[] = [
@@ -2126,6 +2401,68 @@ const specExamples: Example[] = [
       </GraphSpec>
     ),
   },
+  {
+    title: "inline code and notes",
+    description:
+      "Code and links in a value survive. Leave blank lines between rows and an indented paragraph sits under the value.",
+    code: `<GraphSpec title="INSTALL">
+
+- Command: \`pnpm dlx shadcn@latest add @mdxcn/all\`
+
+- Lands in: \`registry/default\`
+
+  Edit it there. Nothing to update later.
+
+- Needs: [motion](https://motion.dev)
+
+</GraphSpec>`,
+    react: tsx(
+      "graph-spec",
+      "GraphSpec",
+      `<GraphSpec title="INSTALL">
+  <ul>
+    <li>
+      <p>
+        Command: <code>pnpm dlx shadcn@latest add @mdxcn/all</code>
+      </p>
+    </li>
+    <li>
+      <p>
+        Lands in: <code>registry/default</code>
+      </p>
+      <p>Edit it there. Nothing to update later.</p>
+    </li>
+    <li>
+      <p>
+        Needs: <a href="https://motion.dev">motion</a>
+      </p>
+    </li>
+  </ul>
+</GraphSpec>`
+    ),
+    preview: (
+      <GraphSpec title="INSTALL">
+        <ul>
+          <li>
+            <p>
+              Command: <code>pnpm dlx shadcn@latest add @mdxcn/all</code>
+            </p>
+          </li>
+          <li>
+            <p>
+              Lands in: <code>registry/default</code>
+            </p>
+            <p>Edit it there. Nothing to update later.</p>
+          </li>
+          <li>
+            <p>
+              Needs: <a href="https://motion.dev">motion</a>
+            </p>
+          </li>
+        </ul>
+      </GraphSpec>
+    ),
+  },
 ]
 
 function activityDays(start: string, length: number) {
@@ -2174,6 +2511,7 @@ const activityExamples: Example[] = [
     title: "year",
     description:
       "Dated counts. The grid, month labels, and intensity scale are derived.",
+    source: "tsx",
     code: `import { GraphActivity } from "@/registry/default/graph-activity/graph-activity"
 
 function activityDays(start: string, length: number) {
@@ -2189,6 +2527,8 @@ function activityDays(start: string, length: number) {
       const pulse = (week + dow) % 9
       count =
         pulse === 0 ? 12 : pulse === 4 ? 7 : pulse % 3 === 0 ? 3 : index % 5 === 0 ? 1 : 0
+    } else if (index % 13 === 0) {
+      count = 2
     }
     return { date, count }
   })
@@ -2203,7 +2543,8 @@ function activityDays(start: string, length: number) {
   {
     title: "quarter",
     description:
-      'Shorter range. glyphs="ascii" swaps the block characters for .- =#@.',
+      'Shorter range. glyphs="ascii" swaps the block characters for .- =#@. activityDays is the helper from the example above.',
+    source: "tsx",
     code: `import { GraphActivity } from "@/registry/default/graph-activity/graph-activity"
 
 <GraphActivity
@@ -2221,6 +2562,34 @@ function activityDays(start: string, length: number) {
         title="SHIPPED"
         weekStartsOn={1}
       />
+    ),
+  },
+  {
+    title: "written",
+    description:
+      "`date: counts`. Counts run day by day from the date; `0*4` is four quiet days.",
+    code: `<GraphActivity title="COMMITS">
+
+- 2026-03-02: 1 3 0 4 2 0*2 5 6 2 3 1 0*2 2 4 7 3 5 0*2 1 2 0 3 4 0*3
+
+</GraphActivity>`,
+    react: tsx(
+      "graph-activity",
+      "GraphActivity",
+      `<GraphActivity title="COMMITS">
+  <ul>
+    <li>2026-03-02: 1 3 0 4 2 0*2 5 6 2 3 1 0*2 2 4 7 3 5 0*2 1 2 0 3 4 0*3</li>
+  </ul>
+</GraphActivity>`
+    ),
+    preview: (
+      <GraphActivity title="COMMITS">
+        <ul>
+          <li>
+            2026-03-02: 1 3 0 4 2 0*2 5 6 2 3 1 0*2 2 4 7 3 5 0*2 1 2 0 3 4 0*3
+          </li>
+        </ul>
+      </GraphActivity>
     ),
   },
 ]
@@ -2533,6 +2902,45 @@ const calendarExamples: Example[] = [
       />
     ),
   },
+  {
+    title: "with notes",
+    description:
+      "A list of `day: label`. Labels list under the month. Bold is today.",
+    code: `<GraphCalendar year={2026} month={3}>
+
+- 4: freeze tokens
+- 12: registry listed
+- **18: docs go live**
+- 27: postmortem due
+
+</GraphCalendar>`,
+    react: tsx(
+      "graph-calendar",
+      "GraphCalendar",
+      `<GraphCalendar year={2026} month={3}>
+  <ul>
+    <li>4: freeze tokens</li>
+    <li>12: registry listed</li>
+    <li>
+      <strong>18: docs go live</strong>
+    </li>
+    <li>27: postmortem due</li>
+  </ul>
+</GraphCalendar>`
+    ),
+    preview: (
+      <GraphCalendar month={3} year={2026}>
+        <ul>
+          <li>4: freeze tokens</li>
+          <li>12: registry listed</li>
+          <li>
+            <strong>18: docs go live</strong>
+          </li>
+          <li>27: postmortem due</li>
+        </ul>
+      </GraphCalendar>
+    ),
+  },
 ]
 
 const waterfallExamples: Example[] = [
@@ -2608,21 +3016,22 @@ const uptimeExamples: Example[] = [
   {
     title: "ninety days",
     description:
-      "One glyph per day, wrapped every 30. Percent is the share of ok days.",
-    code: `import { GraphUptime } from "@/registry/default/graph-uptime/graph-uptime"
+      "One glyph per day, wrapped every 30. Percent is the share of ok days. `ok*18` is eighteen ok days, so a quarter fits on one line.",
+    code: `<GraphUptime title="API" from="Jun 1" to="Aug 29">
 
-<GraphUptime
+ok*18 degraded ok*22 down*2 ok*17 degraded*2 ok*28
+
+</GraphUptime>`,
+    react: tsx(
+      "graph-uptime",
+      "GraphUptime",
+      `<GraphUptime
   title="API"
   from="Jun 1"
   to="Aug 29"
-  days={Array.from({ length: 90 }, (_, index) =>
-    index === 41 || index === 42
-      ? "down"
-      : index === 18 || index === 60
-        ? "degraded"
-        : "ok"
-  )}
-/>`,
+  days="ok*18 degraded ok*22 down*2 ok*17 degraded*2 ok*28"
+/>`
+    ),
     preview: (
       <GraphUptime days={uptimeQuarter} from="Jun 1" title="API" to="Aug 29" />
     ),
@@ -2865,6 +3274,21 @@ const countdownExamples: Example[] = [
       <GraphCountdown done="closed" title="WINDOW" to="2020-01-01T00:00:00Z" />
     ),
   },
+  {
+    title: "written",
+    description: "The date, then the caption after an em dash.",
+    code: `<GraphCountdown title="LAUNCH">2027-01-15T09:00:00Z — until 2.0</GraphCountdown>`,
+    react: tsx(
+      "graph-countdown",
+      "GraphCountdown",
+      `<GraphCountdown title="LAUNCH">2027-01-15T09:00:00Z — until 2.0</GraphCountdown>`
+    ),
+    preview: (
+      <GraphCountdown title="LAUNCH">
+        2027-01-15T09:00:00Z — until 2.0
+      </GraphCountdown>
+    ),
+  },
 ]
 
 const frameExamples: Example[] = [
@@ -2974,7 +3398,7 @@ const quoteExamples: Example[] = [
 </Quote>`,
     preview: (
       <Quote by="Paul Graham" source="Taste for Makers">
-        A thousand barely audible voices all singing in tune.
+        <p>A thousand barely audible voices all singing in tune.</p>
       </Quote>
     ),
   },
@@ -2988,7 +3412,7 @@ const quoteExamples: Example[] = [
 </Quote>`,
     preview: (
       <Quote by="Dieter Rams" title="PRINCIPLE">
-        Good design is as little design as possible.
+        <p>Good design is as little design as possible.</p>
       </Quote>
     ),
   },
@@ -3206,12 +3630,850 @@ const changelogExamples: Example[] = [
   },
 ]
 
+const annotateExamples: Example[] = [
+  {
+    title: "mdx-components",
+    description:
+      "End a line with `// (1)`. The ordered list under the fence explains it. Marked lines stay bright; the rest recede.",
+    code: `<Annotate title="mdx-components.tsx">
+
+\`\`\`tsx
+import { withMdxcn } from "@/registry/default/mdx/mdx" // (1)
+import { GraphTimeline } from "@/registry/default/graph-timeline/graph-timeline"
+
+export function useMDXComponents(components) {
+  return withMdxcn({ ...components, GraphTimeline }) // (2)
+}
+\`\`\`
+
+1. Runs on the server. The file has no "use client".
+2. Your overrides stay. A swapped tag still reads as that tag.
+
+</Annotate>`,
+    react: tsx(
+      "annotate",
+      "Annotate",
+      `<Annotate title="mdx-components.tsx">
+  <pre>
+    <code className="language-tsx">{\`import { withMdxcn } from "@/registry/default/mdx/mdx" // (1)
+import { GraphTimeline } from "@/registry/default/graph-timeline/graph-timeline"
+
+export function useMDXComponents(components) {
+  return withMdxcn({ ...components, GraphTimeline }) // (2)
+}\`}</code>
+  </pre>
+  <ol>
+    <li>Runs on the server. The file has no "use client".</li>
+    <li>Your overrides stay. A swapped tag still reads as that tag.</li>
+  </ol>
+</Annotate>`
+    ),
+    preview: (
+      <Annotate title="mdx-components.tsx">
+        <pre>
+          <code className="language-tsx">{`import { withMdxcn } from "@/registry/default/mdx/mdx" // (1)
+import { GraphTimeline } from "@/registry/default/graph-timeline/graph-timeline"
+
+export function useMDXComponents(components) {
+  return withMdxcn({ ...components, GraphTimeline }) // (2)
+}
+`}</code>
+        </pre>
+        <ol>
+          <li>Runs on the server. The file has no &quot;use client&quot;.</li>
+          <li>Your overrides stay. A swapped tag still reads as that tag.</li>
+        </ol>
+      </Annotate>
+    ),
+  },
+  {
+    title: "retry",
+    description: "`# (1)` works for Python, shell, and YAML.",
+    code: `<Annotate>
+
+\`\`\`python
+def fetch(url, times=3):  # (1)
+    for attempt in range(times):
+        try:
+            return get(url)
+        except TimeoutError:  # (2)
+            sleep(2 ** attempt)
+    raise
+\`\`\`
+
+1. Three tries. Enough for a flaky network, not for a service that is down.
+2. Only timeouts retry. A 500 fails fast.
+
+</Annotate>`,
+    react: tsx(
+      "annotate",
+      "Annotate",
+      `<Annotate>
+  <pre>
+    <code className="language-python">{\`def fetch(url, times=3):  # (1)
+    for attempt in range(times):
+        try:
+            return get(url)
+        except TimeoutError:  # (2)
+            sleep(2 ** attempt)
+    raise\`}</code>
+  </pre>
+  <ol>
+    <li>Three tries. Enough for a flaky network, not for a service that is down.</li>
+    <li>Only timeouts retry. A 500 fails fast.</li>
+  </ol>
+</Annotate>`
+    ),
+    preview: (
+      <Annotate>
+        <pre>
+          <code className="language-python">{`def fetch(url, times=3):  # (1)
+    for attempt in range(times):
+        try:
+            return get(url)
+        except TimeoutError:  # (2)
+            sleep(2 ** attempt)
+    raise
+`}</code>
+        </pre>
+        <ol>
+          <li>
+            Three tries. Enough for a flaky network, not for a service that is
+            down.
+          </li>
+          <li>Only timeouts retry. A 500 fails fast.</li>
+        </ol>
+      </Annotate>
+    ),
+  },
+]
+
+const decisionExamples: Example[] = [
+  {
+    title: "database",
+    description:
+      "Bold is chosen, italic is rejected, the rest stay open. `— why` sits next to each. Paragraphs after the list say what follows.",
+    code: `<Decision title="DATABASE" status="accepted" date="Mar 12">
+
+- **Postgres** — boring, and we already run it
+- *Mongo* — no joins we trust
+- SQLite — fine until the second writer
+
+Revisit if writes pass 2k a second.
+
+</Decision>`,
+    react: tsx(
+      "decision",
+      "Decision",
+      `<Decision title="DATABASE" status="accepted" date="Mar 12">
+  <ul>
+    <li>
+      <strong>Postgres</strong> — boring, and we already run it
+    </li>
+    <li>
+      <em>Mongo</em> — no joins we trust
+    </li>
+    <li>SQLite — fine until the second writer</li>
+  </ul>
+  <p>Revisit if writes pass 2k a second.</p>
+</Decision>`
+    ),
+    preview: (
+      <Decision date="Mar 12" status="accepted" title="DATABASE">
+        <ul>
+          <li>
+            <strong>Postgres</strong> — boring, and we already run it
+          </li>
+          <li>
+            <em>Mongo</em> — no joins we trust
+          </li>
+          <li>SQLite — fine until the second writer</li>
+        </ul>
+        <p>Revisit if writes pass 2k a second.</p>
+      </Decision>
+    ),
+  },
+  {
+    title: "rendering",
+    code: `<Decision title="CHARTS">
+
+- **Glyphs in a frame** — copy the source, no chart runtime
+- *SVG* — does not survive a README
+- *Canvas* — no text to select or search
+- Mermaid — fine for flows, wrong for numbers
+
+Every figure has a fenced twin for GitHub.
+
+</Decision>`,
+    react: tsx(
+      "decision",
+      "Decision",
+      `<Decision title="CHARTS">
+  <ul>
+    <li>
+      <strong>Glyphs in a frame</strong> — copy the source, no chart runtime
+    </li>
+    <li>
+      <em>SVG</em> — does not survive a README
+    </li>
+    <li>
+      <em>Canvas</em> — no text to select or search
+    </li>
+    <li>Mermaid — fine for flows, wrong for numbers</li>
+  </ul>
+  <p>Every figure has a fenced twin for GitHub.</p>
+</Decision>`
+    ),
+    preview: (
+      <Decision title="CHARTS">
+        <ul>
+          <li>
+            <strong>Glyphs in a frame</strong> — copy the source, no chart
+            runtime
+          </li>
+          <li>
+            <em>SVG</em> — does not survive a README
+          </li>
+          <li>
+            <em>Canvas</em> — no text to select or search
+          </li>
+          <li>Mermaid — fine for flows, wrong for numbers</li>
+        </ul>
+        <p>Every figure has a fenced twin for GitHub.</p>
+      </Decision>
+    ),
+  },
+]
+
+const chatExamples: Example[] = [
+  {
+    title: "session",
+    description:
+      "`speaker: message`. The first speaker is you and gets the prompt. An italic turn is an aside. A repeated speaker is not repeated.",
+    code: `<Chat title="SESSION">
+
+- you: which graph shows a rollback?
+- agent: Timeline. Bold the row where you rolled back.
+- agent: *reads graph-timeline.tsx*
+- agent: Then Diff for what the rollback changed.
+- you: and on GitHub?
+- agent: Paste the fenced ASCII. GitHub does not run MDX.
+
+</Chat>`,
+    react: tsx(
+      "chat",
+      "Chat",
+      `<Chat title="SESSION">
+  <ul>
+    <li>you: which graph shows a rollback?</li>
+    <li>agent: Timeline. Bold the row where you rolled back.</li>
+    <li>
+      agent: <em>reads graph-timeline.tsx</em>
+    </li>
+    <li>agent: Then Diff for what the rollback changed.</li>
+    <li>you: and on GitHub?</li>
+    <li>agent: Paste the fenced ASCII. GitHub does not run MDX.</li>
+  </ul>
+</Chat>`
+    ),
+    preview: (
+      <Chat title="SESSION">
+        <ul>
+          <li>you: which graph shows a rollback?</li>
+          <li>agent: Timeline. Bold the row where you rolled back.</li>
+          <li>
+            agent: <em>reads graph-timeline.tsx</em>
+          </li>
+          <li>agent: Then Diff for what the rollback changed.</li>
+          <li>you: and on GitHub?</li>
+          <li>agent: Paste the fenced ASCII. GitHub does not run MDX.</li>
+        </ul>
+      </Chat>
+    ),
+  },
+  {
+    title: "support thread",
+    description:
+      "you picks the asker. Leave a blank line between turns and a turn can hold paragraphs and code.",
+    code: `<Chat title="SUPPORT" you="priya">
+
+- priya: the timeline renders empty in our docs
+
+- jon: Do you swap \`li\` in mdx-components?
+
+  Wrap the map in \`withMdxcn\` and the graphs see list items again.
+
+- priya: that was it
+
+</Chat>`,
+    react: tsx(
+      "chat",
+      "Chat",
+      `<Chat title="SUPPORT" you="priya">
+  <ul>
+    <li>
+      <p>priya: the timeline renders empty in our docs</p>
+    </li>
+    <li>
+      <p>
+        jon: Do you swap <code>li</code> in mdx-components?
+      </p>
+      <p>
+        Wrap the map in <code>withMdxcn</code> and the graphs see list
+        items again.
+      </p>
+    </li>
+    <li>
+      <p>priya: that was it</p>
+    </li>
+  </ul>
+</Chat>`
+    ),
+    preview: (
+      <Chat title="SUPPORT" you="priya">
+        <ul>
+          <li>
+            <p>priya: the timeline renders empty in our docs</p>
+          </li>
+          <li>
+            <p>
+              jon: Do you swap <code>li</code> in mdx-components?
+            </p>
+            <p>
+              Wrap the map in <code>withMdxcn</code> and the graphs see list
+              items again.
+            </p>
+          </li>
+          <li>
+            <p>priya: that was it</p>
+          </li>
+        </ul>
+      </Chat>
+    ),
+  },
+]
+
+const envExamples: Example[] = [
+  {
+    title: ".env",
+    description:
+      "Paste the file. A comment above a key describes it. A comment that says required marks it.",
+    code: `<Env>
+
+\`\`\`bash
+# Postgres connection string. Required.
+DATABASE_URL=postgres://localhost:5432/app
+
+# Origin for absolute links in llms.txt
+SITE_URL=https://mdxcn.dev
+
+# Leave empty to turn analytics off
+ANALYTICS_ID=
+\`\`\`
+
+</Env>`,
+    react: tsx(
+      "env",
+      "Env",
+      `<Env>
+  <pre>
+    <code className="language-bash">{\`# Postgres connection string. Required.
+DATABASE_URL=postgres://localhost:5432/app
+
+# Origin for absolute links in llms.txt
+SITE_URL=https://mdxcn.dev
+
+# Leave empty to turn analytics off
+ANALYTICS_ID=\`}</code>
+  </pre>
+</Env>`
+    ),
+    preview: (
+      <Env>
+        <pre>
+          <code className="language-bash">{`# Postgres connection string. Required.
+DATABASE_URL=postgres://localhost:5432/app
+
+# Origin for absolute links in llms.txt
+SITE_URL=https://mdxcn.dev
+
+# Leave empty to turn analytics off
+ANALYTICS_ID=
+`}</code>
+        </pre>
+      </Env>
+    ),
+  },
+  {
+    title: "as a list",
+    description:
+      "Or write rows. Bold is required. `— note` sits under the key.",
+    code: `<Env title="WORKER">
+
+- **QUEUE_URL**: redis://localhost:6379 — jobs and retries
+- CONCURRENCY: 4 — per process
+- LOG_LEVEL: info
+
+</Env>`,
+    react: tsx(
+      "env",
+      "Env",
+      `<Env title="WORKER">
+  <ul>
+    <li>
+      <strong>QUEUE_URL</strong>: redis://localhost:6379 — jobs and retries
+    </li>
+    <li>CONCURRENCY: 4 — per process</li>
+    <li>LOG_LEVEL: info</li>
+  </ul>
+</Env>`
+    ),
+    preview: (
+      <Env title="WORKER">
+        <ul>
+          <li>
+            <strong>QUEUE_URL</strong>: redis://localhost:6379 — jobs and
+            retries
+          </li>
+          <li>CONCURRENCY: 4 — per process</li>
+          <li>LOG_LEVEL: info</li>
+        </ul>
+      </Env>
+    ),
+  },
+]
+
+const endpointExamples: Example[] = [
+  {
+    title: "one component",
+    description:
+      "First line is the method and path. A table of params — bold name is required. Fences after it are the request and the response.",
+    code: `<Endpoint>
+
+GET /api/v1/components/:slug
+
+One component from the catalog, with its props.
+
+| Param | Type | |
+| --- | --- | --- |
+| **slug** | string | Registry slug, like \`graph-table\` |
+
+\`\`\`bash
+$ curl https://mdxcn.dev/api/v1/components/graph-meter
+\`\`\`
+
+\`\`\`json
+{ "slug": "graph-meter", "name": "GraphMeter", "props": [ … ] }
+\`\`\`
+
+</Endpoint>`,
+    react: tsx(
+      "endpoint",
+      "Endpoint",
+      `<Endpoint>
+  <p>GET /api/v1/components/:slug</p>
+  <p>One component from the catalog, with its props.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Param</th>
+        <th>Type</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <strong>slug</strong>
+        </td>
+        <td>string</td>
+        <td>
+          Registry slug, like <code>graph-table</code>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pre>
+    <code className="language-bash">{\`$ curl https://mdxcn.dev/api/v1/components/graph-meter\`}</code>
+  </pre>
+  <pre>
+    <code className="language-json">{\`{ "slug": "graph-meter", "name": "GraphMeter", "props": [ … ] }\`}</code>
+  </pre>
+</Endpoint>`
+    ),
+    preview: (
+      <Endpoint>
+        <p>GET /api/v1/components/:slug</p>
+        <p>One component from the catalog, with its props.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Param</th>
+              <th>Type</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>slug</strong>
+              </td>
+              <td>string</td>
+              <td>
+                Registry slug, like <code>graph-table</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pre>
+          <code className="language-bash">{`$ curl https://mdxcn.dev/api/v1/components/graph-meter
+`}</code>
+        </pre>
+        <pre>
+          <code className="language-json">{`{ "slug": "graph-meter", "name": "GraphMeter", "props": [ … ] }
+`}</code>
+        </pre>
+      </Endpoint>
+    ),
+  },
+]
+
+const keysExamples: Example[] = [
+  {
+    title: "shortcuts",
+    description:
+      "`keys: action`. Modifier glyphs split into their own caps. `then` starts the next chord. Bold is the one to learn first.",
+    code: `<Keys title="SHORTCUTS">
+
+- **⌘K: search the docs**
+- ⌘⇧C: copy the page as Markdown
+- Ctrl+Shift+P: command palette
+- g then d: go to docs
+- Esc: close
+
+</Keys>`,
+    react: tsx(
+      "keys",
+      "Keys",
+      `<Keys title="SHORTCUTS">
+  <ul>
+    <li>
+      <strong>⌘K: search the docs</strong>
+    </li>
+    <li>⌘⇧C: copy the page as Markdown</li>
+    <li>Ctrl+Shift+P: command palette</li>
+    <li>g then d: go to docs</li>
+    <li>Esc: close</li>
+  </ul>
+</Keys>`
+    ),
+    preview: (
+      <Keys title="SHORTCUTS">
+        <ul>
+          <li>
+            <strong>⌘K: search the docs</strong>
+          </li>
+          <li>⌘⇧C: copy the page as Markdown</li>
+          <li>Ctrl+Shift+P: command palette</li>
+          <li>g then d: go to docs</li>
+          <li>Esc: close</li>
+        </ul>
+      </Keys>
+    ),
+  },
+]
+
+const faqExamples: Example[] = [
+  {
+    title: "install",
+    description:
+      "Each heading is a question. Everything under it, up to the next heading, is the answer — paragraphs, lists, code.",
+    code: `<Faq>
+
+### Is this an npm package?
+
+No. The CLI copies the source into \`registry/default\`. You own it.
+
+### Does it need MDX?
+
+No. Comark reads \`::graph-*\` blocks from plain \`.md\`, and every figure has a fenced ASCII twin for GitHub.
+
+### **Why is my timeline empty?**
+
+Your \`mdx-components.tsx\` swaps \`li\` for its own component. Wrap the map in \`withMdxcn\`.
+
+</Faq>`,
+    react: tsx(
+      "faq",
+      "Faq",
+      `<Faq>
+  <h3>Is this an npm package?</h3>
+  <p>
+    No. The CLI copies the source into <code>registry/default</code>. You
+    own it.
+  </p>
+  <h3>Does it need MDX?</h3>
+  <p>
+    No. Comark reads <code>::graph-*</code> blocks from plain{" "}
+    <code>.md</code>, and every figure has a fenced ASCII twin for GitHub.
+  </p>
+  <h3>
+    <strong>Why is my timeline empty?</strong>
+  </h3>
+  <p>
+    Your <code>mdx-components.tsx</code> swaps <code>li</code> for its own
+    component. Wrap the map in <code>withMdxcn</code>.
+  </p>
+</Faq>`
+    ),
+    preview: (
+      <Faq>
+        <h3>Is this an npm package?</h3>
+        <p>
+          No. The CLI copies the source into <code>registry/default</code>. You
+          own it.
+        </p>
+        <h3>Does it need MDX?</h3>
+        <p>
+          No. Comark reads <code>::graph-*</code> blocks from plain{" "}
+          <code>.md</code>, and every figure has a fenced ASCII twin for GitHub.
+        </p>
+        <h3>
+          <strong>Why is my timeline empty?</strong>
+        </h3>
+        <p>
+          Your <code>mdx-components.tsx</code> swaps <code>li</code> for its own
+          component. Wrap the map in <code>withMdxcn</code>.
+        </p>
+      </Faq>
+    ),
+  },
+]
+
+const boardExamples: Example[] = [
+  {
+    title: "roadmap",
+    description:
+      "Each heading is a column. Bold is now, italic is next. `— note` sits under the item. Columns stack on small screens.",
+    code: `<GraphBoard title="ROADMAP">
+
+### Shipped
+- Callout, Steps, Terminal
+- Comark adapter
+
+### Now
+- **Children for every graph**
+- Board and Score — this drop
+
+### Later
+- *Figma kit*
+- *Vue port* — if someone asks twice
+
+</GraphBoard>`,
+    react: tsx(
+      "graph-board",
+      "GraphBoard",
+      `<GraphBoard title="ROADMAP">
+  <h3>Shipped</h3>
+  <ul>
+    <li>Callout, Steps, Terminal</li>
+    <li>Comark adapter</li>
+  </ul>
+  <h3>Now</h3>
+  <ul>
+    <li>
+      <strong>Children for every graph</strong>
+    </li>
+    <li>Board and Score — this drop</li>
+  </ul>
+  <h3>Later</h3>
+  <ul>
+    <li>
+      <em>Figma kit</em>
+    </li>
+    <li>
+      <em>Vue port</em> — if someone asks twice
+    </li>
+  </ul>
+</GraphBoard>`
+    ),
+    preview: (
+      <GraphBoard title="ROADMAP">
+        <h3>Shipped</h3>
+        <ul>
+          <li>Callout, Steps, Terminal</li>
+          <li>Comark adapter</li>
+        </ul>
+        <h3>Now</h3>
+        <ul>
+          <li>
+            <strong>Children for every graph</strong>
+          </li>
+          <li>Board and Score — this drop</li>
+        </ul>
+        <h3>Later</h3>
+        <ul>
+          <li>
+            <em>Figma kit</em>
+          </li>
+          <li>
+            <em>Vue port</em> — if someone asks twice
+          </li>
+        </ul>
+      </GraphBoard>
+    ),
+  },
+  {
+    title: "sprint",
+    code: `<GraphBoard title="SPRINT 14" palette="duo">
+
+### Todo
+- *Postmortem for the cache flag*
+
+### Doing
+- **Roll back cache.v2**
+
+### Done
+- Page the on-call
+- Freeze deploys
+
+</GraphBoard>`,
+    react: tsx(
+      "graph-board",
+      "GraphBoard",
+      `<GraphBoard title="SPRINT 14" palette="duo">
+  <h3>Todo</h3>
+  <ul>
+    <li>
+      <em>Postmortem for the cache flag</em>
+    </li>
+  </ul>
+  <h3>Doing</h3>
+  <ul>
+    <li>
+      <strong>Roll back cache.v2</strong>
+    </li>
+  </ul>
+  <h3>Done</h3>
+  <ul>
+    <li>Page the on-call</li>
+    <li>Freeze deploys</li>
+  </ul>
+</GraphBoard>`
+    ),
+    preview: (
+      <GraphBoard palette="duo" title="SPRINT 14">
+        <h3>Todo</h3>
+        <ul>
+          <li>
+            <em>Postmortem for the cache flag</em>
+          </li>
+        </ul>
+        <h3>Doing</h3>
+        <ul>
+          <li>
+            <strong>Roll back cache.v2</strong>
+          </li>
+        </ul>
+        <h3>Done</h3>
+        <ul>
+          <li>Page the on-call</li>
+          <li>Freeze deploys</li>
+        </ul>
+      </GraphBoard>
+    ),
+  },
+]
+
+const scoreExamples: Example[] = [
+  {
+    title: "review",
+    description:
+      "`label: value/max`. Halves draw a half dot. Bold the row that matters and the others recede.",
+    code: `<GraphScore title="REVIEW">
+
+- Performance: 4/5
+- Accessibility: 5/5
+- **Docs: 2.5/5**
+- Motion: 4/5
+
+</GraphScore>`,
+    react: tsx(
+      "graph-score",
+      "GraphScore",
+      `<GraphScore title="REVIEW">
+  <ul>
+    <li>Performance: 4/5</li>
+    <li>Accessibility: 5/5</li>
+    <li>
+      <strong>Docs: 2.5/5</strong>
+    </li>
+    <li>Motion: 4/5</li>
+  </ul>
+</GraphScore>`
+    ),
+    preview: (
+      <GraphScore title="REVIEW">
+        <ul>
+          <li>Performance: 4/5</li>
+          <li>Accessibility: 5/5</li>
+          <li>
+            <strong>Docs: 2.5/5</strong>
+          </li>
+          <li>Motion: 4/5</li>
+        </ul>
+      </GraphScore>
+    ),
+  },
+  {
+    title: "out of ten",
+    description:
+      "The /n in the first row sets the dots. Glyphs swap the marks.",
+    code: `<GraphScore title="VENDORS" glyphs="ascii">
+
+- Acme: 8/10
+- Globex: 6.5
+- Initech: 4
+
+</GraphScore>`,
+    react: tsx(
+      "graph-score",
+      "GraphScore",
+      `<GraphScore title="VENDORS" glyphs="ascii">
+  <ul>
+    <li>Acme: 8/10</li>
+    <li>Globex: 6.5</li>
+    <li>Initech: 4</li>
+  </ul>
+</GraphScore>`
+    ),
+    preview: (
+      <GraphScore glyphs="ascii" title="VENDORS">
+        <ul>
+          <li>Acme: 8/10</li>
+          <li>Globex: 6.5</li>
+          <li>Initech: 4</li>
+        </ul>
+      </GraphScore>
+    ),
+  },
+]
+
 export const examplesBySlug: Record<string, Example[]> = {
   callout: calloutExamples,
   quote: quoteExamples,
   steps: stepsExamples,
   terminal: terminalExamples,
   changelog: changelogExamples,
+  annotate: annotateExamples,
+  decision: decisionExamples,
+  chat: chatExamples,
+  env: envExamples,
+  endpoint: endpointExamples,
+  keys: keysExamples,
+  faq: faqExamples,
+  "graph-board": boardExamples,
+  "graph-score": scoreExamples,
   "graph-table": tableExamples,
   "graph-sheet": sheetExamples,
   "graph-flow": flowExamples,

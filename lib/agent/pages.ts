@@ -18,6 +18,15 @@ import {
 import { readSkillFile } from "@/lib/docs/skill-files"
 import { AGENTS_DESCRIPTION, DOCS_DESCRIPTION, SITE_URL } from "@/lib/site"
 import { COMARK_DESCRIPTION, COMARK_WIRE } from "@/lib/docs/comark"
+import { GRAMMAR_DESCRIPTION, grammarMarkdown } from "@/lib/docs/grammar"
+import {
+  MDX_BEFORE,
+  MDX_DESCRIPTION,
+  MDX_OPTIONS,
+  MDX_OVERRIDE,
+  MDX_WHY,
+  MDX_WIRE,
+} from "@/lib/docs/mdx-wiring"
 import {
   KNAP_API_URL,
   KNAP_DESCRIPTION,
@@ -84,7 +93,7 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
 ## mdx
 
-register the parent once in mdx-components.tsx. the mdx tab is the framed figure — copy it into notion or a readme.
+register the parent once in mdx-components.tsx. the .md tab is the framed figure — copy it into notion or a readme.
 
 ## agents
 
@@ -112,6 +121,41 @@ function examplesMarkdown(origin: string) {
     description:
       "Short write-ups with two graphs each. A refactor, an incident, a tradeoff, a pull request.",
     extra,
+  })
+}
+
+function grammarDocsMarkdown(origin: string) {
+  return pageMarkdown({
+    origin,
+    title: "grammar",
+    description: GRAMMAR_DESCRIPTION,
+    extra: grammarMarkdown(origin),
+  })
+}
+
+function mdxDocsMarkdown(origin: string) {
+  return pageMarkdown({
+    origin,
+    title: "mdx",
+    description: MDX_DESCRIPTION,
+    registry: "mdx",
+    extra: `## Wire
+
+${MDX_WIRE}
+
+## Upgrades
+
+${MDX_BEFORE}
+
+## Overrides
+
+${MDX_WHY}
+
+${MDX_OVERRIDE}
+
+## Options
+
+${MDX_OPTIONS}`,
   })
 }
 
@@ -317,6 +361,10 @@ export async function markdownForPath(path: string, origin = SITE_URL) {
       return installationMarkdown(host)
     case "/docs/examples":
       return examplesMarkdown(host)
+    case "/docs/grammar":
+      return grammarDocsMarkdown(host)
+    case "/docs/mdx":
+      return mdxDocsMarkdown(host)
     case "/docs/comark":
       return comarkDocsMarkdown(host)
     case "/comark":
@@ -351,6 +399,8 @@ export function knownMarkdownPaths() {
     "/docs",
     "/docs/installation",
     "/docs/examples",
+    "/docs/grammar",
+    "/docs/mdx",
     "/docs/comark",
     "/comark",
     "/docs/knap",

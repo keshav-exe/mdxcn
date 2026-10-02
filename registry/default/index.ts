@@ -4,9 +4,14 @@ export {
   cellsOf,
   childElements,
   childItems,
+  childrenOf,
   defineItem,
+  dropLead,
+  dropText,
+  elementsOf,
   Foot,
   fraction,
+  GRAPH_HOST_TAGS,
   Graph,
   GraphBody,
   GraphCorners,
@@ -18,10 +23,17 @@ export {
   GraphTitle,
   GraphTrack,
   Head,
+  isHost,
+  itemParts,
   linesOf,
+  listItems,
   numberOf,
   numbers,
   Row,
+  runs,
+  seriesOf,
+  sourceText,
+  takeText,
   textOf,
   words,
 } from "./graph-frame/graph-frame"
@@ -35,6 +47,15 @@ export { Quote } from "./quote/quote"
 export { Step, Steps } from "./steps/steps"
 export { Terminal } from "./terminal/terminal"
 export { Change, Changelog } from "./changelog/changelog"
+export { Annotate } from "./annotate/annotate"
+export { Decision } from "./decision/decision"
+export { Chat } from "./chat/chat"
+export { Env } from "./env/env"
+export { Endpoint } from "./endpoint/endpoint"
+export { Keys } from "./keys/keys"
+export { Faq } from "./faq/faq"
+export { withMdxcn, type MdxcnOptions } from "./mdx/mdx"
+export { Footnotes } from "./mdx/mdx-footnotes"
 export { GraphArrow } from "./graph-frame/graph-arrow"
 export {
   fadeUp,
@@ -69,6 +90,7 @@ export { GraphCheck, Task } from "./graph-check/graph-check"
 export { Bar, GraphStack, Segment } from "./graph-stack/graph-stack"
 export { GraphFunnel, Stage } from "./graph-funnel/graph-funnel"
 export { GraphGantt, Span } from "./graph-gantt/graph-gantt"
+export { GraphBoard } from "./graph-board/graph-board"
 export { GraphDiff, Line } from "./graph-diff/graph-diff"
 export { GraphPlot } from "./graph-plot/graph-plot"
 export { GraphWaffle } from "./graph-waffle/graph-waffle"
@@ -92,6 +114,7 @@ export { Delta, GraphWaterfall } from "./graph-waterfall/graph-waterfall"
 export { GraphUptime } from "./graph-uptime/graph-uptime"
 export { GraphSlope, Slope } from "./graph-slope/graph-slope"
 export { GraphBullet, Target } from "./graph-bullet/graph-bullet"
+export { GraphScore } from "./graph-score/graph-score"
 export { GraphTimer } from "./graph-timer/graph-timer"
 export { GraphCountdown } from "./graph-countdown/graph-countdown"
 export {

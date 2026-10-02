@@ -1,5 +1,6 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
@@ -8,6 +9,7 @@ import {
   GraphTick,
   GraphTrack,
   numbers,
+  seriesOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   DIM_OPACITY,
@@ -25,9 +27,11 @@ const SPARK_DEFAULT = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
 
 type GraphSparkProps = {
   title: string
-  /** `[2, 3, 4]` or `"2 3 4"`. Scaled to the max. */
-  data: number[] | string
+  /** `[2, 3, 4]` or `"2 3 4"`. Scaled to the max. Or write it as children. */
+  data?: number[] | string
   caption?: string
+  /** Markdown: `2 3 5 8 — caption`, or a list of `- Mon: 4` rows. */
+  children?: ReactNode
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
@@ -37,13 +41,17 @@ type GraphSparkProps = {
 function GraphSpark({
   title,
   data: dataProp,
-  caption,
+  caption: captionProp,
+  children,
   glyphs,
   palette,
   corner,
   className,
 }: GraphSparkProps) {
-  const data = numbers(dataProp)
+  const written = seriesOf(children)
+  const data = dataProp == null ? written.data : numbers(dataProp)
+  const caption =
+    captionProp ?? (dataProp == null ? written.caption : undefined)
   const reduce = useReducedMotion()
   const max = Math.max(...data, 1)
   const last = data.length - 1

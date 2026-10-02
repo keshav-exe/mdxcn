@@ -1,6 +1,8 @@
 import { fence } from "@/registry/default/graph-knap/frame"
+import { drawMarkdown } from "@/registry/default/graph-knap/markdown"
 import {
   asciiBars,
+  asciiBoard,
   asciiBullet,
   asciiCells,
   asciiCheck,
@@ -13,6 +15,7 @@ import {
   asciiMatrix,
   asciiMeter,
   asciiRank,
+  asciiScore,
   asciiSheet,
   asciiSlope,
   asciiSpark,
@@ -37,7 +40,34 @@ import { toComarkBlock } from "@/registry/default/graph-knap/yaml"
 
 type Draw = (props: never) => string
 
+/** Content blocks draw from their Markdown `body`, like the docs MDX tab. */
+function fromBody(tag: string): Draw {
+  return ((props: Record<string, unknown>) => {
+    const attrs: Record<string, string> = {}
+    for (const [key, value] of Object.entries(props)) {
+      if (key === "body" || value == null) continue
+      attrs[key] = typeof value === "string" ? value : String(value)
+    }
+    const body = typeof props.body === "string" ? props.body : ""
+    return drawMarkdown(tag, attrs, body)
+  }) as Draw
+}
+
 const ASCII: Record<string, Draw> = {
+  callout: fromBody("Callout"),
+  quote: fromBody("Quote"),
+  steps: fromBody("Steps"),
+  terminal: fromBody("Terminal"),
+  changelog: fromBody("Changelog"),
+  annotate: fromBody("Annotate"),
+  decision: fromBody("Decision"),
+  chat: fromBody("Chat"),
+  env: fromBody("Env"),
+  endpoint: fromBody("Endpoint"),
+  keys: fromBody("Keys"),
+  faq: fromBody("Faq"),
+  "graph-board": asciiBoard as Draw,
+  "graph-score": asciiScore as Draw,
   "graph-table": asciiTable as Draw,
   "graph-sheet": asciiSheet as Draw,
   "graph-bars": asciiBars as Draw,
@@ -66,6 +96,18 @@ const ASCII: Record<string, Draw> = {
 }
 
 export const GRAPH_FILTER_SLUGS = [
+  "callout",
+  "quote",
+  "steps",
+  "terminal",
+  "changelog",
+  "annotate",
+  "decision",
+  "chat",
+  "env",
+  "endpoint",
+  "keys",
+  "faq",
   "graph-table",
   "graph-sheet",
   "graph-invoice",
@@ -96,6 +138,8 @@ export const GRAPH_FILTER_SLUGS = [
   "graph-timeline",
   "graph-gantt",
   "graph-check",
+  "graph-board",
+  "graph-score",
   "graph-timer",
   "graph-countdown",
 ] as const
@@ -144,6 +188,18 @@ function makeFilter(slug: GraphFilterSlug): GraphFilter {
 }
 
 export const graphFilters = {
+  graph_callout: makeFilter("callout"),
+  graph_quote: makeFilter("quote"),
+  graph_steps: makeFilter("steps"),
+  graph_terminal: makeFilter("terminal"),
+  graph_changelog: makeFilter("changelog"),
+  graph_annotate: makeFilter("annotate"),
+  graph_decision: makeFilter("decision"),
+  graph_chat: makeFilter("chat"),
+  graph_env: makeFilter("env"),
+  graph_endpoint: makeFilter("endpoint"),
+  graph_keys: makeFilter("keys"),
+  graph_faq: makeFilter("faq"),
   graph_table: makeFilter("graph-table"),
   graph_sheet: makeFilter("graph-sheet"),
   graph_invoice: makeFilter("graph-invoice"),
@@ -174,6 +230,8 @@ export const graphFilters = {
   graph_timeline: makeFilter("graph-timeline"),
   graph_gantt: makeFilter("graph-gantt"),
   graph_check: makeFilter("graph-check"),
+  graph_board: makeFilter("graph-board"),
+  graph_score: makeFilter("graph-score"),
   graph_timer: makeFilter("graph-timer"),
   graph_countdown: makeFilter("graph-countdown"),
 } as const

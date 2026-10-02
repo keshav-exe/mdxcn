@@ -8,8 +8,17 @@ import {
 } from "@/registry/default/graph-comark/adapters"
 import { fromMarkdown } from "@/registry/default/graph-comark/from-markdown"
 import { GraphRow } from "@/registry/default/graph-comark/layout"
+import { Annotate } from "@/registry/default/annotate/annotate"
+import { Callout } from "@/registry/default/callout/callout"
+import { Changelog } from "@/registry/default/changelog/changelog"
+import { Chat } from "@/registry/default/chat/chat"
+import { Decision } from "@/registry/default/decision/decision"
+import { Endpoint } from "@/registry/default/endpoint/endpoint"
+import { Env } from "@/registry/default/env/env"
+import { Faq } from "@/registry/default/faq/faq"
 import { GraphActivity } from "@/registry/default/graph-activity/graph-activity"
 import { GraphBars } from "@/registry/default/graph-bars/graph-bars"
+import { GraphBoard } from "@/registry/default/graph-board/graph-board"
 import { GraphBullet } from "@/registry/default/graph-bullet/graph-bullet"
 import { GraphCalendar } from "@/registry/default/graph-calendar/graph-calendar"
 import { GraphCells } from "@/registry/default/graph-cells/graph-cells"
@@ -27,6 +36,7 @@ import { GraphMatrix } from "@/registry/default/graph-matrix/graph-matrix"
 import { GraphMeter } from "@/registry/default/graph-meter/graph-meter"
 import { GraphPlot } from "@/registry/default/graph-plot/graph-plot"
 import { GraphRank } from "@/registry/default/graph-rank/graph-rank"
+import { GraphScore } from "@/registry/default/graph-score/graph-score"
 import { GraphSheet } from "@/registry/default/graph-sheet/graph-sheet"
 import { GraphSlope } from "@/registry/default/graph-slope/graph-slope"
 import { GraphSpark } from "@/registry/default/graph-spark/graph-spark"
@@ -40,6 +50,10 @@ import { GraphTree } from "@/registry/default/graph-tree/graph-tree"
 import { GraphUptime } from "@/registry/default/graph-uptime/graph-uptime"
 import { GraphWaffle } from "@/registry/default/graph-waffle/graph-waffle"
 import { GraphWaterfall } from "@/registry/default/graph-waterfall/graph-waterfall"
+import { Keys } from "@/registry/default/keys/keys"
+import { Quote } from "@/registry/default/quote/quote"
+import { Steps } from "@/registry/default/steps/steps"
+import { Terminal } from "@/registry/default/terminal/terminal"
 
 type AnyGraph = ComponentType<Record<string, unknown>>
 
@@ -64,6 +78,18 @@ export function createGraphComponents(installed: GraphComponentMap) {
 
 /** Full tag map after `shadcn add …/r/all.json`. Same shape as the demo repo. */
 export const graphComponents = createGraphComponents({
+  callout: Callout,
+  quote: Quote,
+  steps: Steps,
+  terminal: Terminal,
+  changelog: Changelog,
+  annotate: Annotate,
+  decision: Decision,
+  chat: Chat,
+  env: Env,
+  endpoint: Endpoint,
+  keys: Keys,
+  faq: Faq,
   "graph-table": GraphTable,
   "graph-sheet": GraphSheet,
   "graph-invoice": GraphInvoice,
@@ -94,6 +120,8 @@ export const graphComponents = createGraphComponents({
   "graph-timeline": GraphTimeline,
   "graph-gantt": GraphGantt,
   "graph-check": GraphCheck,
+  "graph-board": GraphBoard,
+  "graph-score": GraphScore,
   "graph-timer": GraphTimer,
   "graph-countdown": GraphCountdown,
 } as GraphComponentMap)

@@ -1,8 +1,16 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  Graph,
+  GraphBody,
+  listItems,
+  numbers,
+  sourceText,
+  splitLabel,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
   intensityClass,
@@ -45,7 +53,13 @@ type ActivityCell = {
 
 type GraphActivityProps = {
   title: string
-  days: ActivityDay[]
+  /** `{ date, count }` per day. Or write the counts as children. */
+  days?: ActivityDay[]
+  /**
+   * Markdown. One row per run of days: `- 2026-03-02: 0 1 4 2 0*5 3`. Counts
+   * go day by day from the date.
+   */
+  children?: ReactNode
   weekStartsOn?: 0 | 1
   max?: number
   legend?: boolean
@@ -63,6 +77,27 @@ function parseUTC(iso: string) {
 
 function toISO(utc: number) {
   return new Date(utc).toISOString().slice(0, 10)
+}
+
+/** `2026-03-02: 0 1 4` → three days from Mar 2. */
+function daysOf(children: ReactNode): ActivityDay[] {
+  const listed = listItems(children)
+  const rows =
+    listed.length > 0
+      ? listed.map((item) => sourceText(item).trim())
+      : sourceText(children).split("\n")
+
+  return rows.flatMap((row) => {
+    const { label, rest } = splitLabel(row)
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(label)) {
+      return []
+    }
+    const start = parseUTC(label)
+    return numbers(rest).map((count, index) => ({
+      date: toISO(start + index * DAY_MS),
+      count,
+    }))
+  })
 }
 
 function buildWeeks(days: ActivityDay[], weekStartsOn: 0 | 1) {
@@ -162,7 +197,8 @@ function IntensityScale({
 
 function GraphActivity({
   title,
-  days,
+  days: daysProp,
+  children,
   weekStartsOn = 0,
   max,
   legend = true,
@@ -175,6 +211,7 @@ function GraphActivity({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.01)
+  const days = daysProp ?? daysOf(children)
   const weeks = buildWeeks(days, weekStartsOn)
   const months = monthLabels(weeks)
   const labels = dayLabels(weekStartsOn)

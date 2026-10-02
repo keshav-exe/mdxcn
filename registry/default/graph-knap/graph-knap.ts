@@ -11,6 +11,8 @@
  *   })
  *
  * Piped value is the graph props object (same shape as the React API).
+ * Content filters (graph_callout, graph_steps, …) take a Markdown string, or
+ * `{ ...props, body }` — the body uses the same grammar as MDX children.
  * A string param is the title. Pass "comark" to emit a ::graph-* block
  * instead of the fenced ASCII. Graphs with no ASCII (flow, plot, …) emit
  * Comark YAML by default.
@@ -26,6 +28,7 @@ export {
   type GraphFilterSlug,
 } from "@/registry/default/graph-knap/filters"
 export {
+  CONTENT_SLUGS,
   filterName,
   GRAPH_VALUE_KEY,
   type GraphFilter,

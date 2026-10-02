@@ -1,5 +1,6 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
@@ -7,6 +8,7 @@ import {
   GraphBody,
   GraphRule,
   numbers,
+  seriesOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   clamp01,
@@ -21,9 +23,11 @@ import { cn } from "@/lib/utils"
 
 type GraphPlotProps = {
   title: string
-  /** `[2, 3, 4]` or `"2 3 4"`. One value per column. */
-  data: number[] | string
+  /** `[2, 3, 4]` or `"2 3 4"`. One value per column. Or write it as children. */
+  data?: number[] | string
   labels?: string[]
+  /** Markdown: `2 3 5 8`, or a list of `- Mon: 4` rows (labels kept). */
+  children?: ReactNode
   height?: number
   variant?: "line" | "area"
   progress?: number
@@ -44,7 +48,8 @@ function formatTick(value: number) {
 function GraphPlot({
   title,
   data: dataProp,
-  labels,
+  labels: labelsProp,
+  children,
   height = 7,
   variant = "area",
   progress = 1,
@@ -53,7 +58,10 @@ function GraphPlot({
   corner,
   className,
 }: GraphPlotProps) {
-  const data = numbers(dataProp)
+  const written = seriesOf(children)
+  const data = dataProp == null ? written.data : numbers(dataProp)
+  const labels =
+    labelsProp ?? (written.labels.length > 0 ? written.labels : undefined)
   const reduce = useReducedMotion()
   const max = Math.max(...data, 0)
   const min = Math.min(0, ...data)

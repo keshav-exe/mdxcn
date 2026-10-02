@@ -1,6 +1,6 @@
 "use client"
 
-import { Children, isValidElement, type ReactNode } from "react"
+import { isValidElement, type ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
@@ -9,8 +9,10 @@ import {
   Graph,
   GraphBody,
   isHost,
+  itemParts,
   itemText,
   listItems,
+  childNodes,
   splitDash,
   textOf,
 } from "@/registry/default/graph-frame/graph-frame"
@@ -27,6 +29,8 @@ type CheckItem = {
   label?: string
   done?: boolean
   note?: string
+  /** Sub-tasks. A nested list in Markdown. */
+  items?: CheckItem[]
 }
 
 type GraphCheckProps = {
@@ -43,9 +47,9 @@ type GraphCheckProps = {
 const Task = defineItem<CheckItem>("Task")
 
 function checksOf(children: ReactNode): CheckItem[] {
-  const listed = listItems(children).map((item) => {
+  const listed = listItems(children).map((item): CheckItem => {
     const content = (item.props as { children?: ReactNode }).children
-    const box = Children.toArray(content).find(
+    const box = childNodes(content).find(
       (child) =>
         isValidElement(child) &&
         isHost(child, "input") &&
@@ -59,7 +63,13 @@ function checksOf(children: ReactNode): CheckItem[] {
         Boolean((box.props as { checked?: boolean }).checked))
     const label = text.replace(/^\s*\[[xX ]\]\s*/, "")
     const { label: name, rest } = splitDash(label)
-    return { label: name, done, note: rest || undefined }
+    const nested = itemParts(item).lists.flatMap((list) => checksOf(list))
+    return {
+      label: name,
+      done,
+      note: rest || undefined,
+      items: nested.length > 0 ? nested : undefined,
+    }
   })
   if (listed.length > 0) {
     return listed
@@ -69,6 +79,62 @@ function checksOf(children: ReactNode): CheckItem[] {
     ...entry,
     label: entry.label ?? textOf(entry.children),
   }))
+}
+
+function flatten(items: CheckItem[]): CheckItem[] {
+  return items.flatMap((entry) => [entry, ...flatten(entry.items ?? [])])
+}
+
+function CheckRow({
+  entry,
+  palette,
+  variants,
+  nested = false,
+}: {
+  entry: CheckItem
+  palette?: GraphPalette
+  variants?: ReturnType<typeof fadeUp>
+  nested?: boolean
+}) {
+  const done = Boolean(entry.done)
+  const Row = nested ? "li" : motion.li
+
+  return (
+    <Row
+      className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-baseline gap-x-3"
+      {...(nested ? {} : { variants })}
+    >
+      <span
+        aria-hidden="true"
+        className={cn(
+          "select-none",
+          done ? toneClass(palette, "primary") : "text-graph-muted"
+        )}
+      >
+        {done ? "[x]" : "[ ]"}
+      </span>
+      <span className="flex min-w-0 flex-col gap-1">
+        <span className={done ? "text-foreground" : "text-graph-muted"}>
+          {entry.label}
+        </span>
+        {entry.note ? (
+          <span className="text-graph-muted">{entry.note}</span>
+        ) : null}
+        {entry.items?.length ? (
+          <ul className="mt-1 flex flex-col gap-2" role="list">
+            {entry.items.map((child) => (
+              <CheckRow
+                entry={child}
+                key={child.label}
+                nested
+                palette={palette}
+              />
+            ))}
+          </ul>
+        ) : null}
+      </span>
+    </Row>
+  )
 }
 
 function GraphCheck({
@@ -82,10 +148,8 @@ function GraphCheck({
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
-  const items = (itemsProp ?? checksOf(children)).map((entry) => ({
-    ...entry,
-    label: entry.label ?? "",
-  }))
+  const items = itemsProp ?? checksOf(children)
+  const flat = flatten(items)
 
   return (
     <Graph title={title} className={className} corner={corner}>
@@ -98,41 +162,17 @@ function GraphCheck({
           viewport={{ once: true, amount: 0.4 }}
           whileInView="show"
         >
-          {items.map((entry) => {
-            const done = Boolean(entry.done)
-            const mark = done ? "[x]" : "[ ]"
-
-            return (
-              <motion.li
-                className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-baseline gap-x-3"
-                key={entry.label}
-                variants={item}
-              >
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "select-none",
-                    done ? toneClass(palette, "primary") : "text-graph-muted"
-                  )}
-                >
-                  {mark}
-                </span>
-                <span className="flex min-w-0 flex-col gap-1">
-                  <span
-                    className={done ? "text-foreground" : "text-graph-muted"}
-                  >
-                    {entry.label}
-                  </span>
-                  {entry.note ? (
-                    <span className="text-graph-muted">{entry.note}</span>
-                  ) : null}
-                </span>
-              </motion.li>
-            )
-          })}
+          {items.map((entry) => (
+            <CheckRow
+              entry={entry}
+              key={entry.label}
+              palette={palette}
+              variants={item}
+            />
+          ))}
         </motion.ul>
         <span className="sr-only">
-          {items.filter((entry) => entry.done).length} of {items.length} done
+          {flat.filter((entry) => entry.done).length} of {flat.length} done
         </span>
       </GraphBody>
     </Graph>

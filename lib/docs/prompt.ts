@@ -33,7 +33,7 @@ Chooser
 - overlapping work this week → GraphGantt
 
 Host
-- Notion, Linear, a README → the framed ASCII from the docs MDX tab. Keep the fence so the + corners stay aligned. That is the figure, not the inner list.
+- Notion, Linear, a README → the framed ASCII from the docs .md tab. Keep the fence so the + corners stay aligned. That is the figure, not the inner list.
 - React, or MDX that can register the parent → wrap markdown children in the parent tag. Register the parent once in mdx-components.tsx. No extra child imports.
 - Plain Markdown (README, GitHub, PR comments) → same framed ASCII from /llms.txt ## MDX, or the docs Markdown tab. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
 - Comark app (plain .md the app renders) → ::graph-* block from /llms.txt ## Comark, or the docs Comark tab. YAML props match the React API. Do not paste JSX. GitHub still gets fenced ASCII.
@@ -90,7 +90,7 @@ ${DESIGN_AND_MOOD}`
   }
 
   const usage = example
-    ? `\nUsage\n\nThe docs .mdx tab is the framed figure — dashed box, [ TITLE ], glyphs. Paste that into Notion or a README. Keep the fence. Register the parent once in mdx-components.tsx and wrap markdown children when you want it live.\n\n${toMdxCopy(example)}\n`
+    ? `\nUsage\n\nThe docs .md tab is the framed figure — dashed box, [ TITLE ], glyphs. Paste that into Notion or a README. Keep the fence. Register the parent once in mdx-components.tsx and wrap markdown children when you want it live.\n\n${toMdxCopy(example)}\n`
     : `\nImport\n\nimport { ${doc.name} } from "@/registry/default/${registry}/${registry}"\n`
 
   return `Install ${doc.name} (${doc.title}) from mdxcn into this shadcn project.

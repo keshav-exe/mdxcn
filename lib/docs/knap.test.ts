@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import { components } from "@/lib/docs/catalog"
 import { knapExample, isKnapSlug } from "@/lib/docs/knap"
 import {
+  filterName,
   GRAPH_FILTER_SLUGS,
   graphFilterMetadata,
   graphFilterNames,
@@ -161,13 +162,16 @@ describe("knap engine", () => {
 })
 
 describe("knapExample", () => {
-  it("covers every graph except frame", () => {
+  it("covers every component except frame", () => {
     expect(graphFilterNames.length).toBe(GRAPH_FILTER_SLUGS.length)
     expect(new Set(graphFilterNames)).toEqual(
-      new Set(GRAPH_FILTER_SLUGS.map((slug) => slug.replaceAll("-", "_")))
+      new Set(GRAPH_FILTER_SLUGS.map((slug) => filterName(slug)))
     )
+    for (const name of graphFilterNames) {
+      expect(name.startsWith("graph_"), name).toBe(true)
+    }
     for (const item of components) {
-      if (item.slug === "graph-frame" || !item.slug.startsWith("graph-")) {
+      if (item.slug === "graph-frame") {
         expect(isKnapSlug(item.slug)).toBe(false)
         continue
       }

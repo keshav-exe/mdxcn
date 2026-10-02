@@ -17,6 +17,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/docs",
     "/docs/installation",
     "/docs/examples",
+    "/docs/grammar",
+    "/docs/mdx",
     "/docs/comark",
     "/docs/knap",
     "/docs/skill",

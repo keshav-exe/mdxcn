@@ -1,13 +1,16 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  firstToken,
   fraction,
   Graph,
   GraphBody,
   GraphTick,
   GraphTrack,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fillDelay,
@@ -21,10 +24,12 @@ import { cn } from "@/lib/utils"
 
 type GraphMeterProps = {
   title: string
-  /** `0.67`, `"0.67"`, or `"67%"`. */
-  value: number | string
+  /** `0.67`, `"0.67"`, or `"67%"`. Or write `67% used` as children. */
+  value?: number | string
   ticks?: number
   caption?: string
+  /** Markdown: the value, then the caption. `67% — of the disk`. */
+  children?: ReactNode
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
@@ -35,13 +40,20 @@ function GraphMeter({
   title,
   value: valueProp,
   ticks = 14,
-  caption,
+  caption: captionProp,
+  children,
   glyphs,
   palette,
   corner,
   className,
 }: GraphMeterProps) {
-  const value = fraction(valueProp)
+  const written = firstToken(textOf(children).replace(/\s+/g, " ").trim())
+  const value = fraction(valueProp ?? written.token)
+  const caption =
+    captionProp ??
+    (valueProp == null
+      ? written.rest.replace(/^[—–-]\s*/, "") || undefined
+      : undefined)
   const reduce = useReducedMotion()
   const clamped = Math.min(1, Math.max(0, value))
   const filled = Math.round(clamped * ticks)

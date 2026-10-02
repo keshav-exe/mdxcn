@@ -236,7 +236,7 @@ export function recipesMarkdown(origin = SITE_URL) {
 
   return `## Recipes
 
-Two graphs per write-up is enough. Prose between them. Copy the framed ASCII from the examples MDX tab into Notion or a README. Wrap markdown children in the parent when the host can register components. Comark: ## Comark.
+Two graphs per write-up is enough. Prose between them. Copy the framed ASCII from the examples .md tab into Notion or a README. Wrap markdown children in the parent when the host can register components. Comark: ## Comark.
 
 ${lines.join("\n")}
 

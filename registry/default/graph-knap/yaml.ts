@@ -92,10 +92,16 @@ export function toYaml(value: Record<string, unknown>) {
   return yamlObject(value, 0)
 }
 
+/**
+ * A `::tag` block. `body` is Markdown and goes inside the block, after the
+ * YAML — the same grammar MDX children use.
+ */
 export function toComarkBlock(tag: string, props: Record<string, unknown>) {
-  const yaml = toYaml(props).trimEnd()
+  const { body, ...rest } = props
+  const yaml = toYaml(rest).trimEnd()
+  const text = typeof body === "string" && body.trim() ? `${body.trim()}\n` : ""
   if (!yaml) {
-    return `::${tag}\n::`
+    return `::${tag}\n${text}::`
   }
-  return `::${tag}\n---\n${yaml}\n---\n::`
+  return `::${tag}\n---\n${yaml}\n---\n${text}::`
 }

@@ -1,8 +1,14 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  Graph,
+  GraphBody,
+  splitDash,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   formatHms,
   parseInstant,
@@ -17,9 +23,12 @@ import { cn } from "@/lib/utils"
 
 type GraphCountdownProps = {
   title: string
-  to: Date | number | string
+  /** Or write it as children. */
+  to?: Date | number | string
   done?: string
   caption?: string
+  /** Markdown: the instant, then the caption. `2026-12-01 — until launch`. */
+  children?: ReactNode
   palette?: GraphPalette
   corner?: string
   className?: string
@@ -27,9 +36,10 @@ type GraphCountdownProps = {
 
 function GraphCountdown({
   title,
-  to,
+  to: toProp,
   done = "done",
-  caption,
+  caption: captionProp,
+  children,
   palette,
   corner,
   className,
@@ -37,7 +47,10 @@ function GraphCountdown({
   const reduce = useReducedMotion()
   const enter = fadeUp(reduce)
   const now = useGraphNow()
-  const target = parseInstant(to)
+  const written = splitDash(textOf(children).replace(/\s+/g, " ").trim())
+  const to = toProp ?? written.label
+  const caption = captionProp ?? (written.rest || undefined)
+  const target = to ? parseInstant(to) : Number.NaN
   const remaining =
     now == null || !Number.isFinite(target) ? null : target - now
   const finished = remaining != null && remaining <= 0

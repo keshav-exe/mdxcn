@@ -8,9 +8,11 @@ import {
   defineItem,
   Graph,
   GraphBody,
+  GraphProse,
   hasHost,
-  itemText,
+  itemParts,
   listItems,
+  splitDash,
   splitLabel,
   textOf,
 } from "@/registry/default/graph-frame/graph-frame"
@@ -29,6 +31,8 @@ type TimelineEvent = {
   /** Falls back to the child text: `<Event date="14:02">p95 crossed</Event>`. */
   label?: string
   state?: TimelineState
+  /** Muted, under the label. `— note` in a list item, or its body paragraphs. */
+  note?: ReactNode
 }
 
 type GraphTimelineProps = {
@@ -62,14 +66,16 @@ function GraphTimeline({
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
   const listed = listItems(children).map((item) => {
-    const text = itemText(item)
+    const { head, body } = itemParts(item)
+    const text = textOf(head).replace(/\s+/g, " ").trim()
     const { label: date, rest } = splitLabel(text)
-    const content = (item.props as { children?: ReactNode }).children
-    const now = hasHost(content, ["strong", "b"])
-    const next = !now && hasHost(content, ["em", "i"])
+    const { label, rest: aside } = splitDash(rest || date)
+    const now = hasHost(head, ["strong", "b"])
+    const next = !now && hasHost(head, ["em", "i"])
     return {
       date,
-      label: rest || date,
+      label,
+      note: body.length > 0 ? body : aside || undefined,
       state: (now ? "now" : next ? "next" : "done") as TimelineState,
     }
   })
@@ -125,14 +131,21 @@ function GraphTimeline({
                   >
                     {event.date}
                   </span>
-                  <span
-                    className={cn(
-                      live && toneClass(palette, "primary"),
-                      state === "done" && "text-foreground",
-                      state === "next" && toneClass(palette, "secondary")
-                    )}
-                  >
-                    {event.label}
+                  <span className="flex min-w-0 flex-col gap-1">
+                    <span
+                      className={cn(
+                        live && toneClass(palette, "primary"),
+                        state === "done" && "text-foreground",
+                        state === "next" && toneClass(palette, "secondary")
+                      )}
+                    >
+                      {event.label}
+                    </span>
+                    {event.note ? (
+                      <GraphProse className="text-graph-muted">
+                        {event.note}
+                      </GraphProse>
+                    ) : null}
                   </span>
                 </div>
                 {last ? null : (

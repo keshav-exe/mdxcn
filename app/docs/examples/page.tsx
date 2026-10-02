@@ -20,7 +20,7 @@ export const metadata: Metadata = pageMeta({
 })
 
 const extra = [
-    "## examples",
+  "## examples",
   "",
   ...recipes.flatMap((item) => [
     `### ${item.title}`,
@@ -62,7 +62,7 @@ export default function ExamplesPage() {
         }}
         lead={
           <ProseLead>
-            short write-ups with two graphs each. copy the mdx tab — it is the
+            short write-ups with two graphs each. copy the .md tab — it is the
             framed figure. paste it into notion or a readme and the drawing is
             still there. each graph has its own page if you want the props.
           </ProseLead>
@@ -84,7 +84,7 @@ export default function ExamplesPage() {
       </DocsPageHeader>
 
       <Callout type="tip">
-        copy is the framed figure from the mdx tab. paste it into notion or a
+        copy is the framed figure from the .md tab. paste it into notion or a
         readme and the drawing is still there.
       </Callout>
 

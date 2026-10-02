@@ -7,6 +7,7 @@ import { DocsPageHeader } from "@/components/docs/page-header"
 import { MonoLabel } from "@/components/docs/mono-label"
 import { JsonLd } from "@/components/seo/json-ld"
 import { SiteCorners, SiteMark, SiteRule } from "@/components/site/corners"
+import { TextLink } from "@/components/site/prose"
 import {
   components,
   componentsByCategory,
@@ -25,7 +26,7 @@ export const metadata: Metadata = pageMeta({
   path: "/docs",
 })
 
-const intro = `register the parent once in mdx-components.tsx. the .mdx tab is the framed figure — copy it into notion, linear, a readme. the .tsx tab is the react. wrap the same content in the parent when you want it live.`
+const intro = `register the parent once in mdx-components.tsx. the .mdx tab is what you write — markdown inside the tag. the .md tab is the framed figure — copy it into notion, linear, a readme. the .tsx tab is the react. wrap the same content in the parent when you want it live.`
 
 export default function DocsPage() {
   const groups = componentsByCategory()
@@ -97,9 +98,10 @@ export default function DocsPage() {
       </DocsPageHeader>
 
       <Callout type="tip">
-        the mdx tab is the drawing: dashed frame, title, glyphs. copy that into
-        notion or a readme and the figure is still there. react is the other
-        tab. register the parent once to render it live.
+        the .mdx tab is what you write: markdown inside the tag. the .md tab is
+        the drawing — dashed frame, title, glyphs. copy that into notion or a
+        readme and the figure is still there. the rules are on{" "}
+        <TextLink href="/docs/grammar">grammar</TextLink>.
       </Callout>
 
       <div className="flex flex-col gap-4">
@@ -144,8 +146,8 @@ export default function DocsPage() {
                         "sm:[&:nth-child(n+3)]:border-t sm:[&:nth-child(n+3)]:border-dashed sm:[&:nth-child(n+3)]:border-site-rail",
                         "sm:[&:nth-child(odd)]:border-r sm:[&:nth-child(odd)]:border-dashed sm:[&:nth-child(odd)]:border-site-rail",
                         group.items.length % 2 === 1 &&
-                        index === group.items.length - 1 &&
-                        "sm:col-span-2 sm:[&:nth-child(odd)]:border-r-0"
+                          index === group.items.length - 1 &&
+                          "sm:col-span-2 sm:[&:nth-child(odd)]:border-r-0"
                       )}
                     >
                       <div className="flex flex-col gap-2">

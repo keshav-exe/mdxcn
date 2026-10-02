@@ -17,6 +17,7 @@ Nested agent notes:
 - [`registry/default/AGENTS.md`](registry/default/AGENTS.md) — how to build a graph
 - [`lib/docs/AGENTS.md`](lib/docs/AGENTS.md) — catalog, examples, recipes, **New** marks, OG, ASCII/MDX
 - [`skills/mdxcn/SKILL.md`](skills/mdxcn/SKILL.md) — Agent Skills file; copy into `.cursor/skills`, `.claude/skills`, `.agents/skills`, or `.opencode/skills`
+- [`lib/docs/grammar.ts`](lib/docs/grammar.ts) — the Markdown every component reads; drives `/docs/grammar`, `/llms.txt`, and the skill
 
 ## Adding a graph
 
@@ -33,7 +34,9 @@ Do the full list. Docs pages are generated from the catalog; there is no per-com
 9. fenced ASCII in `registry/default/graph-knap/graphs.ts` + `MDX_SLUGS` if the figure is a character grid (see `lib/docs/AGENTS.md`)
 10. Comark: `COMARK_PROPS` in `lib/docs/comark-props.ts` and `numeric` / `required` in `registry/default/graph-comark/adapters.ts`. Do not add a catalog row for `graph-comark`.
 11. Knap: `GRAPH_VALUE_KEY` / `ASCII` / `GRAPH_FILTER_SLUGS` in `graph-knap` (`props.ts`, `filters.ts`). Do not add a catalog row for `graph-knap`.
-12. `pnpm registry:build` so `public/r/` matches source
+12. Grammar: read children with the shared rules (`graph-frame/graph-markdown.ts` — `listItems`, `itemParts`, `splitLabel`, `splitDash`, `hasHost`, `seriesOf`, `runs`). Bold is now / accent, italic is next / recedes, `— note` is a side note. A new rule gets a row in `lib/docs/grammar.ts`. Mirror it in the string parser `registry/default/graph-knap/markdown.ts` so the ASCII matches.
+13. `pnpm test` — `lib/docs/mdx-render.test.tsx` compiles every docs example through real MDX + GFM and checks it against the preview, with and without swapped tags. A preview that does not match its `code` fails. JS-only examples set `source: "tsx"`.
+14. `pnpm registry:build` so `public/r/` matches source
 
 OG is one shared route: `app/opengraph-image.tsx` renders via `lib/og/opengraph.tsx` (`ImageResponse` at build time). Font: `lib/og/geist-mono-latin-400-normal.ttf` (official Geist Mono — fontsource subsets break satori). Alt text in `app/opengraph-image.alt.txt`. No per-page OG files. Mark geometry lives in `lib/og/mark.tsx`.
 
@@ -54,6 +57,9 @@ OG is one shared route: `app/opengraph-image.tsx` renders via `lib/og/opengraph.
 - `"use client"` on graphs that use motion.
 - Every graph forwards `corner?: string` to `Graph`. Drawing graphs also take `glyphs?: Glyphs` and `palette?: GraphPalette`.
 - Shared helpers live in `graph-frame` (`graph-motion.ts`). Don’t couple intensity legends into the frame — keep them in the drawing component.
+- Markdown parsing helpers live in `graph-frame/graph-markdown.ts` with no `"use client"`, so a server `mdx-components.tsx` (`registry/default/mdx/mdx.tsx`) can call them. `graph-frame.tsx` re-exports them.
+- Content components (`callout`, `steps`, `chat`, …) are unprefixed; drawing graphs are `graph-*`. Knap filters are always `graph_*` (`graph_callout`) — Knap ships its own `callout`.
+- Glyph gutters: `1.25rem` for a single mark (`●`, `*`, `?`, `>`), `2.5rem` for numbers or tags (`01`, `[x]`, `[1]`). `*` in the accent is required.
 
 ## Commands
 

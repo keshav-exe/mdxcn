@@ -5,7 +5,12 @@ import { Command, InstallCommand } from "@/components/docs/install"
 import { DocsPageHeader } from "@/components/docs/page-header"
 import { NamespaceSetup } from "@/components/docs/namespace"
 import { JsonLd } from "@/components/seo/json-ld"
-import { InlineCode, ProseLead, ProseP, TextLink } from "@/components/site/prose"
+import {
+  InlineCode,
+  ProseLead,
+  ProseP,
+  TextLink,
+} from "@/components/site/prose"
 import { COMARK_URL } from "@/lib/docs/comark"
 import { KNAP_URL } from "@/lib/docs/knap"
 import { getComponent } from "@/lib/docs/catalog"
@@ -51,7 +56,7 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
 ## mdx
 
-register the parent once in mdx-components.tsx. the mdx tab is the framed figure — copy it into notion or a readme. wrap the children in the parent when you want it live.
+register the parent once in mdx-components.tsx. the .md tab is the framed figure — copy it into notion or a readme. wrap the children in the parent when you want it live.
 
 ## agents
 
@@ -131,15 +136,16 @@ export default function InstallationPage() {
           <h2 className="text-xl font-semibold tracking-tight">mdx</h2>
           <ProseP>
             register the parent once. lists and tables inside the tag do not
-            need extra imports. the mdx tab is the framed figure — paste that
+            need extra imports. the .md tab is the framed figure — paste that
             into notion or a readme. wrap the children in the parent when you
             want it live.
           </ProseP>
           <Callout type="tip">
             register the parent once in{" "}
-            <InlineCode>mdx-components.tsx</InlineCode>. the mdx tab is the
-            framed drawing. copy that into notion or a readme. react is the
-            other tab.
+            <InlineCode>mdx-components.tsx</InlineCode> and wrap the map in{" "}
+            <TextLink href="/docs/mdx">withMdxcn</TextLink> — tags your docs
+            framework swaps still parse. the .mdx tab is what you write; the .md
+            tab is the framed drawing for notion or a readme.
           </Callout>
           <Steps title="mdx">
             <ol>
@@ -161,7 +167,7 @@ export default function InstallationPage() {
                   <em>paste</em>
                 </p>
                 <p>
-                  the mdx tab is the framed figure. paste it into notion or a
+                  the .md tab is the framed figure. paste it into notion or a
                   readme. wrap the children in the parent when you want it live.
                 </p>
               </li>

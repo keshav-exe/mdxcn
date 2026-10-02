@@ -1,8 +1,14 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
-import { Graph, GraphBody } from "@/registry/default/graph-frame/graph-frame"
+import {
+  Graph,
+  GraphBody,
+  splitDash,
+  textOf,
+} from "@/registry/default/graph-frame/graph-frame"
 import {
   formatAgo,
   formatClock,
@@ -24,6 +30,8 @@ type GraphTimerProps = {
   kind?: TimerKind
   at?: Date | number | string
   caption?: string
+  /** Markdown: the instant, then the caption. `2026-09-01T09:00Z — since deploy`. */
+  children?: ReactNode
   palette?: GraphPalette
   corner?: string
   className?: string
@@ -32,8 +40,9 @@ type GraphTimerProps = {
 function GraphTimer({
   title,
   kind = "elapsed",
-  at,
-  caption,
+  at: atProp,
+  caption: captionProp,
+  children,
   palette,
   corner,
   className,
@@ -41,6 +50,9 @@ function GraphTimer({
   const reduce = useReducedMotion()
   const enter = fadeUp(reduce)
   const now = useGraphNow()
+  const written = splitDash(textOf(children).replace(/\s+/g, " ").trim())
+  const at = atProp ?? (written.label || undefined)
+  const caption = captionProp ?? (written.rest || undefined)
   const origin = at == null ? Number.NaN : parseInstant(at)
   let value = kind === "ago" ? "0s ago" : "00:00:00"
   let spoken = "timer"

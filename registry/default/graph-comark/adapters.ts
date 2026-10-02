@@ -1,7 +1,8 @@
 import type { NumericProps } from "@/registry/default/graph-comark/coerce"
 
 /**
- * Per-tag hints for Markdown props. `numeric` matches catalog rows whose type
+ * Per-tag hints for Markdown props. Content tags (`::callout`, `::steps`, …)
+ * read their Markdown body as children, so they need no YAML. `numeric` matches catalog rows whose type
  * is `number` or `0 | 1`. `required` is the data the graph cannot render
  * without — used while a stream is still missing its YAML fence.
  */
@@ -11,6 +12,18 @@ export type GraphAdapter = {
 }
 
 export const GRAPH_ADAPTERS = {
+  callout: {},
+  quote: {},
+  steps: {},
+  terminal: {},
+  changelog: { required: ["version"] },
+  annotate: {},
+  decision: {},
+  chat: {},
+  env: {},
+  endpoint: {},
+  keys: {},
+  faq: {},
   "graph-table": { required: ["headers", "rows"] },
   "graph-sheet": { required: ["headers", "sections"] },
   "graph-invoice": { required: ["items"] },
@@ -59,6 +72,8 @@ export const GRAPH_ADAPTERS = {
     required: ["items"],
   },
   "graph-check": { required: ["items"] },
+  "graph-board": { required: ["columns"] },
+  "graph-score": { numeric: ["max"], required: ["items"] },
   "graph-timer": {},
   "graph-countdown": { required: ["to"] },
   row: { numeric: ["cols"] },

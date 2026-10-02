@@ -110,11 +110,47 @@ export const skillChooser: SkillChooserRow[] = [
     writing: "Nested files",
     graphs: [{ name: "GraphTree", slug: "graph-tree" }],
   },
+  {
+    writing: "A decision or an ADR",
+    graphs: [
+      { name: "Decision", slug: "decision" },
+      { name: "GraphScore", slug: "graph-score" },
+    ],
+  },
+  {
+    writing: "A roadmap or a sprint",
+    graphs: [
+      { name: "GraphBoard", slug: "graph-board" },
+      { name: "GraphCheck", slug: "graph-check" },
+    ],
+  },
+  {
+    writing: "A code sample to explain",
+    graphs: [
+      { name: "Annotate", slug: "annotate" },
+      { name: "Terminal", slug: "terminal" },
+    ],
+  },
+  {
+    writing: "An agent session",
+    graphs: [
+      { name: "Chat", slug: "chat" },
+      { name: "GraphDiff", slug: "graph-diff" },
+    ],
+  },
+  {
+    writing: "Setup or an API",
+    graphs: [
+      { name: "Env", slug: "env" },
+      { name: "Endpoint", slug: "endpoint" },
+    ],
+  },
 ]
 
 export const skillRules = [
   "At most two graphs in a section. Prose between them.",
-  "React / importable MDX: JSX. Notion / README / GitHub / Linear: framed ASCII from the docs MDX tab (keep the fence). Comark: ::graph-* with YAML. Knap: graph_* filter. Do not invent ASCII.",
+  "React / importable MDX: JSX. Notion / README / GitHub / Linear: framed ASCII from the docs .md tab (keep the fence). Comark: ::graph-* with YAML. Knap: graph_* filter. Do not invent ASCII.",
+  "In MDX, write Markdown inside the tag — bold is now, italic is next, label: value is a row, — note is a side note. The rules are on /docs/grammar.",
   "Titles: short uppercase, drawn as [ TITLE ].",
   "Labels: lowercase, plain (auth middleware, not AuthMiddleware Layer).",
   "Copy props from docs or recipes. Do not invent APIs, extra hues, or chart libraries.",

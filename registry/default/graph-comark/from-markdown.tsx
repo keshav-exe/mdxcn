@@ -67,15 +67,19 @@ export function fromMarkdown<P extends Record<string, unknown>>(
   function MarkdownGraph(raw: Record<string, unknown>) {
     const props = coerceProps<P>(raw, numeric)
 
-    if (!required.every((key) => isPresent(props[key]))) {
+    // A block can carry the data as YAML or as its Markdown body — the same
+    // grammar MDX children use. Either one is enough.
+    const written = isPresent(props.children)
+    if (!written && !required.every((key) => isPresent(props[key]))) {
       return <PendingGraph title={props.title as string | undefined} />
     }
 
     return <Component key={propsKey(props)} {...props} />
   }
 
-  MarkdownGraph.displayName = `FromMarkdown(${Component.displayName ?? Component.name ?? "Graph"
-    })`
+  MarkdownGraph.displayName = `FromMarkdown(${
+    Component.displayName ?? Component.name ?? "Graph"
+  })`
 
   return MarkdownGraph as ComponentType<Record<string, unknown>>
 }

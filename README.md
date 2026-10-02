@@ -2,7 +2,7 @@
 
 React components for ASCII-style tables, charts, and diagrams in MDX. Built so an agent can drop a figure next to prose — JSX in MDX, `::graph-*` in Comark, `graph_*` in Knap, official ASCII in a README. Each graph sits in a dashed frame with a title on the top edge. One accent color by default; drawing graphs can take `palette="duo"` or `palette="multi"`. You copy the source into your project — this is not an npm package.
 
-[docs](https://mdxcn.dev/docs) · [comark](https://mdxcn.dev/comark) · [knap](https://mdxcn.dev/knap) · [for agents](https://mdxcn.dev/agents) · [examples](https://mdxcn.dev/docs/examples) · [install](https://mdxcn.dev/docs/installation) · [skill](https://mdxcn.dev/docs/skill) · [github](https://github.com/keshav-exe/mdxcn)
+[docs](https://mdxcn.dev/docs) · [grammar](https://mdxcn.dev/docs/grammar) · [mdx](https://mdxcn.dev/docs/mdx) · [comark](https://mdxcn.dev/comark) · [knap](https://mdxcn.dev/knap) · [for agents](https://mdxcn.dev/agents) · [examples](https://mdxcn.dev/docs/examples) · [install](https://mdxcn.dev/docs/installation) · [skill](https://mdxcn.dev/docs/skill) · [github](https://github.com/keshav-exe/mdxcn)
 
 ## Install
 
@@ -43,6 +43,18 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 
 | Component | Registry item     | Use for                                    |
 | --------- | ----------------- | ------------------------------------------ |
+| Callout   | `callout`         | Note, tip, warning, or danger              |
+| Quote     | `quote`           | A pull quote with a byline                 |
+| Steps     | `steps`           | A numbered procedure, one step current     |
+| Terminal  | `terminal`        | A shell session                            |
+| Changelog | `changelog`       | One release: added, changed, fixed         |
+| Annotate  | `annotate`        | Code with numbered notes                   |
+| Decision  | `decision`        | Options, the one chosen, and why           |
+| Chat      | `chat`            | A conversation or an agent session         |
+| Env       | `env`             | Environment variables from a `.env` fence  |
+| Endpoint  | `endpoint`        | One API route: params, request, response   |
+| Keys      | `keys`            | Keyboard shortcuts as keycaps              |
+| FAQ       | `faq`             | Questions and answers                      |
 | Table     | `graph-table`     | Data tables with optional footer totals    |
 | Sheet     | `graph-sheet`     | Tables with section titles                 |
 | Flow      | `graph-flow`      | Process diagrams on a dashed arrow         |
@@ -56,6 +68,7 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 | Stack     | `graph-stack`     | Parts of a whole, glyphs instead of colors |
 | Funnel    | `graph-funnel`    | Steps that get narrower                    |
 | Gantt     | `graph-gantt`     | Schedule on a character track              |
+| Board     | `graph-board`     | Columns of work: now, next, later          |
 | Plot      | `graph-plot`      | Line or area from columns of glyphs        |
 | Waffle    | `graph-waffle`    | Share of 100 cells                         |
 | Diff      | `graph-diff`      | Add / remove / keep rows                   |
@@ -71,11 +84,27 @@ import { GraphTable } from "@/registry/default/graph-table/graph-table"
 | Uptime    | `graph-uptime`    | One glyph per day, percent up              |
 | Slope     | `graph-slope`     | Two figures per row, before → after        |
 | Bullet    | `graph-bullet`    | Actual versus target on one track          |
+| Score     | `graph-score`     | Ratings as dots, out of five or ten        |
 | Rank      | `graph-rank`      | A ranked list, one bar per row             |
 | KPI       | `graph-kpi`       | One number with a sparkline under it       |
 | Timer     | `graph-timer`     | Elapsed time, how long ago, or the clock   |
 | Countdown | `graph-countdown` | Time left until a date                     |
+| MDX       | `mdx`             | `withMdxcn` for `mdx-components.tsx`       |
 | Frame     | `graph-frame`     | Shared dashed frame primitives             |
+
+Every component reads the same Markdown inside its tag — bold is now, italic is next, `label: value` is a row, `— note` is a side note, `ok*40` is a run. The rules: [grammar](https://mdxcn.dev/docs/grammar). The same Markdown works as a Comark block body and a Knap `body`, and draws the same fenced ASCII.
+
+```mdx
+<GraphTimeline title="NIGHT">
+
+- 14:02: p95 crossed 800ms — paged the on-call
+- **14:11: rolled back the cache flag**
+- *14:40: write the postmortem*
+
+</GraphTimeline>
+```
+
+Wrap your MDX components in `withMdxcn` (registry item `mdx`). Tags your docs framework swaps — `li`, `table`, `h3` — still parse, and plain Markdown gets a frame: `> [!WARNING]` becomes a Callout, a `— Name` byline a Quote, a `console` fence a Terminal, footnotes a framed list. GitHub still renders the original. See [mdx](https://mdxcn.dev/docs/mdx).
 
 Each docs page has CLI, manual, agent, MDX, Comark, and Knap install tabs. Copy page puts the markdown (install, prompt, examples, props) on the clipboard.
 
@@ -99,6 +128,7 @@ Composed write-ups (refactor, incident, tradeoff, PR, sprint, migration) live on
 pnpm install
 pnpm dev
 pnpm typecheck
+pnpm test
 pnpm registry:build
 ```
 

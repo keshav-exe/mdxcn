@@ -64,7 +64,7 @@ const steps = [
     name: "markdown",
     detail: (
       <>
-        output is the official fenced ascii, the same drawing as the mdx tab.
+        output is the official fenced ascii, the same drawing as the .md tab.
         obsidian, github, and a readme can open it. graphs with no ascii emit
         comark yaml instead.
       </>

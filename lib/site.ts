@@ -41,7 +41,7 @@ export const SITE_ALTERNATE_NAMES = [
 export const AGENTS_DESCRIPTION =
   "a skill and chooser that tell an agent which mdxcn component to put next to the prose, and whether to write mdx, a ::graph-* block, a knap filter, or fenced ascii it can read back later."
 export const DOCS_DESCRIPTION =
-  "markdown-friendly components for mdx. the mdx tab is the framed figure — copy it into notion or a readme. register the parent once to render it live."
+  "markdown-friendly components for mdx. the .md tab is the framed figure — copy it into notion or a readme. register the parent once to render it live."
 export const SITE_NAV = [
   { href: "/docs", label: "components" },
   { href: "/docs/examples", label: "examples" },

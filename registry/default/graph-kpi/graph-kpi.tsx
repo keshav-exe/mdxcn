@@ -1,13 +1,17 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
   Graph,
   GraphBody,
   GraphTick,
+  firstToken,
   GraphTrack,
+  linesOf,
   numbers,
+  splitDash,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   DIM_OPACITY,
@@ -26,11 +30,16 @@ const SPARK_DEFAULT = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
 
 type GraphKpiProps = {
   title: string
-  value: string
-  label: string
+  value?: string
+  label?: string
   hint?: string
   /** `[4, 5, 6]` or `"4 5 6"`. Sparkline under the number. */
-  data: number[] | string
+  data?: number[] | string
+  /**
+   * Markdown. First line `12,400 this week — +18%` (value, label, hint),
+   * then a line of numbers for the sparkline.
+   */
+  children?: ReactNode
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
@@ -39,16 +48,23 @@ type GraphKpiProps = {
 
 function GraphKpi({
   title,
-  value,
-  label,
-  hint,
+  value: valueProp,
+  label: labelProp,
+  hint: hintProp,
   data: dataProp,
+  children,
   glyphs,
   palette,
   corner,
   className,
 }: GraphKpiProps) {
-  const data = numbers(dataProp)
+  const [head = "", ...tail] = linesOf(children)
+  const { token, rest } = firstToken(head)
+  const written = splitDash(rest)
+  const value = valueProp ?? token
+  const label = labelProp ?? written.label
+  const hint = hintProp ?? (written.rest || undefined)
+  const data = numbers(dataProp ?? tail.join(" "))
   const reduce = useReducedMotion()
   const enter = fadeUp(reduce)
   const max = Math.max(...data, 1)

@@ -1,11 +1,14 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
+  firstToken,
   fraction,
   Graph,
   GraphBody,
+  textOf,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fillDelay,
@@ -19,11 +22,13 @@ import { cn } from "@/lib/utils"
 
 type GraphWaffleProps = {
   title: string
-  /** `0.73`, `"0.73"`, or `"73%"`. */
-  value: number | string
+  /** `0.73`, `"0.73"`, or `"73%"`. Or write `73% green` as children. */
+  value?: number | string
   cells?: number
   columns?: number
   caption?: string
+  /** Markdown: the value, then the caption. `73% — tests green`. */
+  children?: ReactNode
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
@@ -35,13 +40,20 @@ function GraphWaffle({
   value: valueProp,
   cells = 100,
   columns = 10,
-  caption,
+  caption: captionProp,
+  children,
   glyphs,
   palette,
   corner,
   className,
 }: GraphWaffleProps) {
-  const value = fraction(valueProp)
+  const written = firstToken(textOf(children).replace(/\s+/g, " ").trim())
+  const value = fraction(valueProp ?? written.token)
+  const caption =
+    captionProp ??
+    (valueProp == null
+      ? written.rest.replace(/^[—–-]\s*/, "") || undefined
+      : undefined)
   const reduce = useReducedMotion()
   const clamped = Math.min(1, Math.max(0, value))
   const filled = Math.round(clamped * cells)

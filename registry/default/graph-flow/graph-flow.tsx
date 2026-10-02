@@ -10,6 +10,7 @@ import {
   Graph,
   GraphBody,
   isHost,
+  childNodes,
   listItems,
   paragraphsOf,
   textOf,
@@ -68,7 +69,7 @@ const ARROW = /\s*(?:→|->|—>|=>)\s*/
 function nodesOf(children: React.ReactNode): FlowNode[] {
   const nodes: FlowNode[] = []
 
-  for (const child of React.Children.toArray(children)) {
+  for (const child of childNodes(children)) {
     if (typeof child === "string" || typeof child === "number") {
       for (const part of String(child).split(ARROW)) {
         const label = part.trim()

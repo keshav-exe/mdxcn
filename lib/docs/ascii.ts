@@ -1,6 +1,9 @@
+import { COMARK_PROPS } from "@/lib/docs/comark-props"
 import { fence } from "@/registry/default/graph-knap/frame"
+import { drawMarkdown } from "@/registry/default/graph-knap/markdown"
 import {
   asciiBars,
+  asciiBoard,
   asciiBullet,
   asciiCells,
   asciiCheck,
@@ -13,6 +16,7 @@ import {
   asciiMatrix,
   asciiMeter,
   asciiRank,
+  asciiScore,
   asciiSheet,
   asciiSlope,
   asciiSpark,
@@ -27,7 +31,45 @@ import {
   asciiWaterfall,
 } from "@/registry/default/graph-knap/graphs"
 
+/** Content blocks draw from the same Markdown body Comark and Knap use. */
+const CONTENT_TAGS = {
+  callout: "Callout",
+  quote: "Quote",
+  steps: "Steps",
+  terminal: "Terminal",
+  changelog: "Changelog",
+  annotate: "Annotate",
+  decision: "Decision",
+  chat: "Chat",
+  env: "Env",
+  endpoint: "Endpoint",
+  keys: "Keys",
+  faq: "Faq",
+} as const
+
+function contentAscii(slug: keyof typeof CONTENT_TAGS) {
+  const { body, ...props } = COMARK_PROPS[slug] ?? {}
+  const attrs = Object.fromEntries(
+    Object.entries(props).map(([key, value]) => [key, String(value)])
+  )
+  return drawMarkdown(CONTENT_TAGS[slug], attrs, String(body ?? ""))
+}
+
 export const MDX_SLUGS = [
+  "callout",
+  "quote",
+  "steps",
+  "terminal",
+  "changelog",
+  "annotate",
+  "decision",
+  "chat",
+  "env",
+  "endpoint",
+  "keys",
+  "faq",
+  "graph-board",
+  "graph-score",
   "graph-table",
   "graph-sheet",
   "graph-bars",
@@ -81,6 +123,24 @@ const uptimeQuarter = Array.from({ length: 90 }, (_, index) =>
 )
 
 const examples: Record<MdxSlug, string> = {
+  callout: contentAscii("callout"),
+  quote: contentAscii("quote"),
+  steps: contentAscii("steps"),
+  terminal: contentAscii("terminal"),
+  changelog: contentAscii("changelog"),
+  annotate: contentAscii("annotate"),
+  decision: contentAscii("decision"),
+  chat: contentAscii("chat"),
+  env: contentAscii("env"),
+  endpoint: contentAscii("endpoint"),
+  keys: contentAscii("keys"),
+  faq: contentAscii("faq"),
+  "graph-board": asciiBoard(
+    COMARK_PROPS["graph-board"] as Parameters<typeof asciiBoard>[0]
+  ),
+  "graph-score": asciiScore(
+    COMARK_PROPS["graph-score"] as Parameters<typeof asciiScore>[0]
+  ),
   "graph-table": asciiTable({
     title: "WHAT THE RESEARCH COST",
     headers: ["Agent", "Tokens", "Tool calls", "Time"],

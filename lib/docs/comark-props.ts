@@ -357,4 +357,76 @@ export const COMARK_PROPS: Record<string, Record<string, unknown>> = {
     done: "open",
     caption: "until launch",
   },
+
+  callout: {
+    type: "warning",
+    body: "The CLI copies files into `registry/default`. Edit the source — there is nothing to update later.",
+  },
+  quote: {
+    by: "Paul Graham",
+    source: "Taste for Makers",
+    body: "A thousand barely audible voices all singing in tune.",
+  },
+  steps: {
+    title: "INSTALL",
+    body: "1. Copy the source\n\n   Run the shadcn CLI.\n\n2. **Register it**\n\n   Add it to the components map.\n\n3. *Write*\n\n   Use it between paragraphs.",
+  },
+  terminal: {
+    title: "SHELL",
+    body: "```\n$ pnpm dlx shadcn@latest add @mdxcn/all\n✓ 51 files written\n```",
+  },
+  changelog: {
+    version: "1.3.0",
+    date: "Oct 02",
+    body: "- added: Board, Score, Chat, Env, Endpoint, Keys, FAQ\n- changed: Every graph reads Markdown children\n- fixed: Overridden tags in mdx-components",
+  },
+  annotate: {
+    title: "retry.py",
+    body: "```python\ndef fetch(url, times=3):  # (1)\n    for attempt in range(times):\n        try:\n            return get(url)\n        except TimeoutError:  # (2)\n            sleep(2 ** attempt)\n```\n\n1. Three tries.\n2. Only timeouts retry.",
+  },
+  decision: {
+    title: "DATABASE",
+    status: "accepted",
+    date: "Mar 12",
+    body: "- **Postgres** — we already run it\n- *Mongo* — no joins we trust\n- SQLite — fine until the second writer\n\nRevisit if writes pass 2k a second.",
+  },
+  chat: {
+    title: "SESSION",
+    body: "- you: which graph shows a rollback?\n- agent: Timeline. Bold the rollback row.\n- you: and on GitHub?\n- agent: Paste the fenced ASCII.",
+  },
+  env: {
+    body: "```bash\n# Postgres connection string. Required.\nDATABASE_URL=postgres://localhost:5432/app\n\n# Leave empty to turn analytics off\nANALYTICS_ID=\n```",
+  },
+  endpoint: {
+    body: "GET /api/v1/components/:slug\n\nOne component from the catalog.\n\n| Param | Type | |\n| --- | --- | --- |\n| **slug** | string | Registry slug |",
+  },
+  keys: {
+    title: "SHORTCUTS",
+    body: "- **⌘K: search the docs**\n- Ctrl+Shift+P: command palette\n- g then d: go to docs",
+  },
+  faq: {
+    body: "### Is this an npm package?\n\nNo. The CLI copies the source.\n\n### Does it need MDX?\n\nNo. Comark reads blocks from plain `.md`.",
+  },
+  "graph-board": {
+    title: "ROADMAP",
+    columns: [
+      {
+        title: "Now",
+        items: [
+          { label: "Children for every graph", state: "now" },
+          "Comark parity",
+        ],
+      },
+      { title: "Next", items: ["Board", "Score"] },
+      { title: "Later", items: [{ label: "Figma kit", state: "next" }] },
+    ],
+  },
+  "graph-score": {
+    title: "REVIEW",
+    items: [
+      { label: "Performance", value: 4, max: 5 },
+      { label: "Accessibility", value: 5, max: 5 },
+      { label: "Docs", value: 2.5, max: 5, accent: true },
+    ],
+  },
 }

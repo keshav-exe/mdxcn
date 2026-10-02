@@ -68,7 +68,7 @@ export default async function ComponentDocPage({ params }: PageProps) {
         title={item.title}
       />
 
-      {examples[0] ? <Examples items={[examples[0]]} /> : null}
+      {examples[0] ? <Examples items={[examples[0]]} slug={slug} /> : null}
 
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-semibold tracking-tight">install</h2>
@@ -79,7 +79,9 @@ export default async function ComponentDocPage({ params }: PageProps) {
         />
       </section>
 
-      {examples.length > 1 ? <Examples items={examples.slice(1)} /> : null}
+      {examples.length > 1 ? (
+        <Examples items={examples.slice(1)} slug={slug} />
+      ) : null}
 
       <PropsTable rows={item.props} />
     </div>

@@ -14,8 +14,39 @@ export type GraphFilter = {
   metadata?: { example?: string }
 }
 
+/**
+ * Content blocks. Their data is a Markdown `body` in the shared grammar, and
+ * they keep their own default title (Callout uses its type, Quote has none).
+ */
+export const CONTENT_SLUGS = [
+  "callout",
+  "quote",
+  "steps",
+  "terminal",
+  "changelog",
+  "annotate",
+  "decision",
+  "chat",
+  "env",
+  "endpoint",
+  "keys",
+  "faq",
+] as const
+
 /** If the piped value is not a props object, store it under this key. */
 export const GRAPH_VALUE_KEY = {
+  callout: "body",
+  quote: "body",
+  steps: "body",
+  terminal: "body",
+  changelog: "body",
+  annotate: "body",
+  decision: "body",
+  chat: "body",
+  env: "body",
+  endpoint: "body",
+  keys: "body",
+  faq: "body",
   "graph-table": "rows",
   "graph-sheet": "sections",
   "graph-invoice": "items",
@@ -40,12 +71,20 @@ export const GRAPH_VALUE_KEY = {
   "graph-timeline": "events",
   "graph-gantt": "items",
   "graph-check": "items",
+  "graph-board": "columns",
+  "graph-score": "items",
   "graph-timer": "at",
   "graph-countdown": "to",
 } as const
 
+/** `graph-table` → `graph_table`. Content keeps the namespace: `graph_callout`. */
 export function filterName(slug: string) {
-  return slug.replaceAll("-", "_")
+  const name = slug.replaceAll("-", "_")
+  return name.startsWith("graph_") ? name : `graph_${name}`
+}
+
+function isContent(slug: string) {
+  return (CONTENT_SLUGS as readonly string[]).includes(slug)
 }
 
 export function unquoteParam(param?: string) {
@@ -91,7 +130,8 @@ function tableFromRecords(rows: Record<string, unknown>[]) {
   }
 }
 
-function defaultTitle(slug: string) {
+function defaultTitle(slug: string): string | undefined {
+  if (isContent(slug)) return undefined
   return slug
     .replace(/^graph-/, "")
     .replaceAll("-", " ")
@@ -114,7 +154,9 @@ export function resolveGraphProps(
   if (isPlainObject(data)) {
     const props = { ...data }
     if (title) props.title = title
-    if (props.title == null) props.title = defaultTitle(slug)
+    if (props.title == null && defaultTitle(slug)) {
+      props.title = defaultTitle(slug)
+    }
     return { props, format }
   }
 
@@ -138,9 +180,10 @@ export function resolveGraphProps(
   const key = (GRAPH_VALUE_KEY as Record<string, string | undefined>)[slug]
   if (!key) return null
 
+  const fallback = title ?? defaultTitle(slug)
   return {
     props: {
-      title: title ?? defaultTitle(slug),
+      ...(fallback ? { title: fallback } : {}),
       [key]: data,
     },
     format,

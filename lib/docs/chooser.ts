@@ -1,6 +1,7 @@
 import type { ComponentDoc } from "@/lib/docs/catalog"
 import { MDX_SKIP_SLUGS, isMdxSlug, mdxExample } from "@/lib/docs/ascii"
 import { comarkChooserSection } from "@/lib/docs/comark"
+import { grammarMarkdown } from "@/lib/docs/grammar"
 import { knapChooserSection } from "@/lib/docs/knap"
 import { recipesMarkdown } from "@/lib/docs/recipes"
 import { SITE_URL } from "@/lib/site"
@@ -25,6 +26,34 @@ export const CHOOSER: Record<string, { when: string; not: string }> = {
   changelog: {
     when: "Good for one release: what was added, changed, fixed, removed.",
     not: "Bundle or headcount deltas with numbers are Diff.",
+  },
+  annotate: {
+    when: "Good for a code sample where three lines need explaining.",
+    not: "A shell session is Terminal. Code with nothing to explain is a plain fence.",
+  },
+  decision: {
+    when: "Good for an ADR or a tradeoff: what you picked, what you didn't, and why.",
+    not: "Features across plans are Compare. Ratings are Score.",
+  },
+  chat: {
+    when: "Good for an agent session, a support thread, or an interview excerpt.",
+    not: "One line someone said is Quote. Commands and output are Terminal.",
+  },
+  env: {
+    when: "Good for the variables a project needs, which are required, and what they do.",
+    not: "Label/value rows that are not variables are Spec.",
+  },
+  endpoint: {
+    when: "Good for one API route: method, path, params, a response.",
+    not: "Many routes in one place are Sheet. A shell session is Terminal.",
+  },
+  keys: {
+    when: "Good for keyboard shortcuts, a cheat sheet, or a key combo in a tutorial.",
+    not: "Label/value rows are Spec.",
+  },
+  faq: {
+    when: "Good for questions people keep asking, with the answer under each.",
+    not: "A procedure is Steps. One caveat is Callout.",
   },
   "graph-table": {
     when: "Good when the numbers belong in a spreadsheet.",
@@ -85,6 +114,14 @@ export const CHOOSER: Record<string, { when: string; not: string }> = {
   "graph-gantt": {
     when: "Good for work that overlaps on a shared calendar.",
     not: "A dated log is Timeline.",
+  },
+  "graph-board": {
+    when: "Good for a roadmap or a sprint: now, next, later, or todo, doing, done.",
+    not: "One list of done boxes is Check. Dated events are Timeline.",
+  },
+  "graph-score": {
+    when: "Good for a review, an eval, or a vendor pick scored out of five.",
+    not: "Actual versus a target is Bullet. A ranked list of numbers is Rank.",
   },
   "graph-plot": {
     when: "Good when the series needs a y-scale.",
@@ -202,7 +239,7 @@ ${mdx.markdown}`
   return `# mdxcn
 
 ASCII-framed React diagrams for MDX. Source is copied via shadcn registry, not npm.
-The docs .mdx tab is the framed figure (dashed box, [ TITLE ], glyphs). Paste that into Notion, Linear, or a README. Keep the fence. Wrap markdown children in the parent after registering once (React / MDX). Write a \`::graph-*\` block for Comark, or pipe data through a Knap filter. Do not invent ASCII. Do not draw SVG.
+The docs .md tab is the framed figure (dashed box, [ TITLE ], glyphs). Paste that into Notion, Linear, or a README. Keep the fence. Wrap markdown children in the parent after registering once (React / MDX). Write a \`::graph-*\` block for Comark, or pipe data through a Knap filter. Do not invent ASCII. Do not draw SVG.
 ${host}
 
 ## When to use
@@ -213,7 +250,7 @@ Reach for it when the writing is a path or a refactor, an incident or postmortem
 
 How to call it:
 
-1. Notion, Linear, or a README: copy the framed ASCII from the docs MDX tab. Keep the fence so the + corners stay aligned.
+1. Notion, Linear, or a README: copy the framed ASCII from the docs .md tab. Keep the fence so the + corners stay aligned.
 2. React or importable MDX: install with \`pnpm dlx shadcn@latest add ${host}/r/<slug>.json\`, register the parent once in mdx-components.tsx, wrap markdown children in the tag.
 3. Plain Markdown that cannot run a renderer (README, GitHub): same framed ASCII from ## MDX below. Do not invent ASCII. Do not paste JSX.
 4. Comark app (plain \`.md\`, streaming, DB-backed content): paste a \`::graph-*\` block from ## Comark. Wiring: ${host}/docs/comark.
@@ -221,6 +258,8 @@ How to call it:
 6. Install the skill from ${host}/skill.md so the chooser runs without fetching this file every time.
 
 Do not use it for a one-sentence note, a pie chart, or a drawing that needs SVG. At most two figures, with prose between them.
+
+${grammarMarkdown(host)}
 
 ## Machine-readable
 
@@ -242,7 +281,7 @@ pnpm dlx shadcn@latest add ${host}/r/all.json
 
 ## Host
 
-- Notion, Linear, Google Docs, any rich text editor: copy the framed ASCII from the docs MDX tab. Keep the fence.
+- Notion, Linear, Google Docs, any rich text editor: copy the framed ASCII from the docs .md tab. Keep the fence.
 - React, or MDX that can register the parent: wrap markdown children in the tag. Install via shadcn. Register once in mdx-components.tsx. No extra child imports.
 - Plain Markdown that cannot run React (README, GitHub, Slack, PR comments): paste a fenced ASCII from ## MDX. Swap labels, keep the frame. Do not invent ASCII. Do not paste JSX.
 - Comark: paste a \`::graph-*\` block from ## Comark. YAML props match the React API. GitHub does not run Comark — use fenced ASCII there.

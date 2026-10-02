@@ -1,5 +1,6 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import {
@@ -7,7 +8,8 @@ import {
   GraphBody,
   GraphTick,
   GraphTrack,
-  words,
+  runs,
+  sourceText,
 } from "@/registry/default/graph-frame/graph-frame"
 import {
   fadeUp,
@@ -23,15 +25,24 @@ type UptimeStatus = "ok" | "degraded" | "down" | "empty"
 
 type GraphUptimeProps = {
   title: string
-  /** `["ok", "down"]` or `"ok ok down"`. ok, degraded, down, or empty. */
-  days: UptimeStatus[] | string
+  /** `["ok", "down"]`, `"ok ok down"`, or runs: `"ok*40 down*2"`. */
+  days?: UptimeStatus[] | string
   from?: string
   to?: string
   columns?: number
+  /** Markdown: the days as words. `ok*40 degraded ok*20 down*2 ok*27`. */
+  children?: ReactNode
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
   className?: string
+}
+
+const STATUSES: Record<UptimeStatus, true> = {
+  ok: true,
+  degraded: true,
+  down: true,
+  empty: true,
 }
 
 function statusTone(
@@ -51,12 +62,15 @@ function GraphUptime({
   from,
   to,
   columns = 30,
+  children,
   glyphs,
   palette,
   corner,
   className,
 }: GraphUptimeProps) {
-  const days = words<UptimeStatus>(daysProp)
+  const days = runs(daysProp ?? sourceText(children)).filter(
+    (day): day is UptimeStatus => day in STATUSES
+  )
   const reduce = useReducedMotion()
   const item = fadeUp(reduce)
   const list = staggerList(reduce, 0.05)
